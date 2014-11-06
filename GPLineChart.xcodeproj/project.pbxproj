@@ -13,6 +13,7 @@
 		24D9FFBA1A0C319E007C1260 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24D9FFB91A0C319E007C1260 /* Images.xcassets */; };
 		24D9FFBD1A0C319E007C1260 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24D9FFBB1A0C319E007C1260 /* LaunchScreen.xib */; };
 		24D9FFC91A0C319E007C1260 /* GPLineChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9FFC81A0C319E007C1260 /* GPLineChartTests.swift */; };
+		24D9FFD41A0C31D1007C1260 /* GPLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9FFD31A0C31D1007C1260 /* GPLineChart.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		24D9FFC21A0C319E007C1260 /* GPLineChartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPLineChartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D9FFC71A0C319E007C1260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24D9FFC81A0C319E007C1260 /* GPLineChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPLineChartTests.swift; sourceTree = "<group>"; };
+		24D9FFD31A0C31D1007C1260 /* GPLineChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPLineChart.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 		24D9FFAF1A0C319E007C1260 /* GPLineChart */ = {
 			isa = PBXGroup;
 			children = (
+				24D9FFD21A0C31AA007C1260 /* Classes */,
 				24D9FFB21A0C319E007C1260 /* AppDelegate.swift */,
 				24D9FFB41A0C319E007C1260 /* ViewController.swift */,
 				24D9FFB61A0C319E007C1260 /* Main.storyboard */,
@@ -110,6 +113,14 @@
 				24D9FFC71A0C319E007C1260 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		24D9FFD21A0C31AA007C1260 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				24D9FFD31A0C31D1007C1260 /* GPLineChart.swift */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24D9FFD41A0C31D1007C1260 /* GPLineChart.swift in Sources */,
 				24D9FFB51A0C319E007C1260 /* ViewController.swift in Sources */,
 				24D9FFB31A0C319E007C1260 /* AppDelegate.swift in Sources */,
 			);

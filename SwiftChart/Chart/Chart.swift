@@ -9,8 +9,8 @@
 import UIKit
 
 protocol ChartDelegate {
-    func didTouchInsideLineChart(lineChart: Chart, point: CGPoint, axisValues: ChartPoint, data: Array<ChartPoint?>, indexes: Array<Int?>)
-    func didTouchOutsideLineChart(lineChart: Chart)
+    func didTouchInsideChart(chart: Chart, point: CGPoint, axisValues: ChartPoint, data: Array<ChartPoint?>, indexes: Array<Int?>)
+    func didTouchOutsideChart(chart: Chart)
 }
 
 typealias ChartPoint = (x: Float, y: Float)
@@ -31,8 +31,7 @@ class Chart: UIControl {
     
     /**
     Values to display as labels of the x-axis. If not provided, the chart will use
-    values of the first dataset. 
-    @see xLabelFormatter
+    values of the first dataset.
     */
     var xLabels: Array<Float>?
     
@@ -55,11 +54,18 @@ class Chart: UIControl {
     /**
     Font used for the labels.
     */
-    var font: UIFont = UIFont.systemFontOfSize(12)
+    var labelFont: UIFont = UIFont.systemFontOfSize(12)
+    
+    /**
+    Font used for the labels.
+    */
+    @IBInspectable
+    var labelColor: UIColor = UIColor.blackColor()
     
     /**
     Color for axes and guides.
     */
+    @IBInspectable
     var axisColor: UIColor = UIColor.grayColor()
     
     /**
@@ -70,6 +76,7 @@ class Chart: UIControl {
     /**
     Width of the chart lines.
     */
+    @IBInspectable
     var lineWidth: CGFloat = 1
     
     /**
@@ -100,15 +107,17 @@ class Chart: UIControl {
     /**
     Color for the highlight line
     */
+    @IBInspectable
     var highlightLineColor = UIColor.grayColor().CGColor
     
     /**
     Width for the highlight line
     */
+    @IBInspectable
     var highlightLineWidth: CGFloat = 0.5
     
     /**
-    Negative offset for the highlight line, spans above the chart
+    Negative offset for the highlight line, spans above the chart. Useful to display a label on touch. 
     */
     var highlightLineOffset: CGFloat = 0
     
@@ -118,8 +127,8 @@ class Chart: UIControl {
     private var drawingWidth: CGFloat = 0
     private var lineLayers: Array<CAShapeLayer> = []
     private var highlightShapeLayer: CAShapeLayer?
-    private var min: ChartPoint = (x: 0, y: 0)
-    private var max: ChartPoint = (x: 0, y: 0)
+    private var min: ChartPoint?
+    private var max: ChartPoint?
     
     // MARK: initializations
     
@@ -142,6 +151,16 @@ class Chart: UIControl {
         #else
             drawChart()
         #endif
+    }
+    
+    func addSerie(serie: ChartSerie) {
+        series.append(serie)
+    }
+    
+    func addSeries(series: Array<ChartSerie>) {
+        for serie in series {
+            addSerie(serie)
+        }
     }
     
     private func drawIBPlaceholder() {
@@ -264,10 +283,10 @@ class Chart: UIControl {
         let width = Float(drawingWidth)
         
         var factor: Float
-        if max.x - min.x == 0 { factor = 0 }
-        else { factor = width / (max.x - min.x) }
+        if max!.x - min!.x == 0 { factor = 0 }
+        else { factor = width / (max!.x - min!.x) }
         
-        let scaled = values.map { factor * ($0 - self.min.x) }
+        let scaled = values.map { factor * ($0 - self.min!.x) }
         return scaled
     }
     
@@ -275,10 +294,10 @@ class Chart: UIControl {
         
         let height = Float(drawingHeight)
         var factor: Float
-        if max.y - min.y == 0 { factor = 0 }
-        else { factor = height / (max.y - min.y) }
+        if max!.y - min!.y == 0 { factor = 0 }
+        else { factor = height / (max!.y - min!.y) }
         
-        let scaled = values.map { height - factor * ($0 - self.min.y) }
+        let scaled = values.map { height - factor * ($0 - self.min!.y) }
         return scaled
     }
     
@@ -286,10 +305,10 @@ class Chart: UIControl {
         
         let height = Float(drawingHeight)
         var factor: Float
-        if max.y - min.y == 0 { factor = 0 }
-        else { factor = height / (max.y - min.y) }
+        if max!.y - min!.y == 0 { factor = 0 }
+        else { factor = height / (max!.y - min!.y) }
         
-        let scaled = height - factor * (value - min.y)
+        let scaled = height - factor * (value - min!.y)
         return scaled
     }
     
@@ -322,10 +341,10 @@ class Chart: UIControl {
         lineLayer.path = path
         
         if isAboveXAxis {
-            lineLayer.strokeColor = series[serieIndex].color.above.CGColor
+            lineLayer.strokeColor = series[serieIndex].colors.above.CGColor
         }
         else {
-            lineLayer.strokeColor = series[serieIndex].color.below.CGColor
+            lineLayer.strokeColor = series[serieIndex].colors.below.CGColor
         }
         lineLayer.fillColor = nil
         lineLayer.lineWidth = lineWidth
@@ -340,7 +359,7 @@ class Chart: UIControl {
     func drawArea(#xValues: Array<Float>, yValues: Array<Float>, serieIndex: Int) {
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let area = CGPathCreateMutable()
-        let zero = CGFloat(scaleValueOnYAxis(0))
+        let zero = CGFloat(scaleValueOnYAxis(min!.y))
         
         CGPathMoveToPoint(area, nil, CGFloat(xValues[0]), zero)
         
@@ -355,10 +374,10 @@ class Chart: UIControl {
         areaLayer.path = area
         areaLayer.strokeColor = nil
         if isAboveXAxis {
-            areaLayer.fillColor = series[serieIndex].color.above.colorWithAlphaComponent(0.1).CGColor
+            areaLayer.fillColor = series[serieIndex].colors.above.colorWithAlphaComponent(0.1).CGColor
         }
         else {
-            areaLayer.fillColor = series[serieIndex].color.below.colorWithAlphaComponent(0.1).CGColor
+            areaLayer.fillColor = series[serieIndex].colors.below.colorWithAlphaComponent(0.1).CGColor
         }
         areaLayer.lineWidth = 0
         
@@ -408,8 +427,9 @@ class Chart: UIControl {
             let x = CGFloat(value)
             
             let label = UILabel(frame: CGRect(x: x, y: drawingHeight, width: 0, height: 0))
-            label.font = self.font
+            label.font = labelFont
             label.text = xLabelFormatter(labels[i])
+            label.textColor = labelColor
             
             // Set label size
             label.sizeToFit()
@@ -449,7 +469,7 @@ class Chart: UIControl {
         }
         else {
             // Use y-values
-            labels = [min.y, (min.y + max.y) / 2, max.y]
+            labels = [min!.y, (min!.y + max!.y) / 2, max!.y]
         }
         let scaled = scaleValuesOnYAxis(labels)
         
@@ -457,12 +477,11 @@ class Chart: UIControl {
             
             let y = CGFloat(value)
             let label = UILabel(frame: CGRect(x: drawingWidth, y: y, width: 0, height: 0))
-            label.font = self.font
+            label.font = labelFont
             label.text = yLabelFormatter(labels[i])
+            label.textColor = labelColor
             
-            // Set label size
             label.sizeToFit()
-            
             
             // If label is on the top part of the chart, put it a bit below
             if Int(y) == 0 {
@@ -493,8 +512,8 @@ class Chart: UIControl {
         
         // Add grid for zero
         
-        if (max.y > 0) & (min.y < 0) {
-            let zero = CGFloat(scaleValueOnYAxis(0))
+        if (max!.y > 0) & (min!.y < 0) {
+            let zero = CGFloat(scaleValueOnYAxis(min!.y))
             CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.8).CGColor)
             CGContextMoveToPoint(context, 0, zero)
             CGContextAddLineToPoint(context, self.bounds.width, zero)
@@ -543,7 +562,7 @@ class Chart: UIControl {
         let x = point.locationInView(self).x
         let y = point.locationInView(self).y
         let xValue = valueFromPointAtX(x)
-        let yValue = valueFromPointAtY(y)
+        let yValue = valueFromPointAtY(y) + max!.y
         
         if x < 0 || x > drawingWidth {
             // Remove highlight and end the touch events
@@ -551,7 +570,7 @@ class Chart: UIControl {
             if let shapeLayer = highlightShapeLayer {
                 shapeLayer.path = nil
             }
-            delegate?.didTouchOutsideLineChart(self)
+            delegate?.didTouchOutsideChart(self)
             return
         }
         
@@ -581,8 +600,8 @@ class Chart: UIControl {
                 data.append(nil)
             }
         }
-        
-        delegate?.didTouchInsideLineChart(self, point: CGPointMake(x, y), axisValues: (x: xValue, y: yValue), data: data, indexes: touchedIndexes)
+
+        delegate?.didTouchInsideChart(self, point: CGPointMake(x, y), axisValues: (x: xValue, y: yValue), data: data, indexes: touchedIndexes)
         
     }
     
@@ -599,12 +618,12 @@ class Chart: UIControl {
     // MARK: - Utilities
     
     func valueFromPointAtX(x: CGFloat) -> Float {
-        let value = ((max.x-min.x) / Float(drawingWidth)) * Float(x) + min.x
+        let value = ((max!.x-min!.x) / Float(drawingWidth)) * Float(x) + min!.x
         return value
     }
     
     func valueFromPointAtY(y: CGFloat) -> Float {
-        let value = ((max.y - min.y) / Float(drawingHeight)) * Float(y) + min.y
+        let value = ((max!.y - min!.y) / Float(drawingHeight)) * Float(y) + min!.y
         return -value
     }
     

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2409AA3A1A0CBBC10097FE50 /* GPLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2409AA391A0CBBC10097FE50 /* GPLineChart.swift */; };
+		2409AA4F1A0CDDEA0097FE50 /* GPLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2409AA391A0CBBC10097FE50 /* GPLineChart.swift */; };
 		24D9FFB31A0C319E007C1260 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9FFB21A0C319E007C1260 /* AppDelegate.swift */; };
 		24D9FFB51A0C319E007C1260 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9FFB41A0C319E007C1260 /* ViewController.swift */; };
 		24D9FFB81A0C319E007C1260 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24D9FFB61A0C319E007C1260 /* Main.storyboard */; };
@@ -174,7 +175,6 @@
 					};
 					24D9FFC11A0C319E007C1260 = {
 						CreatedOnToolsVersion = 6.1;
-						TestTargetID = 24D9FFAC1A0C319E007C1260;
 					};
 				};
 			};
@@ -233,6 +233,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24D9FFC91A0C319E007C1260 /* GPLineChartTests.swift in Sources */,
+				2409AA4F1A0CDDEA0097FE50 /* GPLineChart.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,7 +369,6 @@
 		24D9FFD01A0C319E007C1260 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -380,14 +380,12 @@
 				INFOPLIST_FILE = GPLineChartTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPLineChart.app/GPLineChart";
 			};
 			name = Debug;
 		};
 		24D9FFD11A0C319E007C1260 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -395,7 +393,6 @@
 				INFOPLIST_FILE = GPLineChartTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPLineChart.app/GPLineChart";
 			};
 			name = Release;
 		};

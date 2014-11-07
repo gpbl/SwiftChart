@@ -21,16 +21,16 @@ class GPLineChartTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
+    func testSegmentLine() {
+        
+        let line: Array<(x: Float, y: Float)> = [
+            (x: 1, y: -1), (x: 2, y: 0.0), (x: 3, y: 1)
+        ]
+        
+        let segments = GPLineChart.segmentLine(line)
+        XCTAssert(segments.count == 2)
+        XCTAssert(segments[0][1].x == 2)
+        
     }
     
 }

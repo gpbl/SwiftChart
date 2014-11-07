@@ -15,6 +15,7 @@ protocol GPLineChartDelegate {
     func didTouchOutsideLineChart(lineChart: GPLineChart)
 }
 
+@IBDesignable
 class GPLineChart: UIControl {
     
     typealias Point = (x: Float, y: Float)
@@ -35,7 +36,7 @@ class GPLineChart: UIControl {
     var xLabels: Array<Float>?
     
     /**
-    Values to display as labels of the y-axis. If not specified, will display the 
+    Values to display as labels of the y-axis. If not specified, will display the
     lowest, the middle and the highest values.
     */
     var yLabels: Array<Float>?
@@ -136,7 +137,6 @@ class GPLineChart: UIControl {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clearColor()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -148,10 +148,32 @@ class GPLineChart: UIControl {
     }
     
     override func drawRect(rect: CGRect) {
+        #if TARGET_INTERFACE_BUILDER
+            drawIBPlaceholder()
+            #else
+            drawChart()
+        #endif
+    }
+    
+    func drawIBPlaceholder() {
+        let placeholder = UIView(frame: self.frame)
+        placeholder.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1)
+        let label = UILabel()
+        label.text = "Line Chart"
+        label.font = UIFont.systemFontOfSize(28)
+        label.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
+        label.sizeToFit()
+        label.frame.origin.x += frame.width/2 - (label.frame.width / 2)
+        label.frame.origin.y += frame.height/2 - (label.frame.height / 2)
+        
+        placeholder.addSubview(label)
+        addSubview(placeholder)
+    }
+    
+    func drawChart() {
         
         drawingHeight = bounds.height - axisInset
         drawingWidth = bounds.width
-        
         
         let minMax = getMinMax()
         min = minMax.min
@@ -194,6 +216,7 @@ class GPLineChart: UIControl {
         if yLabels != nil || series.count > 0 {
             drawLabelsOnYAxis()
         }
+        
     }
     
     // MARK: - Scaling
@@ -306,7 +329,7 @@ class GPLineChart: UIControl {
         var factor: Float
         if max.x - min.x == 0 { factor = 0 }
         else { factor = width / (max.x - min.x) }
-
+        
         let scaled = values.map { factor * ($0 - self.min.x) }
         return scaled
     }
@@ -493,7 +516,7 @@ class GPLineChart: UIControl {
         let scaled = scaleValuesOnYAxis(labels)
         
         for (i, value) in enumerate(scaled) {
-           
+            
             let y = CGFloat(value)
             let label = UILabel(frame: CGRect(x: drawingWidth, y: y, width: 0, height: 0))
             label.font = self.font
@@ -513,12 +536,12 @@ class GPLineChart: UIControl {
             
             // Align label above the value
             label.frame.origin.y -= label.frame.height
-
+            
             self.addSubview(label)
             
             // Do not add line for the label at the bottom
             if (y != drawingHeight) {
-  
+                
                 CGContextMoveToPoint(context, 0, y)
                 CGContextAddLineToPoint(context, self.bounds.width, y)
                 CGContextSetLineDash(context, 0, [5], 1)

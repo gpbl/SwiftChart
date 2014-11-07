@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2409AA3A1A0CBBC10097FE50 /* GPLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2409AA391A0CBBC10097FE50 /* GPLineChart.swift */; };
 		24D9FFB31A0C319E007C1260 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9FFB21A0C319E007C1260 /* AppDelegate.swift */; };
 		24D9FFB51A0C319E007C1260 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9FFB41A0C319E007C1260 /* ViewController.swift */; };
 		24D9FFB81A0C319E007C1260 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24D9FFB61A0C319E007C1260 /* Main.storyboard */; };
 		24D9FFBA1A0C319E007C1260 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24D9FFB91A0C319E007C1260 /* Images.xcassets */; };
 		24D9FFBD1A0C319E007C1260 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24D9FFBB1A0C319E007C1260 /* LaunchScreen.xib */; };
 		24D9FFC91A0C319E007C1260 /* GPLineChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9FFC81A0C319E007C1260 /* GPLineChartTests.swift */; };
-		24D9FFD41A0C31D1007C1260 /* GPLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9FFD31A0C31D1007C1260 /* GPLineChart.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2409AA391A0CBBC10097FE50 /* GPLineChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPLineChart.swift; path = Classes/GPLineChart.swift; sourceTree = "<group>"; };
 		24D9FFAD1A0C319E007C1260 /* GPLineChart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPLineChart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D9FFB11A0C319E007C1260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24D9FFB21A0C319E007C1260 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -37,7 +38,6 @@
 		24D9FFC21A0C319E007C1260 /* GPLineChartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPLineChartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D9FFC71A0C319E007C1260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24D9FFC81A0C319E007C1260 /* GPLineChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPLineChartTests.swift; sourceTree = "<group>"; };
-		24D9FFD31A0C31D1007C1260 /* GPLineChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPLineChart.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,7 +118,7 @@
 		24D9FFD21A0C31AA007C1260 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				24D9FFD31A0C31D1007C1260 /* GPLineChart.swift */,
+				2409AA391A0CBBC10097FE50 /* GPLineChart.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -222,7 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24D9FFD41A0C31D1007C1260 /* GPLineChart.swift in Sources */,
+				2409AA3A1A0CBBC10097FE50 /* GPLineChart.swift in Sources */,
 				24D9FFB51A0C319E007C1260 /* ViewController.swift in Sources */,
 				24D9FFB31A0C319E007C1260 /* AppDelegate.swift in Sources */,
 			);
@@ -418,6 +418,7 @@
 				24D9FFCE1A0C319E007C1260 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		24D9FFCF1A0C319E007C1260 /* Build configuration list for PBXNativeTarget "GPLineChartTests" */ = {
 			isa = XCConfigurationList;
@@ -426,6 +427,7 @@
 				24D9FFD11A0C319E007C1260 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

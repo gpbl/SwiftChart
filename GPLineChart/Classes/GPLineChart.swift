@@ -8,12 +8,40 @@
 
 import UIKit
 
-typealias GPLineChartDataset = (x: Array<Float>, y: Array<Float>, name: String?)
-
 protocol GPLineChartDelegate {
     func didTouchInsideLineChart(lineChart: GPLineChart, point: CGPoint, axisValues: (x: Float, y: Float), data: Array<(x: Float, y: Float)?>, indexes: Array<Int?>)
     func didTouchOutsideLineChart(lineChart: GPLineChart)
 }
+
+/**
+Represent a serie to draw in the line chart. Each serie is defined by its data and options.
+*/
+struct GPLineChartSerie {
+    let data: Array<(x: Float, y: Float)>
+    var area: Bool = true
+    var line: Bool = true
+    var color: (above: UIColor, below: UIColor) = (above: GPLineChartColors.greenColor(), below: GPLineChartColors.redColor())
+    
+    init(data: Array<(x: Float, y: Float)>, options: Dictionary<String, Any>? = nil) {
+        self.data = data
+        if let options = options {
+            if let area = options["area"] as? Bool {
+                self.area = area
+            }
+            if let line = options["line"] as? Bool {
+                self.line = line
+            }
+            if let color = options["color"] as? (above: UIColor, below: UIColor) {
+                self.color = color
+            }
+            if let color = options["color"] as? UIColor {
+                self.color = (above: color, below: color)
+            }
+            
+        }
+    }
+}
+
 
 @IBDesignable
 class GPLineChart: UIControl {
@@ -28,7 +56,9 @@ class GPLineChart: UIControl {
     /**
     Series of (x: x, y: y) values to display in the chart.
     */
-    var series: Array<Line> = []
+
+    var series: Array<GPLineChartSerie> = []
+    
     /**
     Values to display as labels of the x-axis. If not provided, the chart will use
     values of the first dataset.
@@ -72,11 +102,6 @@ class GPLineChart: UIControl {
     var lineWidth: CGFloat = 1
     
     /**
-    Fill the area below the lines.
-    */
-    var area: Bool = true
-    
-    /**
     Delegate for listening to GPLineChart touch events.
     */
     var delegate: GPLineChartDelegate?
@@ -100,14 +125,6 @@ class GPLineChart: UIControl {
     Custom maximum value for the y-axis.
     */
     var maxY: Float?
-    
-    /**
-    Colors for each serie
-    */
-    var colors = [
-        (aboveXAxis: GPLineChartColors.greenColor(), belowXAxis: GPLineChartColors.redColor()),
-        (aboveXAxis: GPLineChartColors.purpleColor(), belowXAxis: GPLineChartColors.orangeColor())
-    ]
     
     /**
     Color for the highlight line
@@ -197,14 +214,16 @@ class GPLineChart: UIControl {
         for (index, serie) in enumerate(series) {
             
             // Separate each line in multiple segments over and below the x axis
-            var segments = GPLineChart.segmentLine(serie)
+            var segments = GPLineChart.segmentLine(serie.data as Line)
             
             // Print negative segments
             for (i, segment) in enumerate(segments) {
                 let scaledXValues = scaleValuesOnXAxis( segment.map( { return $0.x } ) )
                 let scaledYValues = scaleValuesOnYAxis( segment.map( { return $0.y } ) )
-                drawLine(xValues: scaledXValues, yValues: scaledYValues, serieIndex: index)
-                if area {
+                if serie.line {
+                    drawLine(xValues: scaledXValues, yValues: scaledYValues, serieIndex: index)
+                }
+                if serie.area {
                     drawArea(xValues: scaledXValues, yValues: scaledYValues, serieIndex: index)
                 }
             }
@@ -229,9 +248,9 @@ class GPLineChart: UIControl {
         // Check in datasets
         
         for serie in series {
-            let xValues =  serie.map( { (point: Point) -> Float in
+            let xValues =  serie.data.map( { (point: Point) -> Float in
                 return point.x } )
-            let yValues =  serie.map( { (point: Point) -> Float in
+            let yValues =  serie.data.map( { (point: Point) -> Float in
                 return point.y } )
             
             let newMinX = minElement(xValues)
@@ -270,59 +289,6 @@ class GPLineChart: UIControl {
         
     }
     
-    
-    func getMaximum() -> (x: Float, y: Float) {
-        
-        var maxX: Float?, maxY: Float?
-        
-        if self.maxX != nil {
-            maxX = self.maxX
-        }
-        
-        if self.maxY != nil {
-            maxY = self.maxY
-        }
-        
-        if maxX != nil && maxY != nil {
-            return (x: maxX!, y: maxY!)
-        }
-        
-        // Check data sets
-        
-        for serie in series {
-            let xValues =  serie.map( { (point: Point) -> Float in
-                return point.x } )
-            let yValues =  serie.map( { (point: Point) -> Float in
-                return point.y } )
-            let newMaxX = maxElement(xValues)
-            let newMaxY = maxElement(yValues)
-            
-            if maxX == nil || newMaxX > maxX! {
-                maxX = newMaxX
-            }
-            if maxY == nil || newMaxY > maxY! {
-                maxY = newMaxY
-            }
-            
-        }
-        
-        if xLabels != nil {
-            let newMaxX = maxElement(xLabels!)
-            if maxX == nil || newMaxX > maxX {
-                maxX = newMaxX
-            }
-        }
-        
-        if yLabels != nil {
-            let newMaxY = maxElement(yLabels!)
-            if maxY == nil || newMaxY > maxY {
-                maxY = newMaxY
-            }
-        }
-        
-        return (x: maxX!, y: maxY!)
-        
-    }
     
     func scaleValuesOnXAxis(values: Array<Float>) -> Array<Float> {
         let width = Float(drawingWidth)
@@ -385,10 +351,10 @@ class GPLineChart: UIControl {
         lineLayer.frame = self.bounds
         lineLayer.path = path
         if isAboveXAxis {
-            lineLayer.strokeColor = colors[serieIndex].aboveXAxis.CGColor
+            lineLayer.strokeColor = series[serieIndex].color.above.CGColor
         }
         else {
-            lineLayer.strokeColor = colors[serieIndex].belowXAxis.CGColor
+            lineLayer.strokeColor = series[serieIndex].color.below.CGColor
         }
         lineLayer.fillColor = nil
         lineLayer.lineWidth = lineWidth
@@ -418,10 +384,10 @@ class GPLineChart: UIControl {
         areaLayer.path = area
         areaLayer.strokeColor = nil
         if isAboveXAxis {
-            areaLayer.fillColor  = colors[serieIndex].aboveXAxis.colorWithAlphaComponent(0.1).CGColor
+            areaLayer.fillColor = series[serieIndex].color.above.colorWithAlphaComponent(0.1).CGColor
         }
         else {
-            areaLayer.fillColor  = colors[serieIndex].belowXAxis.colorWithAlphaComponent(0.1).CGColor
+            areaLayer.fillColor = series[serieIndex].color.below.colorWithAlphaComponent(0.1).CGColor
         }
         areaLayer.lineWidth = 0
         
@@ -461,7 +427,7 @@ class GPLineChart: UIControl {
         }
         else {
             // Use labels from the first serie
-            labels = series[0].map( { (point: Point) -> Float in
+            labels = series[0].data.map( { (point: Point) -> Float in
                 return point.x } )
         }
         
@@ -610,7 +576,7 @@ class GPLineChart: UIControl {
         
         for serie in series {
             var touchedIndex: Int? = nil
-            let xValues = serie.map( { (point: Point) -> Float in
+            let xValues = serie.data.map( { (point: Point) -> Float in
                 return point.x } )
             let closest = GPLineChart.findClosestInValues(xValues, forValue: xValue)
             if closest.lowestIndex != nil && closest.highestIndex != nil {
@@ -624,7 +590,7 @@ class GPLineChart: UIControl {
         for i in 0..<touchedIndexes.count {
             if let valueIndex = touchedIndexes[i] {
                 let serie = series[i]
-                data.append(serie[valueIndex])
+                data.append(serie.data[valueIndex])
             }
             else {
                 data.append(nil)

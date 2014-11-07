@@ -13,9 +13,9 @@
 		2404EEB81A0D5AE800BCB7D6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2404EEB71A0D5AE800BCB7D6 /* Images.xcassets */; };
 		2404EEBB1A0D5AE800BCB7D6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2404EEB91A0D5AE800BCB7D6 /* LaunchScreen.xib */; };
 		2404EEC71A0D5AE800BCB7D6 /* SwiftChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEC61A0D5AE800BCB7D6 /* SwiftChartTests.swift */; };
-		2404EED21A0D5B1F00BCB7D6 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EED11A0D5B1F00BCB7D6 /* Chart.swift */; };
-		2404EED41A0D5B5100BCB7D6 /* ChartSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EED31A0D5B5100BCB7D6 /* ChartSerie.swift */; };
-		2404EED61A0D5B8300BCB7D6 /* ChartColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EED51A0D5B8300BCB7D6 /* ChartColors.swift */; };
+		2404EEDD1A0D647200BCB7D6 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDA1A0D647200BCB7D6 /* Chart.swift */; };
+		2404EEDE1A0D647200BCB7D6 /* ChartColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDB1A0D647200BCB7D6 /* ChartColors.swift */; };
+		2404EEDF1A0D647200BCB7D6 /* ChartSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDC1A0D647200BCB7D6 /* ChartSerie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,9 +39,9 @@
 		2404EEC01A0D5AE800BCB7D6 /* SwiftChartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2404EEC51A0D5AE800BCB7D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2404EEC61A0D5AE800BCB7D6 /* SwiftChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChartTests.swift; sourceTree = "<group>"; };
-		2404EED11A0D5B1F00BCB7D6 /* Chart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
-		2404EED31A0D5B5100BCB7D6 /* ChartSerie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartSerie.swift; sourceTree = "<group>"; };
-		2404EED51A0D5B8300BCB7D6 /* ChartColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartColors.swift; sourceTree = "<group>"; };
+		2404EEDA1A0D647200BCB7D6 /* Chart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Chart.swift; path = Chart/Chart.swift; sourceTree = "<group>"; };
+		2404EEDB1A0D647200BCB7D6 /* ChartColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartColors.swift; path = Chart/ChartColors.swift; sourceTree = "<group>"; };
+		2404EEDC1A0D647200BCB7D6 /* ChartSerie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartSerie.swift; path = Chart/ChartSerie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,9 +122,9 @@
 		2404EED01A0D5B0F00BCB7D6 /* Chart */ = {
 			isa = PBXGroup;
 			children = (
-				2404EED11A0D5B1F00BCB7D6 /* Chart.swift */,
-				2404EED31A0D5B5100BCB7D6 /* ChartSerie.swift */,
-				2404EED51A0D5B8300BCB7D6 /* ChartColors.swift */,
+				2404EEDA1A0D647200BCB7D6 /* Chart.swift */,
+				2404EEDB1A0D647200BCB7D6 /* ChartColors.swift */,
+				2404EEDC1A0D647200BCB7D6 /* ChartSerie.swift */,
 			);
 			name = Chart;
 			sourceTree = "<group>";
@@ -229,11 +229,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2404EEDE1A0D647200BCB7D6 /* ChartColors.swift in Sources */,
 				2404EEB31A0D5AE800BCB7D6 /* ViewController.swift in Sources */,
-				2404EED61A0D5B8300BCB7D6 /* ChartColors.swift in Sources */,
-				2404EED41A0D5B5100BCB7D6 /* ChartSerie.swift in Sources */,
+				2404EEDF1A0D647200BCB7D6 /* ChartSerie.swift in Sources */,
 				2404EEB11A0D5AE800BCB7D6 /* AppDelegate.swift in Sources */,
-				2404EED21A0D5B1F00BCB7D6 /* Chart.swift in Sources */,
+				2404EEDD1A0D647200BCB7D6 /* Chart.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +429,7 @@
 				2404EECC1A0D5AE800BCB7D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2404EECD1A0D5AE800BCB7D6 /* Build configuration list for PBXNativeTarget "SwiftChartTests" */ = {
 			isa = XCConfigurationList;
@@ -437,6 +438,7 @@
 				2404EECF1A0D5AE800BCB7D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

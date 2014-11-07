@@ -456,7 +456,7 @@ class GPLineChart: UIControl {
             
             self.addSubview(label)
             
-            // Add vertical guides
+            // Add vertical grid
             
             CGContextMoveToPoint(context, x, 0)
             CGContextAddLineToPoint(context, x, self.bounds.height)
@@ -506,8 +506,9 @@ class GPLineChart: UIControl {
             
             self.addSubview(label)
             
-            // Do not add line for the label at the bottom
-            if (y != drawingHeight) {
+            // Add horizontal grid
+            
+            if (y != drawingHeight && value != 0) {
                 
                 CGContextMoveToPoint(context, 0, y)
                 CGContextAddLineToPoint(context, self.bounds.width, y)
@@ -515,6 +516,19 @@ class GPLineChart: UIControl {
                 CGContextStrokePath(context)
                 
             }
+        }
+        
+        UIGraphicsEndImageContext()
+        
+        // Add grid for zero
+        
+        if (max.y > 0) & (min.y < 0) {
+            let zero = CGFloat(scaleValueOnYAxis(0))
+            CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.8).CGColor)
+            CGContextMoveToPoint(context, 0, zero)
+            CGContextAddLineToPoint(context, self.bounds.width, zero)
+            CGContextSetLineDash(context, 0, nil, 0)
+            CGContextStrokePath(context)
         }
         
     }

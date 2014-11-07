@@ -1,53 +1,23 @@
 //
-//  GPLineChart.swift
-//  GPLineChart
+//  Chart.swift
+//  SwiftChart
 //
-//  Created by Giampaolo Bellavite on 28/10/14.
+//  Created by Giampaolo Bellavite on 07/11/14.
 //  Copyright (c) 2014 Giampaolo Bellavite. All rights reserved.
 //
 
 import UIKit
 
-protocol GPLineChartDelegate {
-    func didTouchInsideLineChart(lineChart: GPLineChart, point: CGPoint, axisValues: (x: Float, y: Float), data: Array<(x: Float, y: Float)?>, indexes: Array<Int?>)
-    func didTouchOutsideLineChart(lineChart: GPLineChart)
+protocol ChartDelegate {
+    func didTouchInsideLineChart(lineChart: Chart, point: CGPoint, axisValues: ChartPoint, data: Array<ChartPoint?>, indexes: Array<Int?>)
+    func didTouchOutsideLineChart(lineChart: Chart)
 }
 
-/**
-Represent a serie to draw in the line chart. Each serie is defined by its data and options.
-*/
-struct GPLineChartSerie {
-    let data: Array<(x: Float, y: Float)>
-    var area: Bool = true
-    var line: Bool = true
-    var color: (above: UIColor, below: UIColor) = (above: GPLineChartColors.greenColor(), below: GPLineChartColors.redColor())
-    
-    init(data: Array<(x: Float, y: Float)>, options: Dictionary<String, Any>? = nil) {
-        self.data = data
-        if let options = options {
-            if let area = options["area"] as? Bool {
-                self.area = area
-            }
-            if let line = options["line"] as? Bool {
-                self.line = line
-            }
-            if let color = options["color"] as? (above: UIColor, below: UIColor) {
-                self.color = color
-            }
-            if let color = options["color"] as? UIColor {
-                self.color = (above: color, below: color)
-            }
-            
-        }
-    }
-}
-
+typealias ChartPoint = (x: Float, y: Float)
+typealias ChartLine = Array<ChartPoint>
 
 @IBDesignable
-class GPLineChart: UIControl {
-    
-    typealias Point = (x: Float, y: Float)
-    typealias Line = Array<Point>
+class Chart: UIControl {
     
     // MARK: Configuration
     
@@ -56,12 +26,13 @@ class GPLineChart: UIControl {
     /**
     Series of (x: x, y: y) values to display in the chart.
     */
-
-    var series: Array<GPLineChartSerie> = []
+    
+    var series: Array<ChartSerie> = []
     
     /**
     Values to display as labels of the x-axis. If not provided, the chart will use
-    values of the first dataset.
+    values of the first dataset. 
+    @see xLabelFormatter
     */
     var xLabels: Array<Float>?
     
@@ -102,9 +73,9 @@ class GPLineChart: UIControl {
     var lineWidth: CGFloat = 1
     
     /**
-    Delegate for listening to GPLineChart touch events.
+    Delegate for listening to Chart touch events.
     */
-    var delegate: GPLineChartDelegate?
+    var delegate: ChartDelegate?
     
     /**
     Custom minimum value for the x-axis.
@@ -145,10 +116,10 @@ class GPLineChart: UIControl {
     
     private var drawingHeight: CGFloat = 0
     private var drawingWidth: CGFloat = 0
-    private var lineLayerStore: Array<CAShapeLayer> = []
+    private var lineLayers: Array<CAShapeLayer> = []
     private var highlightShapeLayer: CAShapeLayer?
-    private var min: (x: Float, y: Float) = (x: 0, y: 0)
-    private var max: (x: Float, y: Float) = (x: 0, y: 0)
+    private var min: ChartPoint = (x: 0, y: 0)
+    private var max: ChartPoint = (x: 0, y: 0)
     
     // MARK: initializations
     
@@ -173,7 +144,7 @@ class GPLineChart: UIControl {
         #endif
     }
     
-    func drawIBPlaceholder() {
+    private func drawIBPlaceholder() {
         let placeholder = UIView(frame: self.frame)
         placeholder.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1)
         let label = UILabel()
@@ -204,17 +175,17 @@ class GPLineChart: UIControl {
         for view in self.subviews {
             view.removeFromSuperview()
         }
-        for layer in lineLayerStore {
+        for layer in lineLayers {
             layer.removeFromSuperlayer()
         }
-        lineLayerStore.removeAll()
+        lineLayers.removeAll()
         
         // Draw content
         
         for (index, serie) in enumerate(series) {
             
             // Separate each line in multiple segments over and below the x axis
-            var segments = GPLineChart.segmentLine(serie.data as Line)
+            var segments = Chart.segmentLine(serie.data as ChartLine)
             
             // Print negative segments
             for (i, segment) in enumerate(segments) {
@@ -231,26 +202,26 @@ class GPLineChart: UIControl {
         
         drawAxes()
         if xLabels != nil || series.count > 0 {
-            drawLabelsOnXAxis()
+            drawLabelsAndGridOnXAxis()
         }
         if yLabels != nil || series.count > 0 {
-            drawLabelsOnYAxis()
+            drawLabelsAndGridOnYAxis()
         }
         
     }
     
     // MARK: - Scaling
     
-    func getMinMax() -> (min: (x: Float, y: Float), max: (x: Float, y: Float)) {
+    func getMinMax() -> (min: ChartPoint, max: ChartPoint) {
         var min = (x: self.minX, y: self.minY)
         var max = (x: self.maxX, y: self.maxY)
         
         // Check in datasets
         
         for serie in series {
-            let xValues =  serie.data.map( { (point: Point) -> Float in
+            let xValues =  serie.data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
-            let yValues =  serie.data.map( { (point: Point) -> Float in
+            let yValues =  serie.data.map( { (point: ChartPoint) -> Float in
                 return point.y } )
             
             let newMinX = minElement(xValues)
@@ -288,7 +259,6 @@ class GPLineChart: UIControl {
         return (min: (x: min.x!, y: min.y!), max: (x: max.x!, max.y!))
         
     }
-    
     
     func scaleValuesOnXAxis(values: Array<Float>) -> Array<Float> {
         let width = Float(drawingWidth)
@@ -350,6 +320,7 @@ class GPLineChart: UIControl {
         var lineLayer = CAShapeLayer()
         lineLayer.frame = self.bounds
         lineLayer.path = path
+        
         if isAboveXAxis {
             lineLayer.strokeColor = series[serieIndex].color.above.CGColor
         }
@@ -361,7 +332,7 @@ class GPLineChart: UIControl {
         
         self.layer.addSublayer(lineLayer)
         
-        lineLayerStore.append(lineLayer)
+        lineLayers.append(lineLayer)
         
         return lineLayer
     }
@@ -393,7 +364,7 @@ class GPLineChart: UIControl {
         
         self.layer.addSublayer(areaLayer)
         
-        lineLayerStore.append(areaLayer)
+        lineLayers.append(areaLayer)
     }
     
     func drawAxes() {
@@ -414,7 +385,7 @@ class GPLineChart: UIControl {
         
     }
     
-    func drawLabelsOnXAxis() {
+    func drawLabelsAndGridOnXAxis() {
         
         let context = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.3).CGColor)
@@ -427,7 +398,7 @@ class GPLineChart: UIControl {
         }
         else {
             // Use labels from the first serie
-            labels = series[0].data.map( { (point: Point) -> Float in
+            labels = series[0].data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
         }
         
@@ -465,7 +436,7 @@ class GPLineChart: UIControl {
         
     }
     
-    func drawLabelsOnYAxis() {
+    func drawLabelsAndGridOnYAxis() {
         
         let context = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.3).CGColor)
@@ -559,7 +530,7 @@ class GPLineChart: UIControl {
             highlightShapeLayer = shapeLayer
             
             self.layer.addSublayer(highlightShapeLayer!)
-            lineLayerStore.append(highlightShapeLayer!)
+            lineLayers.append(highlightShapeLayer!)
         }
         
     }
@@ -590,9 +561,9 @@ class GPLineChart: UIControl {
         
         for serie in series {
             var touchedIndex: Int? = nil
-            let xValues = serie.data.map( { (point: Point) -> Float in
+            let xValues = serie.data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
-            let closest = GPLineChart.findClosestInValues(xValues, forValue: xValue)
+            let closest = Chart.findClosestInValues(xValues, forValue: xValue)
             if closest.lowestIndex != nil && closest.highestIndex != nil {
                 // Consider valid only values on the right
                 touchedIndex = closest.lowestIndex
@@ -600,7 +571,7 @@ class GPLineChart: UIControl {
             touchedIndexes.append(touchedIndex)
         }
         
-        var data: Array<Point?> = []
+        var data: Array<ChartPoint?> = []
         for i in 0..<touchedIndexes.count {
             if let valueIndex = touchedIndexes[i] {
                 let serie = series[i]
@@ -654,33 +625,21 @@ class GPLineChart: UIControl {
         return (lowestValue: lowestValue, highestValue: highestValue, lowestIndex: lowestIndex, highestIndex: highestIndex)
     }
     
-    class func UIColorFromHex(hex: Int) -> UIColor {
-        var red = CGFloat((hex & 0xFF0000) >> 16) / 255.0
-        var green = CGFloat((hex & 0xFF00) >> 8) / 255.0
-        var blue = CGFloat((hex & 0xFF)) / 255.0
-        return UIColor(red: red, green: green, blue: blue, alpha: 1)
-    }
-    
-    class func makeCircleAtLocation(location: CGPoint, radius: CGFloat) -> UIBezierPath {
-        let path = UIBezierPath()
-        path.addArcWithCenter(location, radius: radius, startAngle: 0, endAngle: CGFloat(M_PI * 2), clockwise: true)
-        return path
-    }
     
     /**
     Segment a line in multiple lines when the line touches the x-axis, i.e. separating
     positive from negative values.
     */
-    class func segmentLine(line: Line) -> Array<Line> {
-        var segments: Array<Line> = []
-        var segment: Line = []
+    class func segmentLine(line: ChartLine) -> Array<ChartLine> {
+        var segments: Array<ChartLine> = []
+        var segment: ChartLine = []
         for (i, point) in enumerate(line) {
             segment.append(point)
             if i < line.count - 1 {
                 let nextPoint = line[i+1]
                 if point.y * nextPoint.y < 0 || point.y < 0 && nextPoint.y == 0 {
                     // The sign changed, close the segment with the intersection on x-axis
-                    let closingPoint = GPLineChart.intersectionOnXAxisBetween(point, and: nextPoint)
+                    let closingPoint = Chart.intersectionOnXAxisBetween(point, and: nextPoint)
                     segment.append(closingPoint)
                     segments.append(segment)
                     // Start a new segment
@@ -698,44 +657,9 @@ class GPLineChart: UIControl {
     /**
     Return the intersection of a line between two points on the x-axis
     */
-    class func intersectionOnXAxisBetween(p1: Point, and p2: Point) -> Point {
+    class func intersectionOnXAxisBetween(p1: ChartPoint, and p2: ChartPoint) -> ChartPoint {
         return (x: p1.x - (p2.x - p1.x) / (p2.y - p1.y) * p1.y, y: 0)
     }
 }
 
-struct GPLineChartColors {
-    static func blueColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0x1f77b4)
-    }
-    static func orangeColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0xff7f0e)
-    }
-    static func greenColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0x2ca02c)
-    }
-    static func redColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0xd62728)
-    }
-    static func purpleColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0x9467bd)
-    }
-    static func maroonColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0x8c564b)
-    }
-    static func pinkColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0xe377c2)
-    }
-    static func greyColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0x7f7f7f)
-    }
-    static func cyanColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0x17becf)
-    }
-    static func goldColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0xbcbd22)
-    }
-    static func yellowColor() -> UIColor {
-        return GPLineChart.UIColorFromHex(0xe7ba52)
-    }
-}
 

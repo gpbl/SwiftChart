@@ -23,10 +23,12 @@ class ViewController: UIViewController {
         
         chart = GPLineChart()
         
-        chart!.series = [
-            [(x: 0, y: 1), (x: 1, y: 2), (x: 2, y: 0), (x: 3, y: 5), (x: 4, y: 6)],
-            [(x: 0, y: -1), (x: 1, y: -2), (x: 2, y: 0), (x: 3, y: -5), (x: 4, y: -6)]
-        ]
+        let firstSerie = GPLineChartSerie(data: [(x: 0, y: 1), (x: 1, y: 2), (x: 2, y: 0), (x: 3, y: 5), (x: 4, y: 6)])
+        let secondSerie = GPLineChartSerie(data: [(x: 0, y: -0.4), (x: 1, y: -0.2), (x: 2, y: -1), (x: 3, y: 0), (x: 4, y: 1)],
+                                        options: ["area": false, "color": UIColor.redColor()])
+        
+        chart!.series.append(firstSerie)
+        chart!.series.append(secondSerie)
         
         chartContainer.addSubview(chart!)
         

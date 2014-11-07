@@ -697,7 +697,7 @@ class GPLineChart: UIControl {
             segment.append(point)
             if i < line.count - 1 {
                 let nextPoint = line[i+1]
-                if point.y * nextPoint.y < 0 {
+                if point.y * nextPoint.y < 0 || point.y < 0 && nextPoint.y == 0 {
                     // The sign changed, close the segment with the intersection on x-axis
                     let closingPoint = GPLineChart.intersectionOnXAxisBetween(point, and: nextPoint)
                     segment.append(closingPoint)

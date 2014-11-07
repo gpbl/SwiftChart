@@ -137,6 +137,7 @@ class GPLineChart: UIControl {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = UIColor.clearColor()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -150,7 +151,7 @@ class GPLineChart: UIControl {
     override func drawRect(rect: CGRect) {
         #if TARGET_INTERFACE_BUILDER
             drawIBPlaceholder()
-            #else
+        #else
             drawChart()
         #endif
     }

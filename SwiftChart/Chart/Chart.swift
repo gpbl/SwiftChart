@@ -117,7 +117,7 @@ class Chart: UIControl {
     var highlightLineWidth: CGFloat = 0.5
     
     /**
-    Negative offset for the highlight line, spans above the chart. Useful to display a label on touch. 
+    Negative offset for the highlight line, spans above the chart. Useful to display a label on touch.
     */
     var highlightLineOffset: CGFloat = 0
     
@@ -148,7 +148,7 @@ class Chart: UIControl {
     override func drawRect(rect: CGRect) {
         #if TARGET_INTERFACE_BUILDER
             drawIBPlaceholder()
-        #else
+            #else
             drawChart()
         #endif
     }
@@ -312,13 +312,17 @@ class Chart: UIControl {
         return scaled
     }
     
+    func getZero() -> Float {
+        return scaleValueOnYAxis(0)
+    }
+    
     // MARK: - Drawings
     
     func isVerticalSegmentAboveXAxis(yValues: Array<Float>) -> Bool {
         
         // YValues are "reverted" from top to bottom, so min is actually the maxz
         let min = maxElement(yValues)
-        let zero = scaleValueOnYAxis(0)
+        let zero = getZero()
         
         return min <= zero
         
@@ -359,7 +363,7 @@ class Chart: UIControl {
     func drawArea(#xValues: Array<Float>, yValues: Array<Float>, serieIndex: Int) {
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let area = CGPathCreateMutable()
-        let zero = CGFloat(scaleValueOnYAxis(min!.y))
+        let zero = CGFloat(getZero())
         
         CGPathMoveToPoint(area, nil, CGFloat(xValues[0]), zero)
         
@@ -513,7 +517,7 @@ class Chart: UIControl {
         // Add grid for zero
         
         if (max!.y > 0) & (min!.y < 0) {
-            let zero = CGFloat(scaleValueOnYAxis(min!.y))
+            let zero = CGFloat(getZero())
             CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.8).CGColor)
             CGContextMoveToPoint(context, 0, zero)
             CGContextAddLineToPoint(context, self.bounds.width, zero)
@@ -600,7 +604,7 @@ class Chart: UIControl {
                 data.append(nil)
             }
         }
-
+        
         delegate?.didTouchInsideChart(self, point: CGPointMake(x, y), axisValues: (x: xValue, y: yValue), data: data, indexes: touchedIndexes)
         
     }

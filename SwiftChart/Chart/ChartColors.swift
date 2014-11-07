@@ -17,36 +17,42 @@ struct ChartColors {
     }
 
     static func blueColor() -> UIColor {
-        return UIColorFromHex(0x1f77b4)
+        return UIColorFromHex(0x4A90E2)
     }
     static func orangeColor() -> UIColor {
-        return UIColorFromHex(0xff7f0e)
+        return UIColorFromHex(0xF5A623)
     }
     static func greenColor() -> UIColor {
-        return UIColorFromHex(0x2ca02c)
+        return UIColorFromHex(0x7ED321)
+    }
+    static func darkGreenColor() -> UIColor {
+        return UIColorFromHex(0x417505)
     }
     static func redColor() -> UIColor {
-        return UIColorFromHex(0xd62728)
+        return UIColorFromHex(0xFF3200)
+    }
+    static func darkRedColor() -> UIColor {
+        return UIColorFromHex(0xD0021B)
     }
     static func purpleColor() -> UIColor {
-        return UIColorFromHex(0x9467bd)
+        return UIColorFromHex(0x9013FE)
     }
     static func maroonColor() -> UIColor {
-        return UIColorFromHex(0x8c564b)
+        return UIColorFromHex(0x8B572A)
     }
     static func pinkColor() -> UIColor {
-        return UIColorFromHex(0xe377c2)
+        return UIColorFromHex(0xBD10E0)
     }
     static func greyColor() -> UIColor {
         return UIColorFromHex(0x7f7f7f)
     }
     static func cyanColor() -> UIColor {
-        return UIColorFromHex(0x17becf)
+        return UIColorFromHex(0x50E3C2)
     }
     static func goldColor() -> UIColor {
         return UIColorFromHex(0xbcbd22)
     }
     static func yellowColor() -> UIColor {
-        return UIColorFromHex(0xe7ba52)
+        return UIColorFromHex(0xF8E71C)
     }
 }

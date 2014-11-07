@@ -12,28 +12,27 @@ import UIKit
 Represent a serie to draw in the line chart. Each serie is defined by its data and options.
 */
 struct ChartSerie {
-    let data: Array<(x: Float, y: Float)>
+    let data: Array<ChartPoint>
     var area: Bool = true
     var line: Bool = true
-    var color: (above: UIColor, below: UIColor) = (above: ChartColors.greenColor(), below: ChartColors.redColor())
+    var colors: (above: UIColor, below: UIColor) = (above: ChartColors.blueColor(), below: ChartColors.redColor())
     
-    init(data: Array<(x: Float, y: Float)>, options: Dictionary<String, Any>? = nil) {
+    init(data: Array<ChartPoint>) {
         self.data = data
-        if let options = options {
-            if let area = options["area"] as? Bool {
-                self.area = area
-            }
-            if let line = options["line"] as? Bool {
-                self.line = line
-            }
-            if let color = options["color"] as? (above: UIColor, below: UIColor) {
-                self.color = color
-            }
-            if let color = options["color"] as? UIColor {
-                self.color = (above: color, below: color)
-            }
-            
-        }
+    }
+    
+    init(data: Array<ChartPoint>, color: UIColor, area: Bool, line: Bool) {
+        self.data = data
+        self.colors = (above: color, below: color)
+        self.area = area
+        self.line = line
+    }
+    
+    init(data: Array<ChartPoint>, aboveColor: UIColor, belowColor: UIColor, area: Bool, line: Bool) {
+        self.data = data
+        self.colors = (above: aboveColor, below: belowColor)
+        self.area = area
+        self.line = line
     }
 }
 

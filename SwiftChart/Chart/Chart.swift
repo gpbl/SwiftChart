@@ -181,7 +181,7 @@ class Chart: UIControl {
         addSubview(placeholder)
     }
     
-    func drawChart() {
+    private func drawChart() {
         
         drawingHeight = bounds.height - axisInset
         drawingWidth = bounds.width
@@ -234,7 +234,7 @@ class Chart: UIControl {
     
     // MARK: - Scaling
     
-    func getMinMax() -> (min: ChartPoint, max: ChartPoint) {
+    private func getMinMax() -> (min: ChartPoint, max: ChartPoint) {
         var min = (x: self.minX, y: self.minY)
         var max = (x: self.maxX, y: self.maxY)
         
@@ -282,7 +282,7 @@ class Chart: UIControl {
         
     }
     
-    func scaleValuesOnXAxis(values: Array<Float>) -> Array<Float> {
+    private func scaleValuesOnXAxis(values: Array<Float>) -> Array<Float> {
         let width = Float(drawingWidth)
         
         var factor: Float
@@ -293,7 +293,7 @@ class Chart: UIControl {
         return scaled
     }
     
-    func scaleValuesOnYAxis(values: Array<Float>) -> Array<Float> {
+    private func scaleValuesOnYAxis(values: Array<Float>) -> Array<Float> {
         
         let height = Float(drawingHeight)
         var factor: Float
@@ -304,7 +304,7 @@ class Chart: UIControl {
         return scaled
     }
     
-    func scaleValueOnYAxis(value: Float) -> Float {
+    private func scaleValueOnYAxis(value: Float) -> Float {
         
         let height = Float(drawingHeight)
         var factor: Float
@@ -315,23 +315,23 @@ class Chart: UIControl {
         return scaled
     }
     
-    func getZero() -> Float {
+    private func getZeroValueonYAxis() -> Float {
         return scaleValueOnYAxis(0)
     }
     
     // MARK: - Drawings
     
-    func isVerticalSegmentAboveXAxis(yValues: Array<Float>) -> Bool {
+    private func isVerticalSegmentAboveXAxis(yValues: Array<Float>) -> Bool {
         
         // YValues are "reverted" from top to bottom, so min is actually the maxz
         let min = maxElement(yValues)
-        let zero = getZero()
+        let zero = getZeroValueonYAxis()
         
         return min <= zero
         
     }
     
-    func drawLine(#xValues: Array<Float>, yValues: Array<Float>, serieIndex: Int) -> CAShapeLayer {
+    private func drawLine(#xValues: Array<Float>, yValues: Array<Float>, serieIndex: Int) -> CAShapeLayer {
         
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let path = CGPathCreateMutable()
@@ -363,10 +363,10 @@ class Chart: UIControl {
         return lineLayer
     }
     
-    func drawArea(#xValues: Array<Float>, yValues: Array<Float>, serieIndex: Int) {
+    private func drawArea(#xValues: Array<Float>, yValues: Array<Float>, serieIndex: Int) {
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let area = CGPathCreateMutable()
-        let zero = CGFloat(getZero())
+        let zero = CGFloat(getZeroValueonYAxis())
         
         CGPathMoveToPoint(area, nil, CGFloat(xValues[0]), zero)
         
@@ -393,7 +393,7 @@ class Chart: UIControl {
         layerStore.append(areaLayer)
     }
     
-    func drawAxes() {
+    private func drawAxes() {
         
         let context = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(context, axisColor.CGColor)
@@ -411,7 +411,7 @@ class Chart: UIControl {
         
     }
     
-    func drawLabelsAndGridOnXAxis() {
+    private func drawLabelsAndGridOnXAxis() {
         
         let context = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.3).CGColor)
@@ -463,7 +463,7 @@ class Chart: UIControl {
         
     }
     
-    func drawLabelsAndGridOnYAxis() {
+    private func drawLabelsAndGridOnYAxis() {
         
         let context = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.3).CGColor)
@@ -520,7 +520,7 @@ class Chart: UIControl {
         // Add grid for zero
         
         if (max.y > 0) & (min.y < 0) {
-            let zero = CGFloat(getZero())
+            let zero = CGFloat(getZeroValueonYAxis())
             CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.8).CGColor)
             CGContextMoveToPoint(context, 0, zero)
             CGContextAddLineToPoint(context, self.bounds.width, zero)
@@ -532,7 +532,7 @@ class Chart: UIControl {
     
     // MARK: - Touch events
     
-    func drawHighlightLineForXValue(x: CGFloat) {
+    private func drawHighlightLineForXValue(x: CGFloat) {
         if let shapeLayer = highlightShapeLayer {
             let path = CGPathCreateMutable()
             
@@ -623,17 +623,17 @@ class Chart: UIControl {
     
     // MARK: - Utilities
     
-    func valueFromPointAtX(x: CGFloat) -> Float {
+    private func valueFromPointAtX(x: CGFloat) -> Float {
         let value = ((max.x-min.x) / Float(drawingWidth)) * Float(x) + min.x
         return value
     }
     
-    func valueFromPointAtY(y: CGFloat) -> Float {
+    private func valueFromPointAtY(y: CGFloat) -> Float {
         let value = ((max.y - min.y) / Float(drawingHeight)) * Float(y) + min.y
         return -value
     }
     
-    class func findClosestInValues(values: Array<Float>, forValue value: Float) -> (lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?) {
+    private class func findClosestInValues(values: Array<Float>, forValue value: Float) -> (lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?) {
         var lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?
         
         for (i, currentValue) in enumerate(values) {
@@ -655,7 +655,7 @@ class Chart: UIControl {
     Segment a line in multiple lines when the line touches the x-axis, i.e. separating
     positive from negative values.
     */
-    class func segmentLine(line: ChartLine) -> Array<ChartLine> {
+    private class func segmentLine(line: ChartLine) -> Array<ChartLine> {
         var segments: Array<ChartLine> = []
         var segment: ChartLine = []
         for (i, point) in enumerate(line) {
@@ -682,7 +682,7 @@ class Chart: UIControl {
     /**
     Return the intersection of a line between two points on the x-axis
     */
-    class func intersectionOnXAxisBetween(p1: ChartPoint, and p2: ChartPoint) -> ChartPoint {
+    private class func intersectionOnXAxisBetween(p1: ChartPoint, and p2: ChartPoint) -> ChartPoint {
         return (x: p1.x - (p2.x - p1.x) / (p2.y - p1.y) * p1.y, y: 0)
     }
 }

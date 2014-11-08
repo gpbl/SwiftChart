@@ -38,7 +38,19 @@ class ViewController: UIViewController, ChartDelegate {
     }
     
     func didTouchOutsideChart(chart: Chart) {
-        chartLabel.text = " "
+        resetChartLabel()
+    }
+    
+    func resetChartLabel() {
+        chartLabel.text = nil
+    }
+    
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        super.didRotateFromInterfaceOrientation(fromInterfaceOrientation)
+        
+        // Redraw chart on rotation
+        chart.setNeedsDisplay()
+        resetChartLabel()
     }
 
 }

@@ -116,11 +116,6 @@ class Chart: UIControl {
     @IBInspectable
     var highlightLineWidth: CGFloat = 0.5
     
-    /**
-    Negative offset for the highlight line, spans above the chart. Useful to display a label on touch.
-    */
-    var highlightLineOffset: CGFloat = 0
-    
     // MARK: Private variables
     
     private var highlightShapeLayer: CAShapeLayer!
@@ -542,7 +537,7 @@ class Chart: UIControl {
         if let shapeLayer = highlightShapeLayer {
             let path = CGPathCreateMutable()
             
-            CGPathMoveToPoint(path, nil, x, 0 - highlightLineOffset)
+            CGPathMoveToPoint(path, nil, x, 0)
             CGPathAddLineToPoint(path, nil, x, drawingHeight)
             shapeLayer.path = path
         }

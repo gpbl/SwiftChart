@@ -123,12 +123,15 @@ class Chart: UIControl {
     
     // MARK: Private variables
     
-    private var drawingHeight: CGFloat = 0
-    private var drawingWidth: CGFloat = 0
-    private var lineLayers: Array<CAShapeLayer> = []
-    private var highlightShapeLayer: CAShapeLayer?
-    private var min: ChartPoint?
-    private var max: ChartPoint?
+    private var highlightShapeLayer: CAShapeLayer!
+    private var layerStore: Array<CAShapeLayer> = []
+    
+    private var drawingHeight: CGFloat!
+    private var drawingWidth: CGFloat!
+    
+    // Minimum and maximum values represented in the chart
+    private var min: ChartPoint!
+    private var max: ChartPoint!
     
     // MARK: initializations
     
@@ -187,17 +190,17 @@ class Chart: UIControl {
         min = minMax.min
         max = minMax.max
         
-        self.highlightShapeLayer = nil
+        highlightShapeLayer = nil
         
         // Remove things before drawing, e.g. when changing orientation
         
         for view in self.subviews {
             view.removeFromSuperview()
         }
-        for layer in lineLayers {
+        for layer in layerStore {
             layer.removeFromSuperlayer()
         }
-        lineLayers.removeAll()
+        layerStore.removeAll()
         
         // Draw content
         
@@ -283,10 +286,10 @@ class Chart: UIControl {
         let width = Float(drawingWidth)
         
         var factor: Float
-        if max!.x - min!.x == 0 { factor = 0 }
-        else { factor = width / (max!.x - min!.x) }
+        if max.x - min.x == 0 { factor = 0 }
+        else { factor = width / (max.x - min.x) }
         
-        let scaled = values.map { factor * ($0 - self.min!.x) }
+        let scaled = values.map { factor * ($0 - self.min.x) }
         return scaled
     }
     
@@ -294,10 +297,10 @@ class Chart: UIControl {
         
         let height = Float(drawingHeight)
         var factor: Float
-        if max!.y - min!.y == 0 { factor = 0 }
-        else { factor = height / (max!.y - min!.y) }
+        if max.y - min.y == 0 { factor = 0 }
+        else { factor = height / (max.y - min.y) }
         
-        let scaled = values.map { height - factor * ($0 - self.min!.y) }
+        let scaled = values.map { height - factor * ($0 - self.min.y) }
         return scaled
     }
     
@@ -305,10 +308,10 @@ class Chart: UIControl {
         
         let height = Float(drawingHeight)
         var factor: Float
-        if max!.y - min!.y == 0 { factor = 0 }
-        else { factor = height / (max!.y - min!.y) }
+        if max.y - min.y == 0 { factor = 0 }
+        else { factor = height / (max.y - min.y) }
         
-        let scaled = height - factor * (value - min!.y)
+        let scaled = height - factor * (value - min.y)
         return scaled
     }
     
@@ -355,7 +358,7 @@ class Chart: UIControl {
         
         self.layer.addSublayer(lineLayer)
         
-        lineLayers.append(lineLayer)
+        layerStore.append(lineLayer)
         
         return lineLayer
     }
@@ -387,7 +390,7 @@ class Chart: UIControl {
         
         self.layer.addSublayer(areaLayer)
         
-        lineLayers.append(areaLayer)
+        layerStore.append(areaLayer)
     }
     
     func drawAxes() {
@@ -473,7 +476,7 @@ class Chart: UIControl {
         }
         else {
             // Use y-values
-            labels = [min!.y, (min!.y + max!.y) / 2, max!.y]
+            labels = [min.y, (min.y + max.y) / 2, max.y]
         }
         let scaled = scaleValuesOnYAxis(labels)
         
@@ -516,7 +519,7 @@ class Chart: UIControl {
         
         // Add grid for zero
         
-        if (max!.y > 0) & (min!.y < 0) {
+        if (max.y > 0) & (min.y < 0) {
             let zero = CGFloat(getZero())
             CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.8).CGColor)
             CGContextMoveToPoint(context, 0, zero)
@@ -551,9 +554,8 @@ class Chart: UIControl {
             shapeLayer.lineWidth = highlightLineWidth
             
             highlightShapeLayer = shapeLayer
-            
-            self.layer.addSublayer(highlightShapeLayer!)
-            lineLayers.append(highlightShapeLayer!)
+            layer.addSublayer(shapeLayer)
+            layerStore.append(shapeLayer)
         }
         
     }
@@ -566,7 +568,7 @@ class Chart: UIControl {
         let x = point.locationInView(self).x
         let y = point.locationInView(self).y
         let xValue = valueFromPointAtX(x)
-        let yValue = valueFromPointAtY(y) + max!.y
+        let yValue = valueFromPointAtY(y) + max.y
         
         if x < 0 || x > drawingWidth {
             // Remove highlight and end the touch events
@@ -622,12 +624,12 @@ class Chart: UIControl {
     // MARK: - Utilities
     
     func valueFromPointAtX(x: CGFloat) -> Float {
-        let value = ((max!.x-min!.x) / Float(drawingWidth)) * Float(x) + min!.x
+        let value = ((max.x-min.x) / Float(drawingWidth)) * Float(x) + min.x
         return value
     }
     
     func valueFromPointAtY(y: CGFloat) -> Float {
-        let value = ((max!.y - min!.y) / Float(drawingHeight)) * Float(y) + min!.y
+        let value = ((max.y - min.y) / Float(drawingHeight)) * Float(y) + min.y
         return -value
     }
     

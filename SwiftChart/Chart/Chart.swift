@@ -316,7 +316,13 @@ class Chart: UIControl {
     }
     
     private func getZeroValueonYAxis() -> Float {
-        return scaleValueOnYAxis(0)
+        if min.y > 0 {
+            return scaleValueOnYAxis(min.y)
+        }
+        else {
+            return scaleValueOnYAxis(0)
+        }
+
     }
     
     // MARK: - Drawings

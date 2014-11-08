@@ -10,25 +10,19 @@ import UIKit
 
 class ViewController: UIViewController, ChartDelegate {
 
-    
     @IBOutlet weak var chartLabel: UILabel!
     @IBOutlet weak var chart: Chart!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        chartLabel.text = " "
+        resetChartLabel()
         
         let serie = ChartSerie(data: [(x: 1, y: 2), (x: 2, y: 3), (x: 3, y: 2), (x: 4, y: 4), (x: 5, y: 3), (x: 6, y: 5), (x: 7, y: 2.5), (x: 8, y: 6)])
-        chart.minY = 0
+
         chart.addSerie(serie)
         chart.delegate = self
     
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
     }
 
     func didTouchInsideChart(chart: Chart, point: CGPoint, axisValues: ChartPoint, data: Array<ChartPoint?>, indexes: Array<Int?>) {

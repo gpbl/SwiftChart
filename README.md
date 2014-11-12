@@ -9,4 +9,5 @@ A line/area chart library for iOS, in swift. Started as a fork of [swift-linecha
 * Works with negative values
 * Support of touch events
 * Can display partially filled series
+* Specify different colors for values above or below zero
 * Customizable y-, x-axis label formatters

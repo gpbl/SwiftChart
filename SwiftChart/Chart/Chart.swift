@@ -40,6 +40,11 @@ class Chart: UIControl {
     lowest, the middle and the highest values.
     */
     var yLabels: Array<Float>?
+
+    /**
+    Displays the y-axis labels on the right side of the chart.
+    */
+    var yLabelsOnRightSide: Bool = true
     
     /**
     Formatter for the labels on the x-axis.
@@ -495,11 +500,14 @@ class Chart: UIControl {
             labels = [min.y, (min.y + max.y) / 2, max.y]
         }
         let scaled = scaleValuesOnYAxis(labels)
-        
+        let padding: CGFloat = 5
         for (i, value) in enumerate(scaled) {
             
             let y = CGFloat(value)
-            let label = UILabel(frame: CGRect(x: drawingWidth, y: y, width: 0, height: 0))
+            let label = UILabel(frame: CGRect(x: padding,
+                                              y: y,
+                                          width: 0,
+                                         height: 0))
             label.font = labelFont
             label.text = yLabelFormatter(labels[i])
             label.textColor = labelColor
@@ -507,7 +515,10 @@ class Chart: UIControl {
             label.sizeToFit()
             
             // Align label to the right with a padding
-            label.frame.origin.x -= label.frame.width + 5
+            if yLabelsOnRightSide {
+                label.frame.origin.x = drawingWidth
+                label.frame.origin.x -= label.frame.width + padding
+            }
             
             // Align label above the value
             label.frame.origin.y -= label.frame.height

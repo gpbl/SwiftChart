@@ -42,7 +42,7 @@ class Chart: UIControl {
     var yLabels: Array<Float>?
 
     /**
-    Displays the y-axis labels on the right side of the chart.
+    Displays the y-axis labels on the right side of the chart. Default is `true`.
     */
     var yLabelsOnRightSide: Bool = true
     

@@ -69,9 +69,9 @@ class Chart: UIControl {
     var axisColor: UIColor = UIColor.grayColor()
     
     /**
-    Height of the area below the chart, containing the labels for the x-axis.
+    Height of the area at the bottom of the chart, containing the labels for the x-axis.
     */
-    var axisInset: CGFloat = 20
+    var axisBottomInset: CGFloat = 20
     
     /**
     Width of the chart lines.
@@ -146,15 +146,21 @@ class Chart: UIControl {
     override func drawRect(rect: CGRect) {
         #if TARGET_INTERFACE_BUILDER
             drawIBPlaceholder()
-            #else
+        #else
             drawChart()
         #endif
     }
     
+    /**
+    * Appends a serie to the chart.
+    */
     func addSerie(serie: ChartSerie) {
         series.append(serie)
     }
-    
+
+    /**
+    * Appends multiple series to the chart.
+    */
     func addSeries(series: Array<ChartSerie>) {
         for serie in series {
             addSerie(serie)
@@ -178,7 +184,7 @@ class Chart: UIControl {
     
     private func drawChart() {
         
-        drawingHeight = bounds.height - axisInset
+        drawingHeight = bounds.height - axisBottomInset
         drawingWidth = bounds.width
         
         let minMax = getMinMax()
@@ -444,7 +450,7 @@ class Chart: UIControl {
             label.sizeToFit()
             
             // Center label vertically
-            label.frame.origin.y -= (label.frame.height - axisInset) / 2
+            label.frame.origin.y -= (label.frame.height - axisBottomInset) / 2
             
             // Add left padding
             label.frame.origin.x += 5

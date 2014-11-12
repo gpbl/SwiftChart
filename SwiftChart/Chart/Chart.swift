@@ -72,7 +72,12 @@ class Chart: UIControl {
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
     */
     var axisBottomInset: CGFloat = 20
-    
+
+    /**
+    Height of the area at the top of the chart, acting a padding to make place for the top y-axis label.
+    */
+    var axisTopInset: CGFloat = 20
+
     /**
     Width of the chart lines.
     */
@@ -184,7 +189,7 @@ class Chart: UIControl {
     
     private func drawChart() {
         
-        drawingHeight = bounds.height - axisBottomInset
+        drawingHeight = bounds.height - axisBottomInset - axisTopInset
         drawingWidth = bounds.width
         
         let minMax = getMinMax()
@@ -214,6 +219,7 @@ class Chart: UIControl {
             for (i, segment) in enumerate(segments) {
                 let scaledXValues = scaleValuesOnXAxis( segment.map( { return $0.x } ) )
                 let scaledYValues = scaleValuesOnYAxis( segment.map( { return $0.y } ) )
+
                 if serie.line {
                     drawLine(xValues: scaledXValues, yValues: scaledYValues, serieIndex: index)
                 }
@@ -301,7 +307,8 @@ class Chart: UIControl {
         if max.y - min.y == 0 { factor = 0 }
         else { factor = height / (max.y - min.y) }
         
-        let scaled = values.map { height - factor * ($0 - self.min.y) }
+        let scaled = values.map { Float(self.axisTopInset) + height - factor * ($0 - self.min.y) }
+        
         return scaled
     }
     
@@ -312,7 +319,7 @@ class Chart: UIControl {
         if max.y - min.y == 0 { factor = 0 }
         else { factor = height / (max.y - min.y) }
         
-        let scaled = height - factor * (value - min.y)
+        let scaled = Float(self.axisTopInset) + height - factor * (value - min.y)
         return scaled
     }
     
@@ -408,8 +415,8 @@ class Chart: UIControl {
         CGContextSetLineWidth(context, 0.5)
         
         // xAxis (bottom)
-        CGContextMoveToPoint(context, 0, drawingHeight)
-        CGContextAddLineToPoint(context, drawingWidth, drawingHeight)
+        CGContextMoveToPoint(context, 0, drawingHeight + axisTopInset)
+        CGContextAddLineToPoint(context, drawingWidth, drawingHeight + axisTopInset)
         CGContextStrokePath(context)
         
         // xAxis (top)
@@ -450,6 +457,7 @@ class Chart: UIControl {
             label.sizeToFit()
             
             // Center label vertically
+            label.frame.origin.y += axisTopInset
             label.frame.origin.y -= (label.frame.height - axisBottomInset) / 2
             
             // Add left padding
@@ -498,11 +506,6 @@ class Chart: UIControl {
             
             label.sizeToFit()
             
-            // If label is on the top part of the chart, put it a bit below
-            if Int(y) == 0 {
-                label.frame.origin.y += label.frame.height
-            }
-            
             // Align label to the right with a padding
             label.frame.origin.x -= label.frame.width + 5
             
@@ -545,7 +548,7 @@ class Chart: UIControl {
             let path = CGPathCreateMutable()
             
             CGPathMoveToPoint(path, nil, x, 0)
-            CGPathAddLineToPoint(path, nil, x, drawingHeight)
+            CGPathAddLineToPoint(path, nil, x, drawingHeight  + axisTopInset)
             shapeLayer.path = path
         }
         else {

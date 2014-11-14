@@ -16,7 +16,6 @@
 		2404EEDD1A0D647200BCB7D6 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDA1A0D647200BCB7D6 /* Chart.swift */; };
 		2404EEDE1A0D647200BCB7D6 /* ChartColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDB1A0D647200BCB7D6 /* ChartColors.swift */; };
 		2404EEDF1A0D647200BCB7D6 /* ChartSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDC1A0D647200BCB7D6 /* ChartSerie.swift */; };
-		242A9E6D1A134DBE009DE9A8 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 242A9E6C1A134DBE009DE9A8 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -232,7 +231,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				242A9E6D1A134DBE009DE9A8 /* README.md in Sources */,
 				2404EEDE1A0D647200BCB7D6 /* ChartColors.swift in Sources */,
 				2404EEB31A0D5AE800BCB7D6 /* ViewController.swift in Sources */,
 				2404EEDF1A0D647200BCB7D6 /* ChartSerie.swift in Sources */,

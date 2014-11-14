@@ -19,8 +19,9 @@ typealias ChartLine = Array<ChartPoint>
 @IBDesignable
 class Chart: UIControl {
     
-    // MARK: Configuration
+    // MARK: Options
     
+    @IBInspectable
     var identifier: String?
     
     /**
@@ -117,13 +118,11 @@ class Chart: UIControl {
     /**
     Color for the highlight line
     */
-    @IBInspectable
     var highlightLineColor = UIColor.grayColor().CGColor
     
     /**
     Width for the highlight line
     */
-    @IBInspectable
     var highlightLineWidth: CGFloat = 0.5
     
     // MARK: Private variables

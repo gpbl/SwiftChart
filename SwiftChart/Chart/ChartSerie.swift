@@ -13,7 +13,7 @@ Represent a serie to draw in the line chart. Each serie is defined by its data a
 */
 struct ChartSerie {
     let data: Array<ChartPoint>
-    var area: Bool = true
+    var area: Bool = false
     var line: Bool = true
     var colors: (above: UIColor, below: UIColor) = (above: ChartColors.blueColor(), below: ChartColors.redColor())
     

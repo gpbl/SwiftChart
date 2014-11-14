@@ -88,7 +88,7 @@ class Chart: UIControl {
     Width of the chart lines.
     */
     @IBInspectable
-    var lineWidth: CGFloat = 1
+    var lineWidth: CGFloat = 2
     
     /**
     Delegate for listening to Chart touch events.

@@ -17,7 +17,7 @@ class ViewController: UIViewController, ChartDelegate {
         super.viewDidLoad()
         resetChartLabel()
         
-        let serie = ChartSerie(data: [(x: 1, y: 2), (x: 2, y: -30), (x: 2.1, y: 20), (x: 4, y: 4), (x: 5, y: 3), (x: 6, y: 5), (x: 7, y: 2.5), (x: 8, y: 6)])
+        let serie = ChartSerie(data: [(x: 1, y: -2), (x: 2, y: 3), (x: 3, y: 2), (x: 4, y: 7), (x: 5, y: 3), (x: 6, y: -5), (x: 7, y: 2.5), (x: 8, y: 6)])
 
         chart.addSerie(serie)
         chart.delegate = self

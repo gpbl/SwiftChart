@@ -180,7 +180,7 @@ class Chart: UIControl {
         let placeholder = UIView(frame: self.frame)
         placeholder.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1)
         let label = UILabel()
-        label.text = "Line Chart"
+        label.text = "Chart"
         label.font = UIFont.systemFontOfSize(28)
         label.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
         label.sizeToFit()

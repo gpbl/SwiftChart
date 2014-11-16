@@ -196,7 +196,6 @@
                                 <include reference="DML-o4-Ddt"/>
                             </mask>
                         </variation>
-                        <variation key="widthClass=regular"/>
                     </view>
                     <navigationItem key="navigationItem" title="AAPL Stock" id="dc1-oD-zVM"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>

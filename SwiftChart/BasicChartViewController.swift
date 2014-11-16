@@ -21,9 +21,13 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         switch selectedChart {
         case 0:
             
+            let chart2 = Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+            
             // Simple chart
             let serie = ChartSerie([0, 6, 2, 8, 4, 7, 3, 10, 8])
+            serie.color = ChartColors.greenColor()
             chart.addSerie(serie)
+            
             
         case 1:
             
@@ -79,21 +83,8 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             }
             else {
                 // Did not touch this serie
-                
             }
         }
-    }
-    
-    func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, data: Array<ChartPoint?>) {
-        
-       
-        
-        
-//        println("\(x) \(data[0]), \(indexes)")
-    }
-    
-    func didFinishTouchingChart(chart: Chart) {
-        
     }
     
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -101,10 +92,6 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         
         // Redraw chart on rotation
         chart.setNeedsDisplay()
-        //            resetChartLabel()
     }
-    
-    
-    
     
 }

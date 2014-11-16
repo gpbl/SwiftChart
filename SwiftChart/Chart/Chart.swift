@@ -198,6 +198,9 @@ class Chart: UIControl {
     
     private func drawChart() {
         
+        assert(series.count > 0, "At least one serie is needed for drawing the chart")
+        assert(series[0].data.count > 0, "The chart's first serie must contain some data")
+        
         drawingHeight = bounds.height - axisBottomInset - axisTopInset
         drawingWidth = bounds.width
         

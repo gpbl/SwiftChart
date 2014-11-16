@@ -3,6 +3,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6246"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--SwiftChart Examples-->
@@ -103,19 +104,37 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="88d-IO-Xze" customClass="Chart" customModule="SwiftChart" customModuleProvider="target">
-                                <rect key="frame" x="16" y="144" width="568" height="200"/>
+                                <rect key="frame" x="16" y="80" width="568" height="180"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="FGj-By-amk"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="FGj-By-amk"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="88d-IO-Xze" firstAttribute="leading" secondItem="CFd-fA-mBm" secondAttribute="leadingMargin" id="34d-I7-lbe"/>
-                            <constraint firstItem="88d-IO-Xze" firstAttribute="top" secondItem="5JB-ny-zIE" secondAttribute="bottom" constant="80" id="5EH-6Q-c89"/>
+                            <constraint firstItem="88d-IO-Xze" firstAttribute="top" secondItem="5JB-ny-zIE" secondAttribute="bottom" constant="16" id="5EH-6Q-c89"/>
+                            <constraint firstItem="yZp-iw-2jn" firstAttribute="top" secondItem="88d-IO-Xze" secondAttribute="bottom" constant="16" id="g8U-4c-UmN"/>
                             <constraint firstAttribute="trailingMargin" secondItem="88d-IO-Xze" secondAttribute="trailing" id="maN-Cd-Z3E"/>
+                            <constraint firstItem="88d-IO-Xze" firstAttribute="height" secondItem="CFd-fA-mBm" secondAttribute="height" multiplier="0.3" id="ugW-XG-JHb"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="g8U-4c-UmN"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact">
+                            <mask key="constraints">
+                                <exclude reference="ugW-XG-JHb"/>
+                                <include reference="g8U-4c-UmN"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="chart" destination="88d-IO-Xze" id="kDr-CV-Ir9"/>
@@ -125,7 +144,7 @@
             </objects>
             <point key="canvasLocation" x="1612" y="1178"/>
         </scene>
-        <!--Stock Chart View Controller-->
+        <!--AAPL Stock-->
         <scene sceneID="gCV-ao-hJW">
             <objects>
                 <viewController id="PFd-ll-FX6" customClass="StockChartViewController" customModule="SwiftChart" customModuleProvider="target" sceneMemberID="viewController">
@@ -138,31 +157,53 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="47J-0d-WJQ" customClass="Chart" customModule="SwiftChart" customModuleProvider="target">
-                                <rect key="frame" x="16" y="144" width="568" height="200"/>
+                                <rect key="frame" x="16" y="101" width="568" height="180"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="iqw-R6-SXC"/>
-                                </constraints>
+                                <variation key="widthClass=regular" misplaced="YES">
+                                    <rect key="frame" x="16" y="101" width="768" height="491"/>
+                                </variation>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLI-MK-z9c">
-                                <rect key="frame" x="16" y="72" width="568" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLI-MK-z9c">
+                                <rect key="frame" x="16" y="72" width="5" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="AD3-81-vEw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" red="0.99989169836044312" green="1" blue="0.99988096952438354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.99989169836044312" green="1" blue="0.99988096952438354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="47J-0d-WJQ" firstAttribute="leading" secondItem="cDk-Yu-QY5" secondAttribute="leadingMargin" id="FzQ-Bq-DxU"/>
-                            <constraint firstItem="47J-0d-WJQ" firstAttribute="top" secondItem="vGA-xM-Kcg" secondAttribute="bottom" constant="80" id="YHk-58-zrS"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="47J-0d-WJQ" secondAttribute="trailing" id="jjY-HZ-tcQ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="bLI-MK-z9c" secondAttribute="trailing" id="kBI-Pi-XJG"/>
-                            <constraint firstItem="bLI-MK-z9c" firstAttribute="top" secondItem="vGA-xM-Kcg" secondAttribute="bottom" constant="8" id="pcj-cX-07a"/>
-                            <constraint firstItem="bLI-MK-z9c" firstAttribute="leading" secondItem="cDk-Yu-QY5" secondAttribute="leadingMargin" id="pmT-0k-0tZ"/>
+                            <constraint firstItem="47J-0d-WJQ" firstAttribute="height" secondItem="cDk-Yu-QY5" secondAttribute="height" multiplier="0.3" id="09Q-eA-eet"/>
+                            <constraint firstItem="47J-0d-WJQ" firstAttribute="leading" secondItem="cDk-Yu-QY5" secondAttribute="leadingMargin" id="4pG-qs-2ec"/>
+                            <constraint firstItem="BRw-SJ-uOO" firstAttribute="top" secondItem="47J-0d-WJQ" secondAttribute="bottom" constant="16" id="DML-o4-Ddt"/>
+                            <constraint firstItem="47J-0d-WJQ" firstAttribute="trailing" secondItem="cDk-Yu-QY5" secondAttribute="trailingMargin" id="L44-kE-PlG"/>
+                            <constraint firstItem="47J-0d-WJQ" firstAttribute="top" secondItem="bLI-MK-z9c" secondAttribute="bottom" constant="8" id="OJR-9m-bA2"/>
+                            <constraint firstItem="bLI-MK-z9c" firstAttribute="leading" secondItem="cDk-Yu-QY5" secondAttribute="leadingMargin" id="aXm-C8-Ckq"/>
+                            <constraint firstItem="bLI-MK-z9c" firstAttribute="top" secondItem="vGA-xM-Kcg" secondAttribute="bottom" constant="8" id="kU9-3m-f3O"/>
+                            <constraint firstItem="bLI-MK-z9c" firstAttribute="trailing" secondItem="cDk-Yu-QY5" secondAttribute="trailingMargin" id="o0b-GU-Ofq"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="o0b-GU-Ofq"/>
+                                <exclude reference="DML-o4-Ddt"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact">
+                            <mask key="constraints">
+                                <exclude reference="09Q-eA-eet"/>
+                                <include reference="DML-o4-Ddt"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=regular"/>
                     </view>
+                    <navigationItem key="navigationItem" title="AAPL Stock" id="dc1-oD-zVM"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="chart" destination="47J-0d-WJQ" id="USC-0g-2AC"/>
+                        <outlet property="label" destination="bLI-MK-z9c" id="T7l-LQ-yBz"/>
+                        <outlet property="labelLeadingMarginConstraint" destination="aXm-C8-Ckq" id="ya7-X3-42A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A9F-zF-lCv" userLabel="First Responder" sceneMemberID="firstResponder"/>

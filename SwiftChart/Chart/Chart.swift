@@ -9,8 +9,25 @@
 import UIKit
 
 protocol ChartDelegate {
-    func didTouchInsideChart(chart: Chart, point: CGPoint, axisValues: ChartPoint, data: Array<ChartPoint?>, indexes: Array<Int?>)
-    func didTouchOutsideChart(chart: Chart)
+    
+    /**
+    Tells the delegate that the specified chart has been touched.
+    
+    :param: chart The chart that has been touched.
+    :param: indexes Each element of this array contains the index of the data that has been touched, one for each serie.
+            If the serie hasn't been touched, its index will be nil.
+    :param: x The value on the x-axis that has been touched.
+    :param: left The distance from the left side of the chart.
+    
+    */
+    func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat)
+    
+    /**
+    Tells the delegate that the user finished touching the chart. The user will "finish" touching the
+    chart only swiping left/right outside the chart.
+    :param: chart The chart that has been touched.
+    */
+    func didFinishTouchingChart(chart: Chart)
 }
 
 /**
@@ -43,7 +60,7 @@ class Chart: UIControl {
     var xLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
         String(Int(labelValue))
     }
-
+    
     /**
     Text alignment for the x-labels
     */
@@ -61,7 +78,7 @@ class Chart: UIControl {
     var yLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
         String(Int(labelValue))
     }
-
+    
     /**
     Displays the y-axis labels on the right side of the chart.
     */
@@ -88,12 +105,12 @@ class Chart: UIControl {
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
     */
     var axisBottomInset: CGFloat = 20
-
+    
     /**
     Height of the area at the top of the chart, acting a padding to make place for the top y-axis label.
     */
     var axisTopInset: CGFloat = 20
-
+    
     /**
     Width of the chart lines.
     */
@@ -173,7 +190,7 @@ class Chart: UIControl {
     override func drawRect(rect: CGRect) {
         #if TARGET_INTERFACE_BUILDER
             drawIBPlaceholder()
-        #else
+            #else
             drawChart()
         #endif
     }
@@ -184,7 +201,7 @@ class Chart: UIControl {
     func addSerie(serie: ChartSerie) {
         series.append(serie)
     }
-
+    
     /**
     * Appends multiple series to the chart.
     */
@@ -243,7 +260,7 @@ class Chart: UIControl {
             for (i, segment) in enumerate(segments) {
                 let scaledXValues = scaleValuesOnXAxis( segment.map( { return $0.x } ) )
                 let scaledYValues = scaleValuesOnYAxis( segment.map( { return $0.y } ) )
-
+                
                 if serie.line {
                     drawLine(xValues: scaledXValues, yValues: scaledYValues, serieIndex: index)
                 }
@@ -357,7 +374,7 @@ class Chart: UIControl {
         else {
             return scaleValueOnYAxis(0)
         }
-
+        
     }
     
     // MARK: - Drawings
@@ -564,21 +581,21 @@ class Chart: UIControl {
     
     // MARK: - Touch events
     
-    private func drawHighlightLineForXValue(x: CGFloat) {
+    private func drawHighlightLineFromLeftPosition(left: CGFloat) {
         if let shapeLayer = highlightShapeLayer {
             // Use line already created
             let path = CGPathCreateMutable()
             
-            CGPathMoveToPoint(path, nil, x, 0)
-            CGPathAddLineToPoint(path, nil, x, drawingHeight  + axisTopInset)
+            CGPathMoveToPoint(path, nil, left, 0)
+            CGPathAddLineToPoint(path, nil, left, drawingHeight  + axisTopInset)
             shapeLayer.path = path
         }
         else {
             // Create the line
             let path = CGPathCreateMutable()
             
-            CGPathMoveToPoint(path, nil, x, 0)
-            CGPathAddLineToPoint(path, nil, x, drawingHeight)
+            CGPathMoveToPoint(path, nil, left, 0)
+            CGPathAddLineToPoint(path, nil, left, drawingHeight + axisTopInset)
             
             var shapeLayer = CAShapeLayer()
             shapeLayer.frame = self.bounds
@@ -595,56 +612,46 @@ class Chart: UIControl {
     }
     
     func handleTouchEvents(touches: NSSet!, event: UIEvent!) {
-        if (series.count == 0) {
-            return
-        }
         let point: AnyObject! = touches.anyObject()
-        let x = point.locationInView(self).x
-        let y = point.locationInView(self).y
-        let xValue = valueFromPointAtX(x)
-        let yValue = valueFromPointAtY(y) + max.y
+        let left = point.locationInView(self).x
+        let x = valueFromPointAtX(left)
         
-        if x < 0 || x > drawingWidth {
+        if left < 0 || left > drawingWidth {
             // Remove highlight line at the end of the touch event
             if let shapeLayer = highlightShapeLayer {
                 shapeLayer.path = nil
             }
-            delegate?.didTouchOutsideChart(self)
+            delegate?.didFinishTouchingChart(self)
             return
         }
-            
-        drawHighlightLineForXValue(x)
         
-        var touchedIndexes: Array<Int?> = []
+        drawHighlightLineFromLeftPosition(left)
+        
+        if delegate == nil {
+            return
+        }
+        
+        var indexes: Array<Int?> = []
         
         for serie in series {
-            var touchedIndex: Int? = nil
+            var index: Int? = nil
             let xValues = serie.data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
-            let closest = Chart.findClosestInValues(xValues, forValue: xValue)
+            let closest = Chart.findClosestInValues(xValues, forValue: x)
             if closest.lowestIndex != nil && closest.highestIndex != nil {
                 // Consider valid only values on the right
-                touchedIndex = closest.lowestIndex
+                index = closest.lowestIndex
             }
-            touchedIndexes.append(touchedIndex)
+            indexes.append(index)
         }
         
-        var data: Array<ChartPoint?> = []
-        for i in 0..<touchedIndexes.count {
-            if let valueIndex = touchedIndexes[i] {
-                let serie = series[i]
-                data.append(serie.data[valueIndex])
-            }
-            else {
-                data.append(nil)
-            }
-        }
-        
-        delegate?.didTouchInsideChart(self, point: CGPointMake(x, y), axisValues: (x: xValue, y: yValue), data: data, indexes: touchedIndexes)
+        delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
         
     }
     
-    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        handleTouchEvents(touches, event: event)
+    }
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
         handleTouchEvents(touches, event: event)
     }

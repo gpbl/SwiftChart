@@ -15,13 +15,20 @@ class TableViewController: UITableViewController, UITableViewDelegate {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("ChartSegue", sender: nil)
+        if indexPath.row == 3 {
+            performSegueWithIdentifier("StockChartSegue", sender: nil)
+        }
+        else {
+            performSegueWithIdentifier("BasicChartSegue", sender: nil)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let indexPath = tableView.indexPathForSelectedRow()
-        let dvc = segue.destinationViewController as ChartViewController
-        dvc.selectedChart = indexPath!.row
+        if segue.identifier == "BasicChartSegue" {
+            let indexPath = tableView.indexPathForSelectedRow()
+            let dvc = segue.destinationViewController as BasicChartViewController
+            dvc.selectedChart = indexPath!.row
+        }
     }
     
 }

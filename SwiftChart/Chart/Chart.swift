@@ -196,20 +196,29 @@ class Chart: UIControl {
     }
     
     /**
-    * Appends a serie to the chart.
+    Adds a chart serie.
     */
     func addSerie(serie: ChartSerie) {
         series.append(serie)
     }
     
     /**
-    * Appends multiple series to the chart.
+    Adds multiple series.
     */
     func addSeries(series: Array<ChartSerie>) {
         for serie in series {
             addSerie(serie)
         }
     }
+    
+    /**
+    Returns the value for the specified serie at the given index
+    */
+    func valueForSerie(serieIndex: Int, atIndex dataIndex: Int) -> Float? {
+        let serie = self.series[serieIndex] as ChartSerie
+        return serie.data[dataIndex].y
+    }
+    
     
     private func drawIBPlaceholder() {
         let placeholder = UIView(frame: self.frame)
@@ -485,9 +494,12 @@ class Chart: UIControl {
         
         let scaled = scaleValuesOnXAxis(xLabels)
         let padding: CGFloat = 5
+        
         for (i, value) in enumerate(scaled) {
             let x = CGFloat(value)
             
+            
+            // Add label
             let label = UILabel(frame: CGRect(x: x, y: drawingHeight, width: 0, height: 0))
             label.font = labelFont
             label.text = xLabelsFormatter(i, xLabels[i])
@@ -499,10 +511,15 @@ class Chart: UIControl {
             // Add left padding
             label.frame.origin.x += padding
             
-            // Do not add labels outside the frame
+            // Do not add a label outside the frame
             if (label.frame.origin.x) >= drawingWidth {
                 continue
             }
+            
+            // Add vertical grid
+            CGContextMoveToPoint(context, x, 0)
+            CGContextAddLineToPoint(context, x, bounds.height)
+            CGContextStrokePath(context)
             
             // Center label vertically
             label.frame.origin.y += axisTopInset
@@ -515,12 +532,12 @@ class Chart: UIControl {
             
             self.addSubview(label)
             
-            // Add vertical grid
-            
-            CGContextMoveToPoint(context, x, 0)
-            CGContextAddLineToPoint(context, x, self.bounds.height)
-            CGContextStrokePath(context)
         }
+        
+        // Add vertical grid on the right
+        CGContextMoveToPoint(context, drawingWidth, 0)
+        CGContextAddLineToPoint(context, drawingWidth, bounds.height)
+        CGContextStrokePath(context)
         
     }
     
@@ -542,6 +559,22 @@ class Chart: UIControl {
         for (i, value) in enumerate(scaled) {
             
             let y = CGFloat(value)
+            
+            // Add horizontal grid
+            if (y != drawingHeight + axisTopInset) {
+                
+                CGContextMoveToPoint(context, 0, y)
+                CGContextAddLineToPoint(context, self.bounds.width, y)
+                if yLabels[i] != 0 {
+                    // Horizontal grid for 0 is not dashed
+                    CGContextSetLineDash(context, 0, [5], 1)
+                }
+                else {
+                    CGContextSetLineDash(context, 0, nil, 0)
+                }
+                CGContextStrokePath(context)
+            }
+            
             let label = UILabel(frame: CGRect(x: padding, y: y, width: 0, height: 0))
             label.font = labelFont
             label.text = yLabelsFormatter(i, yLabels[i])
@@ -558,21 +591,6 @@ class Chart: UIControl {
             
             self.addSubview(label)
             
-            // Add horizontal grid
-            
-            if (y != drawingHeight + axisTopInset) {
-                
-                CGContextMoveToPoint(context, 0, y)
-                CGContextAddLineToPoint(context, self.bounds.width, y)
-                if yLabels[i] != 0 {
-                    // Horizontal grid for 0 is not dashed
-                    CGContextSetLineDash(context, 0, [5], 1)
-                }
-                else {
-                    CGContextSetLineDash(context, 0, nil, 0)
-                }
-                CGContextStrokePath(context)
-            }
         }
         
         UIGraphicsEndImageContext()

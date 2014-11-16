@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Rk8-1w-vc5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Rk8-1w-vc5">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6246"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -63,7 +63,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D8X-Tk-VkX" id="7Xc-4n-JT9">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Stocks-style" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H34-jE-uY7">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Stock Chart" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H34-jE-uY7">
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -82,17 +82,18 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="SwiftChart Examples" id="eN0-lC-p3u"/>
                     <connections>
-                        <segue destination="3YT-OQ-HpK" kind="show" identifier="ChartSegue" id="mxW-oB-Cfv"/>
+                        <segue destination="3YT-OQ-HpK" kind="show" identifier="BasicChartSegue" id="mxW-oB-Cfv"/>
+                        <segue destination="PFd-ll-FX6" kind="show" identifier="StockChartSegue" id="UFx-Gu-IfP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bbH-j8-Mr0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="958" y="1177"/>
         </scene>
-        <!--Chart View Controller-->
+        <!--Basic Chart View Controller-->
         <scene sceneID="Lwg-TP-tr0">
             <objects>
-                <viewController id="3YT-OQ-HpK" customClass="ChartViewController" customModule="SwiftChart" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="3YT-OQ-HpK" customClass="BasicChartViewController" customModule="SwiftChart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5JB-ny-zIE"/>
                         <viewControllerLayoutGuide type="bottom" id="yZp-iw-2jn"/>
@@ -123,6 +124,50 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B5b-zb-joM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1612" y="1178"/>
+        </scene>
+        <!--Stock Chart View Controller-->
+        <scene sceneID="gCV-ao-hJW">
+            <objects>
+                <viewController id="PFd-ll-FX6" customClass="StockChartViewController" customModule="SwiftChart" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vGA-xM-Kcg"/>
+                        <viewControllerLayoutGuide type="bottom" id="BRw-SJ-uOO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cDk-Yu-QY5">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="47J-0d-WJQ" customClass="Chart" customModule="SwiftChart" customModuleProvider="target">
+                                <rect key="frame" x="16" y="144" width="568" height="200"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="iqw-R6-SXC"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLI-MK-z9c">
+                                <rect key="frame" x="16" y="72" width="568" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.99989169836044312" green="1" blue="0.99988096952438354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="47J-0d-WJQ" firstAttribute="leading" secondItem="cDk-Yu-QY5" secondAttribute="leadingMargin" id="FzQ-Bq-DxU"/>
+                            <constraint firstItem="47J-0d-WJQ" firstAttribute="top" secondItem="vGA-xM-Kcg" secondAttribute="bottom" constant="80" id="YHk-58-zrS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="47J-0d-WJQ" secondAttribute="trailing" id="jjY-HZ-tcQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="bLI-MK-z9c" secondAttribute="trailing" id="kBI-Pi-XJG"/>
+                            <constraint firstItem="bLI-MK-z9c" firstAttribute="top" secondItem="vGA-xM-Kcg" secondAttribute="bottom" constant="8" id="pcj-cX-07a"/>
+                            <constraint firstItem="bLI-MK-z9c" firstAttribute="leading" secondItem="cDk-Yu-QY5" secondAttribute="leadingMargin" id="pmT-0k-0tZ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="chart" destination="47J-0d-WJQ" id="USC-0g-2AC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="A9F-zF-lCv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="958" y="1928"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b8C-PE-uT1">

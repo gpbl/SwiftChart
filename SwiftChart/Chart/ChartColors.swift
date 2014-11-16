@@ -8,8 +8,10 @@
 
 import UIKit
 
+/**
+Shorthands for various colors to use freely in the charts.
+*/
 struct ChartColors {
-    
     static func colorFromHex(hex: Int) -> UIColor {
         var red = CGFloat((hex & 0xFF0000) >> 16) / 255.0
         var green = CGFloat((hex & 0xFF00) >> 8) / 255.0

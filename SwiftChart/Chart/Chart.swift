@@ -13,8 +13,10 @@ protocol ChartDelegate {
     func didTouchOutsideChart(chart: Chart)
 }
 
+/**
+Represent the x- and the y-axis values for each point in a chart serie.
+*/
 typealias ChartPoint = (x: Float, y: Float)
-typealias ChartLine = Array<ChartPoint>
 
 @IBDesignable
 class Chart: UIControl {
@@ -25,22 +27,40 @@ class Chart: UIControl {
     var identifier: String?
     
     /**
-    Series of (x: x, y: y) values to display in the chart.
+    Series to display in the chart.
     */
-    
     var series: Array<ChartSerie> = []
     
     /**
-    Values to display as labels of the x-axis. If not provided, the chart will use
-    values of the first dataset.
+    The values to display as labels on the x-axis. You can format these values with the `xLabelFormatter` attribute.
+    As default, it will display the values of the serie which has the most data.
     */
-    var xLabels: Array<Float>?
+    var xLabels: Array<Float>!
+    
+    /**
+    Formatter for the labels on the x-axis. The `index` represents the `xLabels` index, `value` its value:
+    */
+    var xLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
+        String(Int(labelValue))
+    }
+
+    /**
+    Text alignment for the x-labels
+    */
+    var xLabelsTextAlignment: NSTextAlignment = .Left
     
     /**
     Values to display as labels of the y-axis. If not specified, will display the
     lowest, the middle and the highest values.
     */
-    var yLabels: Array<Float>?
+    var yLabels: Array<Float>!
+    
+    /**
+    Formatter for the labels on the y-axis.
+    */
+    var yLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
+        String(Int(labelValue))
+    }
 
     /**
     Displays the y-axis labels on the right side of the chart.
@@ -48,19 +68,9 @@ class Chart: UIControl {
     var yLabelsOnRightSide: Bool = false
     
     /**
-    Formatter for the labels on the x-axis.
-    */
-    var xLabelFormatter: (_: Float) -> String = { "\(Int($0))" }
-    
-    /**
-    Formatter for the labels on the y-axis.
-    */
-    var yLabelFormatter: (_: Float) -> String = { "\(Int($0))" }
-    
-    /**
     Font used for the labels.
     */
-    var labelFont: UIFont = UIFont.systemFontOfSize(12)
+    var labelFont: UIFont? = UIFont.systemFontOfSize(12)
     
     /**
     Font used for the labels.
@@ -69,10 +79,10 @@ class Chart: UIControl {
     var labelColor: UIColor = UIColor.blackColor()
     
     /**
-    Color for axes and guides.
+    Color for axes and grids.
     */
     @IBInspectable
-    var axisColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
+    var axesColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
     
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
@@ -116,17 +126,17 @@ class Chart: UIControl {
     var maxY: Float?
     
     /**
-    Color for the highlight line
+    Color for the highlight line.
     */
-    var highlightLineColor = UIColor.grayColor().CGColor
+    var highlightLineColor = UIColor.grayColor()
     
     /**
-    Width for the highlight line
+    Width for the highlight line.
     */
     var highlightLineWidth: CGFloat = 0.5
     
     /**
-    Alpha component for the area
+    Alpha component for the area's color.
     */
     var areaAlphaComponent: CGFloat = 0.1
     
@@ -141,6 +151,9 @@ class Chart: UIControl {
     // Minimum and maximum values represented in the chart
     private var min: ChartPoint!
     private var max: ChartPoint!
+    
+    // Represent a set of points corresponding to a segment line on the chart.
+    typealias ChartLineSegment = Array<ChartPoint>
     
     // MARK: initializations
     
@@ -225,9 +238,8 @@ class Chart: UIControl {
         for (index, serie) in enumerate(series) {
             
             // Separate each line in multiple segments over and below the x axis
-            var segments = Chart.segmentLine(serie.data as ChartLine)
+            var segments = Chart.segmentLine(serie.data as ChartLineSegment)
             
-            // Print negative segments
             for (i, segment) in enumerate(segments) {
                 let scaledXValues = scaleValuesOnXAxis( segment.map( { return $0.x } ) )
                 let scaledYValues = scaleValuesOnYAxis( segment.map( { return $0.y } ) )
@@ -254,8 +266,11 @@ class Chart: UIControl {
     // MARK: - Scaling
     
     private func getMinMax() -> (min: ChartPoint, max: ChartPoint) {
-        var min = (x: self.minX, y: self.minY)
-        var max = (x: self.maxX, y: self.maxY)
+        
+        // Start with user-provided values
+        
+        var min = (x: minX, y: minY)
+        var max = (x: maxX, y: maxY)
         
         // Check in datasets
         
@@ -423,7 +438,7 @@ class Chart: UIControl {
     private func drawAxes() {
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetStrokeColorWithColor(context, axisColor.CGColor)
+        CGContextSetStrokeColorWithColor(context, axesColor.CGColor)
         CGContextSetLineWidth(context, 0.5)
         
         // xAxis (bottom)
@@ -441,44 +456,45 @@ class Chart: UIControl {
     private func drawLabelsAndGridOnXAxis() {
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.3).CGColor)
+        CGContextSetStrokeColorWithColor(context, axesColor.CGColor)
         CGContextSetLineWidth(context, 0.5)
         
         var labels: Array<Float>
-        if (xLabels != nil) {
-            // Use user-defined labels
-            labels = xLabels!
-        }
-        else {
+        if (xLabels == nil) {
             // Use labels from the first serie
-            labels = series[0].data.map( { (point: ChartPoint) -> Float in
+            xLabels = series[0].data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
         }
         
-        let scaled = scaleValuesOnXAxis(labels)
-        
+        let scaled = scaleValuesOnXAxis(xLabels)
+        let padding: CGFloat = 5
         for (i, value) in enumerate(scaled) {
             let x = CGFloat(value)
             
             let label = UILabel(frame: CGRect(x: x, y: drawingHeight, width: 0, height: 0))
             label.font = labelFont
-            label.text = xLabelFormatter(labels[i])
+            label.text = xLabelsFormatter(i, xLabels[i])
             label.textColor = labelColor
             
             // Set label size
             label.sizeToFit()
             
-            // Center label vertically
-            label.frame.origin.y += axisTopInset
-            label.frame.origin.y -= (label.frame.height - axisBottomInset) / 2
-            
             // Add left padding
-            label.frame.origin.x += 5
+            label.frame.origin.x += padding
             
             // Do not add labels outside the frame
             if (label.frame.origin.x) >= drawingWidth {
                 continue
             }
+            
+            // Center label vertically
+            label.frame.origin.y += axisTopInset
+            label.frame.origin.y -= (label.frame.height - axisBottomInset) / 2
+            
+            // Set label's text alignment
+            label.frame.size.width = (drawingWidth / CGFloat(xLabels.count)) - padding * 2
+            label.textAlignment = xLabelsTextAlignment
+            
             
             self.addSubview(label)
             
@@ -494,29 +510,24 @@ class Chart: UIControl {
     private func drawLabelsAndGridOnYAxis() {
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetStrokeColorWithColor(context, axisColor.CGColor)
+        CGContextSetStrokeColorWithColor(context, axesColor.CGColor)
         CGContextSetLineWidth(context, 0.5)
         
         var labels: Array<Float>
-        if (yLabels != nil) {
-            // User-defined labels
-            labels = yLabels!
-        }
-        else {
-            // Use y-values
-            labels = [(min.y + max.y) / 2, max.y]
+        if (yLabels == nil) {
+            yLabels = [(min.y + max.y) / 2, max.y]
             if (yLabelsOnRightSide || min.y != 0) {
-                labels.insert(min.y, atIndex: 0)
+                yLabels.insert(min.y, atIndex: 0)
             }
         }
-        let scaled = scaleValuesOnYAxis(labels)
+        let scaled = scaleValuesOnYAxis(yLabels)
         let padding: CGFloat = 5
         for (i, value) in enumerate(scaled) {
             
             let y = CGFloat(value)
             let label = UILabel(frame: CGRect(x: padding, y: y, width: 0, height: 0))
             label.font = labelFont
-            label.text = yLabelFormatter(labels[i])
+            label.text = yLabelsFormatter(i, yLabels[i])
             label.textColor = labelColor
             label.sizeToFit()
             
@@ -536,7 +547,7 @@ class Chart: UIControl {
                 
                 CGContextMoveToPoint(context, 0, y)
                 CGContextAddLineToPoint(context, self.bounds.width, y)
-                if labels[i] != 0 {
+                if yLabels[i] != 0 {
                     // Horizontal grid for 0 is not dashed
                     CGContextSetLineDash(context, 0, [5], 1)
                 }
@@ -555,6 +566,7 @@ class Chart: UIControl {
     
     private func drawHighlightLineForXValue(x: CGFloat) {
         if let shapeLayer = highlightShapeLayer {
+            // Use line already created
             let path = CGPathCreateMutable()
             
             CGPathMoveToPoint(path, nil, x, 0)
@@ -562,6 +574,7 @@ class Chart: UIControl {
             shapeLayer.path = path
         }
         else {
+            // Create the line
             let path = CGPathCreateMutable()
             
             CGPathMoveToPoint(path, nil, x, 0)
@@ -570,7 +583,7 @@ class Chart: UIControl {
             var shapeLayer = CAShapeLayer()
             shapeLayer.frame = self.bounds
             shapeLayer.path = path
-            shapeLayer.strokeColor = highlightLineColor
+            shapeLayer.strokeColor = highlightLineColor.CGColor
             shapeLayer.fillColor = nil
             shapeLayer.lineWidth = highlightLineWidth
             
@@ -592,15 +605,14 @@ class Chart: UIControl {
         let yValue = valueFromPointAtY(y) + max.y
         
         if x < 0 || x > drawingWidth {
-            // Remove highlight and end the touch events
-            
+            // Remove highlight line at the end of the touch event
             if let shapeLayer = highlightShapeLayer {
                 shapeLayer.path = nil
             }
             delegate?.didTouchOutsideChart(self)
             return
         }
-        
+            
         drawHighlightLineForXValue(x)
         
         var touchedIndexes: Array<Int?> = []
@@ -676,9 +688,9 @@ class Chart: UIControl {
     Segment a line in multiple lines when the line touches the x-axis, i.e. separating
     positive from negative values.
     */
-    private class func segmentLine(line: ChartLine) -> Array<ChartLine> {
-        var segments: Array<ChartLine> = []
-        var segment: ChartLine = []
+    private class func segmentLine(line: ChartLineSegment) -> Array<ChartLineSegment> {
+        var segments: Array<ChartLineSegment> = []
+        var segment: ChartLineSegment = []
         for (i, point) in enumerate(line) {
             segment.append(point)
             if i < line.count - 1 {

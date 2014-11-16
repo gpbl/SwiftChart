@@ -511,23 +511,18 @@ class Chart: UIControl {
         for (i, value) in enumerate(scaled) {
             
             let y = CGFloat(value)
-            let label = UILabel(frame: CGRect(x: padding,
-                                              y: y,
-                                          width: 0,
-                                         height: 0))
+            let label = UILabel(frame: CGRect(x: padding, y: y, width: 0, height: 0))
             label.font = labelFont
             label.text = yLabelFormatter(labels[i])
             label.textColor = labelColor
-            
             label.sizeToFit()
             
-            // Align label to the right with a padding
             if yLabelsOnRightSide {
                 label.frame.origin.x = drawingWidth
                 label.frame.origin.x -= label.frame.width + padding
             }
             
-            // Align label above the value
+            // Labels should be placed above the horizontal grid
             label.frame.origin.y -= label.frame.height
             
             self.addSubview(label)
@@ -538,24 +533,18 @@ class Chart: UIControl {
                 
                 CGContextMoveToPoint(context, 0, y)
                 CGContextAddLineToPoint(context, self.bounds.width, y)
-                CGContextSetLineDash(context, 0, [5], 1)
+                if labels[i] != 0 {
+                    // Horizontal grid for 0 is not dashed
+                    CGContextSetLineDash(context, 0, [5], 1)
+                }
+                else {
+                    CGContextSetLineDash(context, 0, nil, 0)
+                }
                 CGContextStrokePath(context)
-                
             }
         }
         
         UIGraphicsEndImageContext()
-        
-        // Add grid for zero
-        
-        if (max.y > 0) & (min.y < 0) {
-            let zero = CGFloat(getZeroValueonYAxis())
-            CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.8).CGColor)
-            CGContextMoveToPoint(context, 0, zero)
-            CGContextAddLineToPoint(context, self.bounds.width, zero)
-            CGContextSetLineDash(context, 0, nil, 0)
-            CGContextStrokePath(context)
-        }
         
     }
     

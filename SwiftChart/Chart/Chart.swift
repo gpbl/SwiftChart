@@ -50,12 +50,12 @@ class Chart: UIControl {
     /**
     Formatter for the labels on the x-axis.
     */
-    var xLabelFormatter: (_: Float) -> String = { "\($0)" }
+    var xLabelFormatter: (_: Float) -> String = { "\(Int($0))" }
     
     /**
     Formatter for the labels on the y-axis.
     */
-    var yLabelFormatter: (_: Float) -> String = { "\($0)" }
+    var yLabelFormatter: (_: Float) -> String = { "\(Int($0))" }
     
     /**
     Font used for the labels.
@@ -72,7 +72,7 @@ class Chart: UIControl {
     Color for axes and guides.
     */
     @IBInspectable
-    var axisColor: UIColor = UIColor.grayColor()
+    var axisColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
     
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
@@ -124,6 +124,11 @@ class Chart: UIControl {
     Width for the highlight line
     */
     var highlightLineWidth: CGFloat = 0.5
+    
+    /**
+    Alpha component for the area
+    */
+    var areaAlphaComponent: CGFloat = 0.1
     
     // MARK: Private variables
     
@@ -400,10 +405,10 @@ class Chart: UIControl {
         areaLayer.path = area
         areaLayer.strokeColor = nil
         if isAboveXAxis {
-            areaLayer.fillColor = series[serieIndex].colors.above.colorWithAlphaComponent(0.1).CGColor
+            areaLayer.fillColor = series[serieIndex].colors.above.colorWithAlphaComponent(areaAlphaComponent).CGColor
         }
         else {
-            areaLayer.fillColor = series[serieIndex].colors.below.colorWithAlphaComponent(0.1).CGColor
+            areaLayer.fillColor = series[serieIndex].colors.below.colorWithAlphaComponent(areaAlphaComponent).CGColor
         }
         areaLayer.lineWidth = 0
         
@@ -486,7 +491,7 @@ class Chart: UIControl {
     private func drawLabelsAndGridOnYAxis() {
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetStrokeColorWithColor(context, axisColor.colorWithAlphaComponent(0.3).CGColor)
+        CGContextSetStrokeColorWithColor(context, axisColor.CGColor)
         CGContextSetLineWidth(context, 0.5)
         
         var labels: Array<Float>
@@ -496,7 +501,10 @@ class Chart: UIControl {
         }
         else {
             // Use y-values
-            labels = [min.y, (min.y + max.y) / 2, max.y]
+            labels = [(min.y + max.y) / 2, max.y]
+            if (yLabelsOnRightSide || min.y != 0) {
+                labels.insert(min.y, atIndex: 0)
+            }
         }
         let scaled = scaleValuesOnYAxis(labels)
         let padding: CGFloat = 5
@@ -526,7 +534,7 @@ class Chart: UIControl {
             
             // Add horizontal grid
             
-            if (y != drawingHeight && value != 0) {
+            if (y != drawingHeight + axisTopInset) {
                 
                 CGContextMoveToPoint(context, 0, y)
                 CGContextAddLineToPoint(context, self.bounds.width, y)

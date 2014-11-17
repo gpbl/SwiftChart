@@ -157,28 +157,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="47J-0d-WJQ" customClass="Chart" customModule="SwiftChart" customModuleProvider="target">
-                                <rect key="frame" x="16" y="101" width="568" height="180"/>
+                                <rect key="frame" x="16" y="93" width="568" height="180"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <variation key="widthClass=regular" misplaced="YES">
                                     <rect key="frame" x="16" y="101" width="768" height="491"/>
                                 </variation>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLI-MK-z9c">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLI-MK-z9c">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="AD3-81-vEw"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                <color key="textColor" red="0.99989169836044312" green="1" blue="0.99988096952438354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.99989169836044312" green="1" blue="0.99988096952438354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="47J-0d-WJQ" firstAttribute="height" secondItem="cDk-Yu-QY5" secondAttribute="height" multiplier="0.3" id="09Q-eA-eet"/>
                             <constraint firstItem="47J-0d-WJQ" firstAttribute="leading" secondItem="cDk-Yu-QY5" secondAttribute="leadingMargin" id="4pG-qs-2ec"/>
                             <constraint firstItem="BRw-SJ-uOO" firstAttribute="top" secondItem="47J-0d-WJQ" secondAttribute="bottom" constant="16" id="DML-o4-Ddt"/>
                             <constraint firstItem="47J-0d-WJQ" firstAttribute="trailing" secondItem="cDk-Yu-QY5" secondAttribute="trailingMargin" id="L44-kE-PlG"/>
-                            <constraint firstItem="47J-0d-WJQ" firstAttribute="top" secondItem="bLI-MK-z9c" secondAttribute="bottom" constant="8" id="OJR-9m-bA2"/>
+                            <constraint firstItem="47J-0d-WJQ" firstAttribute="top" secondItem="bLI-MK-z9c" secondAttribute="bottom" id="OJR-9m-bA2"/>
                             <constraint firstItem="bLI-MK-z9c" firstAttribute="leading" secondItem="cDk-Yu-QY5" secondAttribute="leadingMargin" id="aXm-C8-Ckq"/>
                             <constraint firstItem="bLI-MK-z9c" firstAttribute="top" secondItem="vGA-xM-Kcg" secondAttribute="bottom" constant="8" id="kU9-3m-f3O"/>
                             <constraint firstItem="bLI-MK-z9c" firstAttribute="trailing" secondItem="cDk-Yu-QY5" secondAttribute="trailingMargin" id="o0b-GU-Ofq"/>

@@ -57,12 +57,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
         // Configure chart layout
         
-        chart.backgroundColor = UIColor.blackColor()
-        chart.areaAlphaComponent = 0.3
         chart.lineWidth = 0.5
-        chart.axesColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
-        chart.highlightLineColor = UIColor.whiteColor()
-        chart.labelColor = UIColor.whiteColor()
         chart.labelFont = UIFont(name: "HelveticaNeue-Light", size: 12)!
         chart.xLabels = labels
         chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in

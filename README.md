@@ -24,59 +24,79 @@ chart.addSerie(serie)
 
 More examples can be found in the project.
 
-## Content
-
-This library contains:
-- the [Chart](SwiftChart/Chart/Chart.swift) main class, to initialize and configure the chart content, e.g. for adding series or setting up the chart's appearance
-- the [ChartSeries](SwiftChart/Chart/ChartSeries.swift) class, needed to add data to the chart and configure the aspect of each serie
-- the [ChartDelegate](SwiftChart/Chart/Chart.swift) protocol, which tells your views about touch events
-- the [ChartColor](SwiftChart/Chart/ChartColors.swift) struct, an handy shortcut for some predefined colors
-
-## Installation
-
-Add the content of the [Chart folder](SwiftChart/Chart) to your project.
-
 ## Usage
+
+The library includes:
+
+- the [Chart](SwiftChart/Chart/Chart.swift) main class, to initialize and configure the chart's content, e.g. for adding series or setting up the its appearance
+- the [ChartSeries](SwiftChart/Chart/ChartSeries.swift) class, for creating series and configure their appearance
+- the [ChartDelegate](SwiftChart/Chart/Chart.swift) protocol, which tells other views about the chart's touch events
+- the [ChartColor](SwiftChart/Chart/ChartColors.swift) struct, containing some predefined colors
+
+### Installation
+
+Add the content of the [Chart folder](SwiftChart/Chart) to your project, for example by including it as git submodule:
+
+```bash
+cd myProject
+git submodule add https://github.com/gpbl/SwiftChart.git
+```
+
+From XCode, open your project and and choose *Add Files to myProject...* from the *File* menu. Select the *Chart* folder from the *SwiftChart* subfolder.
 
 ### To initialize a chart
 
-The chart can be initialized with the Interface Builder. Simply drag a UIView into the scene and assign to it the `Chart` custom class:
+#### From the Interface Builder
+
+The chart can be initialized from the Interface Builder. Drag a View into a view controller and assign to it the `Chart` Custom Class:
  
 ![Example](https://cloud.githubusercontent.com/assets/120693/5063826/c01f26d2-6df6-11e4-8122-cb086709d96c.png)
 
-To initialize it programmatically, you can use the `new Chart(frame: ...)` initializer, which requires a `frame`:
+You can now add it as `@IBOutlet` in the view controller class.
+
+> **Note** Parts of the chart can be customized from the Interface Builder, but you need to write some code to make it working.
+
+#### By coding
+
+To initialize a chart programmatically, use the `new Chart(frame: ...)` initializer, which requires a `frame`:
 
 ```swift
-var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 ```
 
-or, if you prefer to autolayout, set the frame to `0` and add constraint manually later in the code:
+If you prefer to use Autolayout, set the frame to `0` and add the constraints later:
 
 ```swift
 var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 // add constraints now
 ```
 
+### Adding series
 
-### To add series to the chart
-
-You need to initialize each serie before adding them to the chart. Using the `ChartSerie` class, you initialize them with their y-values:
+Initialize each serie before adding them to the chart. Use the `ChartSerie` class to specify their y-values:
 
 ```swift
+// Create a new serie using the y-values
 var serie = new ChartSerie([0, 6, 2, 8, 4, 7, 3, 10, 8])
 chart.addSerie(serie)
 ```
 
-By default, the values on the x-axis are the progressive index of the passed array (i.e. `[0, 1, 2, 3...]`) but you can specify those values as *an array of x, y touples* as well:
+By default, values on the x-axis are inferred as the progressive indexes of the given array. You can customize those values passing an array of `(x: Float, y: Float)` touples to the serie's initializer:
 
 ```swift
-var serie = new ChartSerie([(x: 0, y: 0), (x: 0.5, y: 6), (x: 1.2, y: 2)...])
+// Create a new serie specifying x and y values
+var data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
+var serie = new ChartSerie(data)
 chart.addSerie(serie)
 ```
 
-### To respond to touch events
+#### Multiple series
 
-Use the `ChartDelegate` protocol in your classes, i.e. in a `UIViewController`:
+Using the `chart.addSerie()` and `chart.addSeries()` methods, you can add as many series as you want. Those will be indentified with a progressive index in the chart's `series` array property.
+
+## Touch events
+
+To make the chart responding to touch events, implement the `ChartDelegate` protocol in your classes, i.e. in a `UIViewController`, and set the chart's `delegate` property:
 
 ```swift
 class MyViewController: UIViewController, ChartDelegate {
@@ -96,9 +116,28 @@ class MyViewController: UIViewController, ChartDelegate {
 }
 ```
 
+The `didTouchChart` method returns an array of indexes, one for each serie, with an optional Int referring to the data index:
+
+```swift
+ func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
+        for (serieIndex, dataIndex) in enumerate(indexes) {
+            if dataIndex != nil {
+                // The serie at serieIndex has been touched
+                let value = chart.valueForSerie(serieIndex, atIndex: dataIndex)
+            }
+        }
+    }
+```
+
+* You can use the `valueForSerie()` method to access the value for the touched position.
+* The `x: Float` argument refers to the value on the x-axis: it is inferred from the horizontal position of the touch event and may not be part of the x-values.
+* The `left: CGFloat` is the position of the touch starting from the left side of the chart. This can be useful to calculate the horizontal position of a label appearing over the chart: 
+
+![Label on touch](https://cloud.githubusercontent.com/assets/120693/5068773/8be0fa9c-6e52-11e4-8b60-aaf76dc9377d.gif)
+
 ## Reference
 
-### `Chart` class
+### Chart class
 
 #### Labels
 
@@ -111,7 +150,7 @@ class MyViewController: UIViewController, ChartDelegate {
 
 #### Axis and grid
 
-_continue..._
+_work in progress..._
 
 ## Credits
-This project was originally a fork of [swift-linechart](https://github.com/zemirco/swift-linechart).
+This project was originally inspired by [swift-linechart](https://github.com/zemirco/swift-linechart).

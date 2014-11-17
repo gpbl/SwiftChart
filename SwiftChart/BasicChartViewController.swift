@@ -77,12 +77,8 @@ class BasicChartViewController: UIViewController, ChartDelegate {
     
     func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
         for (serieIndex, dataIndex) in enumerate(indexes) {
-            if dataIndex != nil {
-                let inferredValue = chart.series[serieIndex].data[dataIndex!]
-                println("Touched serie: \(serieIndex): data index: \(dataIndex!); serie value: \(inferredValue); x-axis value: \(x) (from left: \(left))")
-            }
-            else {
-                // Did not touch this serie
+            if let value = chart.valueForSerie(serieIndex, atIndex: dataIndex) {
+                println("Touched serie: \(serieIndex): data index: \(dataIndex!); serie value: \(value); x-axis value: \(x) (from left: \(left))")
             }
         }
     }

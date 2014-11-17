@@ -80,29 +80,26 @@ class StockChartViewController: UIViewController, ChartDelegate {
     
     func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
         
-        if let dataIndex = indexes[0] {
-            if let value = chart.valueForSerie(0, atIndex: dataIndex) {
-                
-                let numberFormatter = NSNumberFormatter()
-                numberFormatter.minimumFractionDigits = 2
-                numberFormatter.maximumFractionDigits = 2
-                label.text = numberFormatter.stringFromNumber(value)!
-        
-                // Align the label to the touch left position, centered
-                var constant = labelLeadingMarginInitialConstant + left - (label.frame.width / 2)
-                
-                // Avoid placing the label on the left of the chart
-                if constant < labelLeadingMarginInitialConstant {
-                    constant = labelLeadingMarginInitialConstant
-                }
-                // Avoid placing the label on the right of the chart
-                if constant > chart.frame.width - label.frame.width {
-                    constant =  chart.frame.width - label.frame.width
-                }
-                
-                labelLeadingMarginConstraint.constant = constant
-                
+        if let value = chart.valueForSerie(0, atIndex: indexes[0]) {
+            
+            let numberFormatter = NSNumberFormatter()
+            numberFormatter.minimumFractionDigits = 2
+            numberFormatter.maximumFractionDigits = 2
+            label.text = numberFormatter.stringFromNumber(value)!
+            
+            // Align the label to the touch left position, centered
+            var constant = labelLeadingMarginInitialConstant + left - (label.frame.width / 2)
+            
+            // Avoid placing the label on the left of the chart
+            if constant < labelLeadingMarginInitialConstant {
+                constant = labelLeadingMarginInitialConstant
             }
+            // Avoid placing the label on the right of the chart
+            if constant > chart.frame.width - label.frame.width {
+                constant =  chart.frame.width - label.frame.width
+            }
+            
+            labelLeadingMarginConstraint.constant = constant
             
         }
         

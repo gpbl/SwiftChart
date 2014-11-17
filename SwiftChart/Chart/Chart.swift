@@ -216,9 +216,10 @@ class Chart: UIControl {
     /**
     Returns the value for the specified serie at the given index
     */
-    func valueForSerie(serieIndex: Int, atIndex dataIndex: Int) -> Float? {
+    func valueForSerie(serieIndex: Int, atIndex dataIndex: Int?) -> Float? {
+        if dataIndex == nil { return nil }
         let serie = self.series[serieIndex] as ChartSerie
-        return serie.data[dataIndex].y
+        return serie.data[dataIndex!].y
     }
     
     

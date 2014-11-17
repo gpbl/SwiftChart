@@ -25,7 +25,9 @@ protocol ChartDelegate {
     /**
     Tells the delegate that the user finished touching the chart. The user will "finish" touching the
     chart only swiping left/right outside the chart.
+    
     :param: chart The chart that has been touched.
+    
     */
     func didFinishTouchingChart(chart: Chart)
 }

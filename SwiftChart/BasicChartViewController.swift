@@ -87,6 +87,10 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         }
     }
     
+    func didFinishTouchingChart(chart: Chart) {
+        
+    }
+    
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
         super.didRotateFromInterfaceOrientation(fromInterfaceOrientation)
         

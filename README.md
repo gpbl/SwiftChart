@@ -17,7 +17,7 @@ A line & area chart library for iOS, written in swift.
 
 ```swift
 let chart = Chart()
-let series = ChartSeriess([0, 6, 2, 8, 4, 7, 3, 10, 8])
+let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
 series.color = ChartColors.greenColor()
 chart.addSerie(series)
 ```
@@ -29,7 +29,7 @@ More examples can be found in the project.
 The library includes:
 
 - the [`Chart`](SwiftChart/Chart/Chart.swift) main class, to initialize and configure the chart's content, e.g. for adding series or setting up the its appearance
-- the [`ChartSeriesss`](SwiftChart/Chart/ChartSeriesss.swift) class, for creating series and configure their appearance
+- the [`ChartSeries`](SwiftChart/Chart/ChartSeries.swift) class, for creating series and configure their appearance
 - the [ChartDelegate](SwiftChart/Chart/Chart.swift) protocol, which tells other views about the chart's touch events
 - the [ChartColor](SwiftChart/Chart/ChartColors.swift) struct, containing some predefined colors
 
@@ -42,17 +42,17 @@ cd myProject
 git submodule add https://github.com/gpbl/SwiftChart.git
 ```
 
-From XCode, open your project and and choose *Add Files to myProject...* from the *File* menu. Select the *Chart* folder from the *SwiftChart* subfolder.
+From XCode, open your project and choose *Add Files to myProject...* from the *File* menu. Select the *Chart* folder from the *SwiftChart* subfolder.
 
 ### To initialize a chart
 
 #### From the Interface Builder
 
-The chart can be initialized from the Interface Builder. Drag a View into a view controller and assign to it the `Chart` Custom Class:
+The chart can be initialized from the Interface Builder. Drag a normal View into a View Controller and assign to it the `Chart` Custom Class:
  
 ![Example](https://cloud.githubusercontent.com/assets/120693/5063826/c01f26d2-6df6-11e4-8122-cb086709d96c.png)
 
-You can now add it as `@IBOutlet` in the view controller class.
+You can now add it as `@IBOutlet` to the view controller class.
 
 > **Note** Parts of the chart can be customized from the Interface Builder, but you need to write some code to make it working.
 
@@ -73,30 +73,30 @@ var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 
 ### Adding series
 
-Initialize each series before adding them to the chart. Use the `ChartSeriess` class to specify their y-values:
+Initialize each series before adding them to the chart. Use the `ChartSeries` class to specify their y-values:
 
 ```swift
 // Create a new series using the y-values
-var series = new ChartSeriess([0, 6, 2, 8, 4, 7, 3, 10, 8])
+var series = new ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
 chart.addSerie(series)
 ```
 
-By default, values on the x-axis are inferred as the progressive indexes of the given array. You can customize those values passing an array of `(x: Float, y: Float)` touples to the series' initializer:
+By default, values on the x-axis are inferred as the progressive indexes of the given array. You can customize those values by passing an array of `(x: Float, y: Float)` touples to the series' initializer:
 
 ```swift
 // Create a new series specifying x and y values
 var data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
-var series = new ChartSeriess(data)
+var series = new ChartSeries(data)
 chart.addSerie(series)
 ```
 
 #### Multiple series
 
-Using the `chart.addSerie()` and `chart.addSeries()` methods, you can add as many series as you want. Those will be indentified with a progressive index in the chart's `series` array property.
+Using the `chart.addSerie()` and `chart.addSeries()` methods, you can add as many series as you want. Those will be indentified with a progressive index in the chart's `series` property.
 
 ## Touch events
 
-To make the chart responding to touch events, implement the `ChartDelegate` protocol in your classes, i.e. in a `UIViewController`, and set the chart's `delegate` property:
+To make the chart respond to touch events, implement the `ChartDelegate` protocol in your classes, as a View Controller, and set the chart's `delegate` property:
 
 ```swift
 class MyViewController: UIViewController, ChartDelegate {
@@ -116,7 +116,7 @@ class MyViewController: UIViewController, ChartDelegate {
 }
 ```
 
-The `didTouchChart` method returns an array of indexes, one for each series, with an optional Int referring to the data index:
+The `didTouchChart` method passes an array of indexes, one for each series, with an optional `Int` referring to the data's index:
 
 ```swift
  func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {

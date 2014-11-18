@@ -17,9 +17,9 @@ A line & area chart library for iOS, written in swift.
 
 ```swift
 let chart = Chart()
-let serie = ChartSerie([0, 6, 2, 8, 4, 7, 3, 10, 8])
-serie.color = ChartColors.greenColor()
-chart.addSerie(serie)
+let series = ChartSeriess([0, 6, 2, 8, 4, 7, 3, 10, 8])
+series.color = ChartColors.greenColor()
+chart.addSerie(series)
 ```
 
 More examples can be found in the project.
@@ -28,8 +28,8 @@ More examples can be found in the project.
 
 The library includes:
 
-- the [Chart](SwiftChart/Chart/Chart.swift) main class, to initialize and configure the chart's content, e.g. for adding series or setting up the its appearance
-- the [ChartSeries](SwiftChart/Chart/ChartSeries.swift) class, for creating series and configure their appearance
+- the [`Chart`](SwiftChart/Chart/Chart.swift) main class, to initialize and configure the chart's content, e.g. for adding series or setting up the its appearance
+- the [`ChartSeriesss`](SwiftChart/Chart/ChartSeriesss.swift) class, for creating series and configure their appearance
 - the [ChartDelegate](SwiftChart/Chart/Chart.swift) protocol, which tells other views about the chart's touch events
 - the [ChartColor](SwiftChart/Chart/ChartColors.swift) struct, containing some predefined colors
 
@@ -73,21 +73,21 @@ var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 
 ### Adding series
 
-Initialize each serie before adding them to the chart. Use the `ChartSerie` class to specify their y-values:
+Initialize each series before adding them to the chart. Use the `ChartSeriess` class to specify their y-values:
 
 ```swift
-// Create a new serie using the y-values
-var serie = new ChartSerie([0, 6, 2, 8, 4, 7, 3, 10, 8])
-chart.addSerie(serie)
+// Create a new series using the y-values
+var series = new ChartSeriess([0, 6, 2, 8, 4, 7, 3, 10, 8])
+chart.addSerie(series)
 ```
 
-By default, values on the x-axis are inferred as the progressive indexes of the given array. You can customize those values passing an array of `(x: Float, y: Float)` touples to the serie's initializer:
+By default, values on the x-axis are inferred as the progressive indexes of the given array. You can customize those values passing an array of `(x: Float, y: Float)` touples to the series' initializer:
 
 ```swift
-// Create a new serie specifying x and y values
+// Create a new series specifying x and y values
 var data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
-var serie = new ChartSerie(data)
-chart.addSerie(serie)
+var series = new ChartSeriess(data)
+chart.addSerie(series)
 ```
 
 #### Multiple series
@@ -116,13 +116,13 @@ class MyViewController: UIViewController, ChartDelegate {
 }
 ```
 
-The `didTouchChart` method returns an array of indexes, one for each serie, with an optional Int referring to the data index:
+The `didTouchChart` method returns an array of indexes, one for each series, with an optional Int referring to the data index:
 
 ```swift
  func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
         for (serieIndex, dataIndex) in enumerate(indexes) {
             if dataIndex != nil {
-                // The serie at serieIndex has been touched
+                // The series at serieIndex has been touched
                 let value = chart.valueForSerie(serieIndex, atIndex: dataIndex)
             }
         }

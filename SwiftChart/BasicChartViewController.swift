@@ -24,28 +24,28 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             let chart2 = Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
             
             // Simple chart
-            let serie = ChartSerie([0, 6, 2, 8, 4, 7, 3, 10, 8])
-            serie.color = ChartColors.greenColor()
-            chart.addSerie(serie)
+            let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
+            series.color = ChartColors.greenColor()
+            chart.addSeries(series)
             
             
         case 1:
             
             // Example with multiple series, the first two with area enabled
             
-            let serie1 = ChartSerie([0, 6, 2, 8, 4, 7, 3, 10, 8])
-            serie1.color = ChartColors.yellowColor()
-            serie1.area = true
+            let series1 = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
+            series1.color = ChartColors.yellowColor()
+            series1.area = true
             
-            let serie2 = ChartSerie([1, 0, 0.5, 0.2, 0, 1, 0.8, 0.3, 1])
-            serie2.color = ChartColors.redColor()
-            serie2.area = true
+            let series2 = ChartSeries([1, 0, 0.5, 0.2, 0, 1, 0.8, 0.3, 1])
+            series2.color = ChartColors.redColor()
+            series2.area = true
             
-            // A partially filled serie
-            let serie3 = ChartSerie([9, 8, 10, 8.5, 9.5, 10])
-            serie3.color = ChartColors.purpleColor()
+            // A partially filled series
+            let series3 = ChartSeries([9, 8, 10, 8.5, 9.5, 10])
+            series3.color = ChartColors.purpleColor()
             
-            chart.addSeries([serie1, serie2, serie3])
+            chart.addSeries([series1, series2, series3])
             
         case 2:
             
@@ -53,10 +53,10 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             
             let data: Array<Float> = [3, 6, -2, 6, 2, 4, -4, 3, -6, -1, -5]
             
-            let serie = ChartSerie(data)
-            serie.area = true
+            let series = ChartSeries(data)
+            series.area = true
             
-            chart.addSerie(serie)
+            chart.addSeries(series)
             
             // Set minimum and maximum values for y-axis
             chart.minY = -7
@@ -76,9 +76,9 @@ class BasicChartViewController: UIViewController, ChartDelegate {
     // Chart delegate
     
     func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
-        for (serieIndex, dataIndex) in enumerate(indexes) {
-            if let value = chart.valueForSerie(serieIndex, atIndex: dataIndex) {
-                println("Touched serie: \(serieIndex): data index: \(dataIndex!); serie value: \(value); x-axis value: \(x) (from left: \(left))")
+        for (seriesIndex, dataIndex) in enumerate(indexes) {
+            if let value = chart.valueForSeries(seriesIndex, atIndex: dataIndex) {
+                println("Touched series: \(seriesIndex): data index: \(dataIndex!); series value: \(value); x-axis value: \(x) (from left: \(left))")
             }
         }
     }

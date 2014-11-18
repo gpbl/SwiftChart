@@ -14,8 +14,8 @@ protocol ChartDelegate {
     Tells the delegate that the specified chart has been touched.
     
     :param: chart The chart that has been touched.
-    :param: indexes Each element of this array contains the index of the data that has been touched, one for each serie.
-            If the serie hasn't been touched, its index will be nil.
+    :param: indexes Each element of this array contains the index of the data that has been touched, one for each series.
+            If the series hasn't been touched, its index will be nil.
     :param: x The value on the x-axis that has been touched.
     :param: left The distance from the left side of the chart.
     
@@ -33,7 +33,7 @@ protocol ChartDelegate {
 }
 
 /**
-Represent the x- and the y-axis values for each point in a chart serie.
+Represent the x- and the y-axis values for each point in a chart series.
 */
 typealias ChartPoint = (x: Float, y: Float)
 
@@ -48,11 +48,11 @@ class Chart: UIControl {
     /**
     Series to display in the chart.
     */
-    var series: Array<ChartSerie> = []
+    var series: Array<ChartSeries> = []
     
     /**
     The values to display as labels on the x-axis. You can format these values with the `xLabelFormatter` attribute.
-    As default, it will display the values of the serie which has the most data.
+    As default, it will display the values of the series which has the most data.
     */
     var xLabels: Array<Float>!
     
@@ -198,28 +198,28 @@ class Chart: UIControl {
     }
     
     /**
-    Adds a chart serie.
+    Adds a chart series.
     */
-    func addSerie(serie: ChartSerie) {
-        series.append(serie)
+    func addSeries(series: ChartSeries) {
+        self.series.append(series)
     }
     
     /**
     Adds multiple series.
     */
-    func addSeries(series: Array<ChartSerie>) {
-        for serie in series {
-            addSerie(serie)
+    func addSeries(series: Array<ChartSeries>) {
+        for s in series {
+            addSeries(s)
         }
     }
     
     /**
-    Returns the value for the specified serie at the given index
+    Returns the value for the specified series at the given index
     */
-    func valueForSerie(serieIndex: Int, atIndex dataIndex: Int?) -> Float? {
+    func valueForSeries(seriesIndex: Int, atIndex dataIndex: Int?) -> Float? {
         if dataIndex == nil { return nil }
-        let serie = self.series[serieIndex] as ChartSerie
-        return serie.data[dataIndex!].y
+        let series = self.series[seriesIndex] as ChartSeries
+        return series.data[dataIndex!].y
     }
     
     
@@ -240,8 +240,8 @@ class Chart: UIControl {
     
     private func drawChart() {
         
-        assert(series.count > 0, "At least one serie is needed for drawing the chart")
-        assert(series[0].data.count > 0, "The chart's first serie must contain some data")
+        assert(series.count > 0, "At least one series is needed for drawing the chart")
+        assert(series[0].data.count > 0, "The chart's first series must contain some data")
         
         drawingHeight = bounds.height - axisBottomInset - axisTopInset
         drawingWidth = bounds.width
@@ -264,20 +264,20 @@ class Chart: UIControl {
         
         // Draw content
         
-        for (index, serie) in enumerate(series) {
+        for (index, series) in enumerate(self.series) {
             
             // Separate each line in multiple segments over and below the x axis
-            var segments = Chart.segmentLine(serie.data as ChartLineSegment)
+            var segments = Chart.segmentLine(series.data as ChartLineSegment)
             
             for (i, segment) in enumerate(segments) {
                 let scaledXValues = scaleValuesOnXAxis( segment.map( { return $0.x } ) )
                 let scaledYValues = scaleValuesOnYAxis( segment.map( { return $0.y } ) )
                 
-                if serie.line {
-                    drawLine(xValues: scaledXValues, yValues: scaledYValues, serieIndex: index)
+                if series.line {
+                    drawLine(xValues: scaledXValues, yValues: scaledYValues, seriesIndex: index)
                 }
-                if serie.area {
-                    drawArea(xValues: scaledXValues, yValues: scaledYValues, serieIndex: index)
+                if series.area {
+                    drawArea(xValues: scaledXValues, yValues: scaledYValues, seriesIndex: index)
                 }
             }
         }
@@ -303,10 +303,10 @@ class Chart: UIControl {
         
         // Check in datasets
         
-        for serie in series {
-            let xValues =  serie.data.map( { (point: ChartPoint) -> Float in
+        for series in self.series {
+            let xValues =  series.data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
-            let yValues =  serie.data.map( { (point: ChartPoint) -> Float in
+            let yValues =  series.data.map( { (point: ChartPoint) -> Float in
                 return point.y } )
             
             let newMinX = minElement(xValues)
@@ -401,7 +401,7 @@ class Chart: UIControl {
         
     }
     
-    private func drawLine(#xValues: Array<Float>, yValues: Array<Float>, serieIndex: Int) -> CAShapeLayer {
+    private func drawLine(#xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) -> CAShapeLayer {
         
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let path = CGPathCreateMutable()
@@ -418,10 +418,10 @@ class Chart: UIControl {
         lineLayer.path = path
         
         if isAboveXAxis {
-            lineLayer.strokeColor = series[serieIndex].colors.above.CGColor
+            lineLayer.strokeColor = series[seriesIndex].colors.above.CGColor
         }
         else {
-            lineLayer.strokeColor = series[serieIndex].colors.below.CGColor
+            lineLayer.strokeColor = series[seriesIndex].colors.below.CGColor
         }
         lineLayer.fillColor = nil
         lineLayer.lineWidth = lineWidth
@@ -434,7 +434,7 @@ class Chart: UIControl {
         return lineLayer
     }
     
-    private func drawArea(#xValues: Array<Float>, yValues: Array<Float>, serieIndex: Int) {
+    private func drawArea(#xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let area = CGPathCreateMutable()
         let zero = CGFloat(getZeroValueonYAxis())
@@ -452,10 +452,10 @@ class Chart: UIControl {
         areaLayer.path = area
         areaLayer.strokeColor = nil
         if isAboveXAxis {
-            areaLayer.fillColor = series[serieIndex].colors.above.colorWithAlphaComponent(areaAlphaComponent).CGColor
+            areaLayer.fillColor = series[seriesIndex].colors.above.colorWithAlphaComponent(areaAlphaComponent).CGColor
         }
         else {
-            areaLayer.fillColor = series[serieIndex].colors.below.colorWithAlphaComponent(areaAlphaComponent).CGColor
+            areaLayer.fillColor = series[seriesIndex].colors.below.colorWithAlphaComponent(areaAlphaComponent).CGColor
         }
         areaLayer.lineWidth = 0
         
@@ -490,7 +490,7 @@ class Chart: UIControl {
         
         var labels: Array<Float>
         if (xLabels == nil) {
-            // Use labels from the first serie
+            // Use labels from the first series
             xLabels = series[0].data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
         }
@@ -654,9 +654,9 @@ class Chart: UIControl {
         
         var indexes: Array<Int?> = []
         
-        for serie in series {
+        for series in self.series {
             var index: Int? = nil
-            let xValues = serie.data.map( { (point: ChartPoint) -> Float in
+            let xValues = series.data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
             let closest = Chart.findClosestInValues(xValues, forValue: x)
             if closest.lowestIndex != nil && closest.highestIndex != nil {

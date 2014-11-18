@@ -28,7 +28,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
     func initializeChart() {
         chart.delegate = self
         
-        // Initialize data serie and labels
+        // Initialize data series and labels
         let stockValues = getStockValues()
         
         var serieData: Array<Float> = []
@@ -52,8 +52,8 @@ class StockChartViewController: UIViewController, ChartDelegate {
             }
         }
         
-        let serie = ChartSerie(serieData)
-        serie.area = true
+        let series = ChartSeries(serieData)
+        series.area = true
         
         // Configure chart layout
         
@@ -68,14 +68,14 @@ class StockChartViewController: UIViewController, ChartDelegate {
         // Add some padding above the x-axis
         chart.minY = minElement(serieData) - 5
         
-        chart.addSerie(serie)
+        chart.addSeries(series)
         
     }
     // Chart delegate
     
     func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
         
-        if let value = chart.valueForSerie(0, atIndex: indexes[0]) {
+        if let value = chart.valueForSeries(0, atIndex: indexes[0]) {
             
             let numberFormatter = NSNumberFormatter()
             numberFormatter.minimumFractionDigits = 2

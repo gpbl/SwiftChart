@@ -1,5 +1,5 @@
 //
-//  ChartSerie.swift
+//  ChartSeries.swift
 //  SwiftChart
 //
 //  Created by Giampaolo Bellavite on 07/11/14.
@@ -9,9 +9,9 @@
 import UIKit
 
 /**
-Represent a serie to draw in the line chart. Each serie is defined by its data and options.
+Represent a series to draw in the line chart. Each series is defined with a dataset and appareance settings.
 */
-class ChartSerie {
+class ChartSeries {
     let data: Array<(x: Float, y: Float)>
     var area: Bool = false
     var line: Bool = true

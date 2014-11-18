@@ -89,9 +89,11 @@ class StockChartViewController: UIViewController, ChartDelegate {
             if constant < labelLeadingMarginInitialConstant {
                 constant = labelLeadingMarginInitialConstant
             }
+            
             // Avoid placing the label on the right of the chart
-            if constant > chart.frame.width - label.frame.width {
-                constant =  chart.frame.width - label.frame.width
+            let rightMargin = chart.frame.width - label.frame.width
+            if constant > rightMargin {
+                constant = rightMargin
             }
             
             labelLeadingMarginConstraint.constant = constant

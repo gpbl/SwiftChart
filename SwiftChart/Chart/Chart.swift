@@ -106,15 +106,15 @@ class Chart: UIControl {
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
     */
-    var axisBottomInset: CGFloat = 20
+    var bottomInset: CGFloat = 20
     
     /**
     Height of the area at the top of the chart, acting a padding to make place for the top y-axis label.
     */
-    var axisTopInset: CGFloat = 20
+    var topInset: CGFloat = 20
     
     /**
-    Width of the chart lines.
+    Width of the chart's lines.
     */
     @IBInspectable
     var lineWidth: CGFloat = 2
@@ -243,7 +243,7 @@ class Chart: UIControl {
         assert(series.count > 0, "At least one series is needed for drawing the chart")
         assert(series[0].data.count > 0, "The chart's first series must contain some data")
         
-        drawingHeight = bounds.height - axisBottomInset - axisTopInset
+        drawingHeight = bounds.height - bottomInset - topInset
         drawingWidth = bounds.width
         
         let minMax = getMinMax()
@@ -363,7 +363,7 @@ class Chart: UIControl {
         if max.y - min.y == 0 { factor = 0 }
         else { factor = height / (max.y - min.y) }
         
-        let scaled = values.map { Float(self.axisTopInset) + height - factor * ($0 - self.min.y) }
+        let scaled = values.map { Float(self.topInset) + height - factor * ($0 - self.min.y) }
         
         return scaled
     }
@@ -375,7 +375,7 @@ class Chart: UIControl {
         if max.y - min.y == 0 { factor = 0 }
         else { factor = height / (max.y - min.y) }
         
-        let scaled = Float(self.axisTopInset) + height - factor * (value - min.y)
+        let scaled = Float(self.topInset) + height - factor * (value - min.y)
         return scaled
     }
     
@@ -471,8 +471,8 @@ class Chart: UIControl {
         CGContextSetLineWidth(context, 0.5)
         
         // xAxis (bottom)
-        CGContextMoveToPoint(context, 0, drawingHeight + axisTopInset)
-        CGContextAddLineToPoint(context, drawingWidth, drawingHeight + axisTopInset)
+        CGContextMoveToPoint(context, 0, drawingHeight + topInset)
+        CGContextAddLineToPoint(context, drawingWidth, drawingHeight + topInset)
         CGContextStrokePath(context)
         
         // xAxis (top)
@@ -525,8 +525,8 @@ class Chart: UIControl {
             CGContextStrokePath(context)
             
             // Center label vertically
-            label.frame.origin.y += axisTopInset
-            label.frame.origin.y -= (label.frame.height - axisBottomInset) / 2
+            label.frame.origin.y += topInset
+            label.frame.origin.y -= (label.frame.height - bottomInset) / 2
             
             // Set label's text alignment
             label.frame.size.width = (drawingWidth / CGFloat(xLabels.count)) - padding * 2
@@ -564,7 +564,7 @@ class Chart: UIControl {
             let y = CGFloat(value)
             
             // Add horizontal grid
-            if (y != drawingHeight + axisTopInset) {
+            if (y != drawingHeight + topInset) {
                 
                 CGContextMoveToPoint(context, 0, y)
                 CGContextAddLineToPoint(context, self.bounds.width, y)
@@ -608,7 +608,7 @@ class Chart: UIControl {
             let path = CGPathCreateMutable()
             
             CGPathMoveToPoint(path, nil, left, 0)
-            CGPathAddLineToPoint(path, nil, left, drawingHeight  + axisTopInset)
+            CGPathAddLineToPoint(path, nil, left, drawingHeight  + topInset)
             shapeLayer.path = path
         }
         else {
@@ -616,7 +616,7 @@ class Chart: UIControl {
             let path = CGPathCreateMutable()
             
             CGPathMoveToPoint(path, nil, left, 0)
-            CGPathAddLineToPoint(path, nil, left, drawingHeight + axisTopInset)
+            CGPathAddLineToPoint(path, nil, left, drawingHeight + topInset)
             
             var shapeLayer = CAShapeLayer()
             shapeLayer.frame = self.bounds

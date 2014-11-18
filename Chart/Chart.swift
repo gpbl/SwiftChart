@@ -97,10 +97,16 @@ class Chart: UIControl {
     var labelColor: UIColor = UIColor.blackColor()
     
     /**
-    Color for axes and grids.
+    Color for the axes.
     */
     @IBInspectable
     var axesColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
+    
+    /**
+    Color for the grid.
+    */
+    @IBInspectable
+    var gridColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
     
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
@@ -390,7 +396,7 @@ class Chart: UIControl {
         return scaled
     }
     
-    private func getZeroValueonYAxis() -> Float {
+    private func getZeroValueOnYAxis() -> Float {
         if min.y > 0 {
             return scaleValueOnYAxis(min.y)
         }
@@ -406,7 +412,7 @@ class Chart: UIControl {
         
         // YValues are "reverted" from top to bottom, so min is actually the maxz
         let min = maxElement(yValues)
-        let zero = getZeroValueonYAxis()
+        let zero = getZeroValueOnYAxis()
         
         return min <= zero
         
@@ -448,7 +454,7 @@ class Chart: UIControl {
     private func drawArea(#xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let area = CGPathCreateMutable()
-        let zero = CGFloat(getZeroValueonYAxis())
+        let zero = CGFloat(getZeroValueOnYAxis())
         
         CGPathMoveToPoint(area, nil, CGFloat(xValues[0]), zero)
         
@@ -481,14 +487,33 @@ class Chart: UIControl {
         CGContextSetStrokeColorWithColor(context, axesColor.CGColor)
         CGContextSetLineWidth(context, 0.5)
         
-        // xAxis (bottom)
+        // horizontal axis at the bottom
         CGContextMoveToPoint(context, 0, drawingHeight + topInset)
         CGContextAddLineToPoint(context, drawingWidth, drawingHeight + topInset)
         CGContextStrokePath(context)
         
-        // xAxis (top)
+        // horizontal axis at the top
         CGContextMoveToPoint(context, 0, 0)
         CGContextAddLineToPoint(context, drawingWidth, 0)
+        CGContextStrokePath(context)
+        
+        // horizontal axis when y = 0
+        if min.y < 0 && max.y > 0 {
+            let y = CGFloat(getZeroValueOnYAxis())
+            CGContextMoveToPoint(context, 0, y)
+            CGContextAddLineToPoint(context, drawingWidth, y)
+            CGContextStrokePath(context)
+        }
+        
+        // vertical axis on the left
+        CGContextMoveToPoint(context, 0, 0)
+        CGContextAddLineToPoint(context, 0, drawingHeight + topInset)
+        CGContextStrokePath(context)
+        
+        
+        // vertical axis on the right
+        CGContextMoveToPoint(context, drawingWidth, 0)
+        CGContextAddLineToPoint(context, drawingWidth, drawingHeight + topInset)
         CGContextStrokePath(context)
         
     }
@@ -496,7 +521,7 @@ class Chart: UIControl {
     private func drawLabelsAndGridOnXAxis() {
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetStrokeColorWithColor(context, axesColor.CGColor)
+        CGContextSetStrokeColorWithColor(context, gridColor.CGColor)
         CGContextSetLineWidth(context, 0.5)
         
         var labels: Array<Float>
@@ -514,7 +539,20 @@ class Chart: UIControl {
         
         for (i, value) in enumerate(scaled) {
             let x = CGFloat(value)
+
             
+            // Add vertical grid for each label, except axes on the left and right
+            
+            if x != 0 && x != drawingWidth {
+                CGContextMoveToPoint(context, x, 0)
+                CGContextAddLineToPoint(context, x, bounds.height)
+                CGContextStrokePath(context)
+            }
+
+            if x == drawingWidth {
+                // Do not add label at the most right position
+                continue
+            }
             
             // Add label
             let label = UILabel(frame: CGRect(x: x, y: drawingHeight, width: 0, height: 0))
@@ -527,16 +565,6 @@ class Chart: UIControl {
             
             // Add left padding
             label.frame.origin.x += padding
-            
-            // Do not add a label outside the frame
-            if (label.frame.origin.x) >= drawingWidth {
-                continue
-            }
-            
-            // Add vertical grid
-            CGContextMoveToPoint(context, x, 0)
-            CGContextAddLineToPoint(context, x, bounds.height)
-            CGContextStrokePath(context)
             
             // Center label vertically
             label.frame.origin.y += topInset
@@ -551,17 +579,12 @@ class Chart: UIControl {
             
         }
         
-        // Add vertical grid on the right
-        CGContextMoveToPoint(context, drawingWidth, 0)
-        CGContextAddLineToPoint(context, drawingWidth, bounds.height)
-        CGContextStrokePath(context)
-        
     }
     
     private func drawLabelsAndGridOnYAxis() {
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetStrokeColorWithColor(context, axesColor.CGColor)
+        CGContextSetStrokeColorWithColor(context, gridColor.CGColor)
         CGContextSetLineWidth(context, 0.5)
         
         var labels: Array<Float>
@@ -577,12 +600,13 @@ class Chart: UIControl {
         
         let scaled = scaleValuesOnYAxis(labels)
         let padding: CGFloat = 5
+        let zero = CGFloat(getZeroValueOnYAxis())
         for (i, value) in enumerate(scaled) {
             
             let y = CGFloat(value)
             
-            // Add horizontal grid
-            if (y != drawingHeight + topInset) {
+            // Add horizontal grid for each label, but not over axes
+            if (y != drawingHeight + topInset && y != zero) {
                 
                 CGContextMoveToPoint(context, 0, y)
                 CGContextAddLineToPoint(context, self.bounds.width, y)

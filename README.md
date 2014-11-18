@@ -31,7 +31,7 @@ The library includes:
 
 - the [Chart](Chart/Chart.swift) main class, to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance
 - the [ChartSeries](Chart/ChartSeries.swift) class, for creating datasets and configure their appearance
-- the [ChartDelegate](Chart/Chart.swift) protocol, which tells other views about the chart’s touch events
+- the [ChartDelegate](Chart/Chart.swift) protocol, which tells other objects about the chart’s touch events
 - the [ChartColor](Chart/ChartColors.swift) struct, containing some predefined colors
 
 ### Installation
@@ -43,13 +43,13 @@ cd myProject
 git submodule add https://github.com/gpbl/SwiftChart.git
 ```
 
-From XCode, open your project and choose *Add Files to myProject...* from the *File* menu. Select the *Chart* folder from the *SwiftChart* subfolder.
+From XCode, open then your project and choose *Add Files to ProjectName...* from the *File* menu. Select the *Chart* folder from the *SwiftChart* subfolder.
 
 ### To initialize a chart
 
 #### From the Interface Builder
 
-The chart can be initialized from the Interface Builder. Drag a normal View into a View Controller and assign to it the `Chart` Custom Class:
+The chart can be initialized from the Interface Builder. Drag a normal View into a View Controller and assign to it the `Chart` Custom Class from the Identity Inspector:
  
 ![Example](https://cloud.githubusercontent.com/assets/120693/5063826/c01f26d2-6df6-11e4-8122-cb086709d96c.png)
 
@@ -72,15 +72,14 @@ var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 
 ### Adding series
 
-Initialize each series before adding them to the chart. Use the `ChartSeries` class to specify their y-values:
+Initialize each series before adding them to the chart. To do so, pass an array to initialize a `ChartSeries` object:
 
 ```swift
-// Create a new series using the y-values
-var series = new ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
+var series = new ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
 chart.addSerie(series)
 ```
 
-By default, values on the x-axis are inferred as the progressive indexes of the given array. You can customize those values by passing an array of `(x: Float, y: Float)` touples to the series' initializer:
+By default, the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Float, y: Float)` touples to the series’ initializer:
 
 ```swift
 // Create a new series specifying x and y values
@@ -131,9 +130,9 @@ The `didTouchChart` method passes an array of indexes, one for each series, with
 
 You can use `chart.valueForSerie()` to access the value for the touched position.
 
-The `x: Float` argument refers to the value on the x-axis: it is inferred from the horizontal position of the touch event and may not be part of the x-values.
+The `x: Float` argument refers to the value on the x-axis: it is inferred from the horizontal position of the touch event, and may be not part of the series values.
 
-The `left: CGFloat` is the position of the touch starting from the left side of the chart. This can be useful to calculate the horizontal position of a label appearing over the chart: 
+The `left: CGFloat` is the x position on the chart’s view, starting from the left side. It may be used to set the  position for a label moving above the chart: 
 
 ![Label on touch](https://cloud.githubusercontent.com/assets/120693/5068773/8be0fa9c-6e52-11e4-8b60-aaf76dc9377d.gif)
 
@@ -165,7 +164,7 @@ The `left: CGFloat` is the position of the touch starting from the left side of 
 
 ### ChartSeries class
 
-* `area`: draws an area below the series' line.
+* `area`: draws an area below the series’ line.
 * `line`: set it to false to hide the line (useful for drawing only the area).
 * `color`: the series color.
 * `colors`: a touple to specify the color above or below the zero, e.g. `(above: ChartsColors.redColor(), below: ChartsColors.blueColor())` 

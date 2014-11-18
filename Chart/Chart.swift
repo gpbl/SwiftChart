@@ -53,7 +53,7 @@ class Chart: UIControl {
     The values to display as labels on the x-axis. You can format these values with the `xLabelFormatter` attribute.
     As default, it will display the values of the series which has the most data.
     */
-    var xLabels: Array<Float>!
+    var xLabels: Array<Float>?
     
     /**
     Formatter for the labels on the x-axis. The `index` represents the `xLabels` index, `value` its value:
@@ -71,7 +71,7 @@ class Chart: UIControl {
     Values to display as labels of the y-axis. If not specified, will display the
     lowest, the middle and the highest values.
     */
-    var yLabels: Array<Float>!
+    var yLabels: Array<Float>?
     
     /**
     Formatter for the labels on the y-axis.
@@ -531,7 +531,7 @@ class Chart: UIControl {
                 return point.x } )
         }
         else {
-            labels = xLabels
+            labels = xLabels!
         }
         
         let scaled = scaleValuesOnXAxis(labels)
@@ -571,7 +571,7 @@ class Chart: UIControl {
             label.frame.origin.y -= (label.frame.height - bottomInset) / 2
             
             // Set label's text alignment
-            label.frame.size.width = (drawingWidth / CGFloat(xLabels.count)) - padding * 2
+            label.frame.size.width = (drawingWidth / CGFloat(labels.count)) - padding * 2
             label.textAlignment = xLabelsTextAlignment
             
             
@@ -595,7 +595,7 @@ class Chart: UIControl {
             }
         }
         else {
-            labels = xLabels
+            labels = yLabels!
         }
         
         let scaled = scaleValuesOnYAxis(labels)

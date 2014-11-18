@@ -121,14 +121,13 @@ The `didTouchChart` method passes an array of indexes, one for each series, with
         for (serieIndex, dataIndex) in enumerate(indexes) {
             if dataIndex != nil {
                 // The series at serieIndex has been touched
-
-                let value = chart.valueForSerie(serieIndex, atIndex: dataIndex)
+                let value = chart.valueForSeries(serieIndex, atIndex: dataIndex)
             }
         }
     }
 ```
 
-You can use `chart.valueForSerie()` to access the value for the touched position.
+You can use `chart.valueForSeries()` to access the value for the touched position.
 
 The `x: Float` argument refers to the value on the x-axis: it is inferred from the horizontal position of the touch event, and may be not part of the series values.
 

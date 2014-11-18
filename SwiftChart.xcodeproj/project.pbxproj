@@ -13,12 +13,12 @@
 		2404EEB81A0D5AE800BCB7D6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2404EEB71A0D5AE800BCB7D6 /* Images.xcassets */; };
 		2404EEBB1A0D5AE800BCB7D6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2404EEB91A0D5AE800BCB7D6 /* LaunchScreen.xib */; };
 		2404EEC71A0D5AE800BCB7D6 /* SwiftChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEC61A0D5AE800BCB7D6 /* SwiftChartTests.swift */; };
-		2404EEDD1A0D647200BCB7D6 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDA1A0D647200BCB7D6 /* Chart.swift */; };
-		2404EEDE1A0D647200BCB7D6 /* ChartColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDB1A0D647200BCB7D6 /* ChartColors.swift */; };
-		2404EEDF1A0D647200BCB7D6 /* ChartSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404EEDC1A0D647200BCB7D6 /* ChartSeries.swift */; };
 		24B787381A1927120027CCED /* StockChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B787371A1927120027CCED /* StockChartViewController.swift */; };
 		24BAF2721A18C90F006C921A /* AAPL.json in Resources */ = {isa = PBXBuildFile; fileRef = 24BAF2711A18C90F006C921A /* AAPL.json */; };
 		24BDECB51A176BD800D91AB7 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BDECB41A176BD800D91AB7 /* TableViewController.swift */; };
+		24D9EA0F1A1B304E00777E8D /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9EA0C1A1B304E00777E8D /* Chart.swift */; };
+		24D9EA101A1B304E00777E8D /* ChartColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9EA0D1A1B304E00777E8D /* ChartColors.swift */; };
+		24D9EA111A1B304E00777E8D /* ChartSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9EA0E1A1B304E00777E8D /* ChartSeries.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,13 +42,13 @@
 		2404EEC01A0D5AE800BCB7D6 /* SwiftChartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2404EEC51A0D5AE800BCB7D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2404EEC61A0D5AE800BCB7D6 /* SwiftChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChartTests.swift; sourceTree = "<group>"; };
-		2404EEDA1A0D647200BCB7D6 /* Chart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Chart.swift; path = Chart/Chart.swift; sourceTree = "<group>"; };
-		2404EEDB1A0D647200BCB7D6 /* ChartColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartColors.swift; path = Chart/ChartColors.swift; sourceTree = "<group>"; };
-		2404EEDC1A0D647200BCB7D6 /* ChartSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartSeries.swift; path = Chart/ChartSeries.swift; sourceTree = "<group>"; };
 		242A9E6C1A134DBE009DE9A8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		24B787371A1927120027CCED /* StockChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockChartViewController.swift; path = ../StockChartViewController.swift; sourceTree = "<group>"; };
 		24BAF2711A18C90F006C921A /* AAPL.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AAPL.json; sourceTree = "<group>"; };
 		24BDECB41A176BD800D91AB7 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		24D9EA0C1A1B304E00777E8D /* Chart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
+		24D9EA0D1A1B304E00777E8D /* ChartColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartColors.swift; sourceTree = "<group>"; };
+		24D9EA0E1A1B304E00777E8D /* ChartSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartSeries.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +91,7 @@
 		2404EEAD1A0D5AE800BCB7D6 /* SwiftChart */ = {
 			isa = PBXGroup;
 			children = (
-				2404EED01A0D5B0F00BCB7D6 /* Chart */,
+				24D9EA0B1A1B304E00777E8D /* Chart */,
 				2404EEB41A0D5AE800BCB7D6 /* Main.storyboard */,
 				2404EEB01A0D5AE800BCB7D6 /* AppDelegate.swift */,
 				24BDECB41A176BD800D91AB7 /* TableViewController.swift */,
@@ -128,16 +128,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		2404EED01A0D5B0F00BCB7D6 /* Chart */ = {
-			isa = PBXGroup;
-			children = (
-				2404EEDA1A0D647200BCB7D6 /* Chart.swift */,
-				2404EEDB1A0D647200BCB7D6 /* ChartColors.swift */,
-				2404EEDC1A0D647200BCB7D6 /* ChartSeries.swift */,
-			);
-			name = Chart;
-			sourceTree = "<group>";
-		};
 		24BAF2731A18C91E006C921A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +136,16 @@
 				2404EEB91A0D5AE800BCB7D6 /* LaunchScreen.xib */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		24D9EA0B1A1B304E00777E8D /* Chart */ = {
+			isa = PBXGroup;
+			children = (
+				24D9EA0C1A1B304E00777E8D /* Chart.swift */,
+				24D9EA0D1A1B304E00777E8D /* ChartColors.swift */,
+				24D9EA0E1A1B304E00777E8D /* ChartSeries.swift */,
+			);
+			path = Chart;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,13 +249,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2404EEDE1A0D647200BCB7D6 /* ChartColors.swift in Sources */,
+				24D9EA111A1B304E00777E8D /* ChartSeries.swift in Sources */,
+				24D9EA0F1A1B304E00777E8D /* Chart.swift in Sources */,
 				24BDECB51A176BD800D91AB7 /* TableViewController.swift in Sources */,
+				24D9EA101A1B304E00777E8D /* ChartColors.swift in Sources */,
 				2404EEB31A0D5AE800BCB7D6 /* BasicChartViewController.swift in Sources */,
 				24B787381A1927120027CCED /* StockChartViewController.swift in Sources */,
-				2404EEDF1A0D647200BCB7D6 /* ChartSeries.swift in Sources */,
 				2404EEB11A0D5AE800BCB7D6 /* AppDelegate.swift in Sources */,
-				2404EEDD1A0D647200BCB7D6 /* Chart.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

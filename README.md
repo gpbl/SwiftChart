@@ -1,12 +1,13 @@
 SwiftChart
 ===========
 
-A line and area charting library for iOS, written in swift.
+A charting library for iOS, written in swift.
 
 ![swift](https://cloud.githubusercontent.com/assets/120693/5063755/dcfc9da0-6df3-11e4-9432-974e77a863ed.png)
 
 **Main features**
 
+* Line and area charts
 * Multiple series
 * Works with signed floats
 * Touch events
@@ -28,14 +29,14 @@ More examples can be found in the `SwiftChart.xcodeproj` project.
 
 The library includes:
 
-- the [Chart](SwiftChart/Chart/Chart.swift) main class, to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance
-- the [ChartSeries](SwiftChart/Chart/ChartSeries.swift) class, for creating datasets and configure their appearance
-- the [ChartDelegate](SwiftChart/Chart/Chart.swift) protocol, which tells other views about the chart’s touch events
-- the [ChartColor](SwiftChart/Chart/ChartColors.swift) struct, containing some predefined colors
+- the [Chart](Chart/Chart.swift) main class, to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance
+- the [ChartSeries](Chart/ChartSeries.swift) class, for creating datasets and configure their appearance
+- the [ChartDelegate](Chart/Chart.swift) protocol, which tells other views about the chart’s touch events
+- the [ChartColor](Chart/ChartColors.swift) struct, containing some predefined colors
 
 ### Installation
 
-Add the content of the [Chart folder](SwiftChart/Chart) to your project, for example by including it as git submodule:
+Add the content of the [Chart folder](Chart) to your project, for example by including it as git submodule:
 
 ```bash
 cd myProject

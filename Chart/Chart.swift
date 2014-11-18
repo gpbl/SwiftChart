@@ -211,6 +211,20 @@ class Chart: UIControl {
             addSeries(s)
         }
     }
+
+    /**
+    Remove the series at the specified index.
+    */
+    func removeSeriesAtIndex(index: Int) {
+        series.removeAtIndex(index)
+    }
+    
+    /**
+    Remove all the series.
+    */
+    func removeSeries() {
+        series = []
+    }
     
     /**
     Returns the value for the specified series at the given index
@@ -279,6 +293,7 @@ class Chart: UIControl {
         }
         
         drawAxes()
+        
         if xLabels != nil || series.count > 0 {
             drawLabelsAndGridOnXAxis()
         }
@@ -485,13 +500,16 @@ class Chart: UIControl {
         CGContextSetLineWidth(context, 0.5)
         
         var labels: Array<Float>
-        if (xLabels == nil) {
+        if xLabels == nil {
             // Use labels from the first series
-            xLabels = series[0].data.map( { (point: ChartPoint) -> Float in
+            labels = series[0].data.map( { (point: ChartPoint) -> Float in
                 return point.x } )
         }
+        else {
+            labels = xLabels
+        }
         
-        let scaled = scaleValuesOnXAxis(xLabels)
+        let scaled = scaleValuesOnXAxis(labels)
         let padding: CGFloat = 5
         
         for (i, value) in enumerate(scaled) {
@@ -501,7 +519,7 @@ class Chart: UIControl {
             // Add label
             let label = UILabel(frame: CGRect(x: x, y: drawingHeight, width: 0, height: 0))
             label.font = labelFont
-            label.text = xLabelsFormatter(i, xLabels[i])
+            label.text = xLabelsFormatter(i, labels[i])
             label.textColor = labelColor
             
             // Set label size
@@ -547,13 +565,17 @@ class Chart: UIControl {
         CGContextSetLineWidth(context, 0.5)
         
         var labels: Array<Float>
-        if (yLabels == nil) {
-            yLabels = [(min.y + max.y) / 2, max.y]
+        if yLabels == nil {
+            labels = [(min.y + max.y) / 2, max.y]
             if (yLabelsOnRightSide || min.y != 0) {
-                yLabels.insert(min.y, atIndex: 0)
+                labels.insert(min.y, atIndex: 0)
             }
         }
-        let scaled = scaleValuesOnYAxis(yLabels)
+        else {
+            labels = xLabels
+        }
+        
+        let scaled = scaleValuesOnYAxis(labels)
         let padding: CGFloat = 5
         for (i, value) in enumerate(scaled) {
             
@@ -564,7 +586,7 @@ class Chart: UIControl {
                 
                 CGContextMoveToPoint(context, 0, y)
                 CGContextAddLineToPoint(context, self.bounds.width, y)
-                if yLabels[i] != 0 {
+                if labels[i] != 0 {
                     // Horizontal grid for 0 is not dashed
                     CGContextSetLineDash(context, 0, [5], 1)
                 }
@@ -576,7 +598,7 @@ class Chart: UIControl {
             
             let label = UILabel(frame: CGRect(x: padding, y: y, width: 0, height: 0))
             label.font = labelFont
-            label.text = yLabelsFormatter(i, yLabels[i])
+            label.text = yLabelsFormatter(i, labels[i])
             label.textColor = labelColor
             label.sizeToFit()
             

@@ -137,7 +137,7 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 
 ## Reference
 
-![reference](https://cloud.githubusercontent.com/assets/120693/5088076/265497d6-6f30-11e4-86fc-8a9bba9e80a0.png)
+![reference](https://cloud.githubusercontent.com/assets/120693/5094993/e3a3e10e-6f65-11e4-8619-b7a05d18190e.png)
 
 ### Chart class
 

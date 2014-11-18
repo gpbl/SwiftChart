@@ -138,14 +138,19 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 
 ## Reference
 
+![reference](https://cloud.githubusercontent.com/assets/120693/5088076/265497d6-6f30-11e4-86fc-8a9bba9e80a0.png)
+
 ### Chart class
 
+#### Chart options
+
 * `areaAlphaComponent`: alpha factor for the area’s color.
-* `axesColor`: the color for axes and grid.
+* `axesColor`: the axes’ color.
 * `bottomInset`: height of the area at the bottom of the chart, containing the labels for the x-axis.
 * `delegate`: the delegate for listening to touch events.
 * `highlightLineColor`: color of the highlight line.
 * `highlightLineWidth`: width of the highlight line.
+* `gridColor`: the grid color.
 * `labelColor`: the color of the labels.
 * `labelFont`: the font used for the labels.
 * `lineWidth`: width of the chart’s lines.
@@ -159,15 +164,19 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 * `yLabelsFormatter`: formats the labels on the y-axis.
 * `yLabelsOnRightSide`: place the y-labels on the right side.
 
-![reference](https://cloud.githubusercontent.com/assets/120693/5083897/e18419e2-6efd-11e4-96f1-4400596e6c60.png)
+#### Methods
 
+* `addSeries(series: ChartSeries)`: add a series to the chart.
+* `removeSeries()`: remove all the series from the chart.
+* `removeSeriesAtIndex(index: Int)`: remove a series at the specified index. 
+* `valueForSeries()`: get the value of the specified series at the specified index.
 
 ### ChartSeries class
 
 * `area`: draws an area below the series’ line.
-* `line`: set it to false to hide the line (useful for drawing only the area).
 * `color`: the series color.
 * `colors`: a touple to specify the color above or below the zero, e.g. `(above: ChartsColors.redColor(), below: ChartsColors.blueColor())` 
+* `line`: set it to false to hide the line (useful for drawing only the area).
 
 ## Credits
 

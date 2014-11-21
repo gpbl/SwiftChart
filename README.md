@@ -60,13 +60,13 @@ The chart can be initialized from the Interface Builder. Drag a normal View into
 To initialize a chart programmatically, use the `new Chart(frame: ...)` initializer, which requires a `frame`:
 
 ```swift
-var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+let chart = new Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 ```
 
 If you prefer to use Autolayout, set the frame to `0` and add the constraints later:
 
 ```swift
-var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+let chart = new Chart(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 // add constraints now
 ```
 
@@ -75,7 +75,7 @@ var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 Initialize each series before adding them to the chart. To do so, pass an array to initialize a `ChartSeries` object:
 
 ```swift
-var series = new ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
+let series = new ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
 chart.addSerie(series)
 ```
 
@@ -83,8 +83,8 @@ By default, the values on the x-axis are the progressive indexes of the passed a
 
 ```swift
 // Create a new series specifying x and y values
-var data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
-var series = new ChartSeries(data)
+let data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
+let series = new ChartSeries(data)
 chart.addSerie(series)
 ```
 
@@ -99,7 +99,7 @@ To make the chart respond to touch events, implement the `ChartDelegate` protoco
 ```swift
 class MyViewController: UIViewController, ChartDelegate {
     override func viewDidLoad() {
-        var chart = new Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+        let chart = new Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
         chart.delegate = self
     }
     

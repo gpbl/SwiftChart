@@ -12,7 +12,6 @@ A charting library for iOS, written in swift.
 * Works with signed floats
 * Touch events
 * Partially filled series
-* Highly customizable
 
 **Example**
 

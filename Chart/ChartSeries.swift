@@ -32,5 +32,9 @@ class ChartSeries {
     init(data: Array<(x: Float, y: Float)>) {
         self.data = data
     }
+    
+    init(data: Array<(x: Double, y: Double)>) {
+        self.data = data.map ({ (Float($0.x), Float($0.y))})
+    }
 }
 

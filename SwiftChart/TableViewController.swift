@@ -15,7 +15,7 @@ class TableViewController: UITableViewController, UITableViewDelegate {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 3 {
+        if indexPath.row == 4 {
             performSegueWithIdentifier("StockChartSegue", sender: nil)
         }
         else {

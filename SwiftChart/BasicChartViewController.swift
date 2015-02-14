@@ -51,7 +51,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             
             // Chart with y-min, y-max and y-labels formatter
             
-            let thing = 1.2
+            
             let data: Array<Float> = [3, 6, -2, 6, 2, 4, -4, 3, -6, -1, -5]
             
             let series = ChartSeries(data)

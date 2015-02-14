@@ -711,15 +711,15 @@ class Chart: UIControl {
         delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
         
     }
-    
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        handleTouchEvents(touches, event: event)
-    }
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         handleTouchEvents(touches, event: event)
     }
     
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        handleTouchEvents(touches, event: event)
+    }
+    
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         handleTouchEvents(touches, event: event)
     }
     

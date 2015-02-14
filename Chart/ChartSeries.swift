@@ -11,7 +11,7 @@ import UIKit
 Represent a series to draw in the line chart. Each series is defined with a dataset and appareance settings.
 */
 class ChartSeries {
-    let data: Array<(x: Float, y: Float)>
+    var data: Array<(x: Float, y: Float)>
     var area: Bool = false
     var line: Bool = true
     var color: UIColor = ChartColors.blueColor() {

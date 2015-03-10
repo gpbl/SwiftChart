@@ -41,11 +41,11 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
         for (i, value) in enumerate(stockValues) {
             
-            serieData.append(value["close"] as Float)
+            serieData.append(value["close"] as! Float)
             
             // Use only one label for each month
-            let month = dateFormatter.stringFromDate(value["date"] as NSDate).toInt()!
-            let monthAsString:String = dateFormatter.monthSymbols[month - 1] as String
+            let month = dateFormatter.stringFromDate(value["date"] as! NSDate).toInt()!
+            let monthAsString:String = dateFormatter.monthSymbols[month - 1] as! String
             if (labels.count == 0 || labelsAsString.last != monthAsString) {
                 labels.append(Float(i))
                 labelsAsString.append(monthAsString)
@@ -113,15 +113,15 @@ class StockChartViewController: UIViewController, ChartDelegate {
         // Read the JSON file
         let filePath = NSBundle.mainBundle().pathForResource("AAPL", ofType: "json")!
         let jsonData = NSData(contentsOfFile: filePath)
-        let json: NSDictionary = NSJSONSerialization.JSONObjectWithData(jsonData!, options: nil, error: nil) as NSDictionary
-        let jsonValues = json["quotes"] as Array<NSDictionary>
+        let json: NSDictionary = NSJSONSerialization.JSONObjectWithData(jsonData!, options: nil, error: nil) as! NSDictionary
+        let jsonValues = json["quotes"] as! Array<NSDictionary>
         
         // Parse data
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         var values = jsonValues.map() { (value: NSDictionary) -> Dictionary<String, Any> in
-            let date = dateFormatter.dateFromString(value["date"]! as String)
-            let close = (value["close"]! as NSNumber).floatValue
+            let date = dateFormatter.dateFromString(value["date"]! as! String)
+            let close = (value["close"]! as! NSNumber).floatValue
             return ["date": date!, "close": close]
         }
         

@@ -15,7 +15,7 @@ class TableViewController: UITableViewController, UITableViewDelegate {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 3 {
+        if indexPath.row == 4 {
             performSegueWithIdentifier("StockChartSegue", sender: nil)
         }
         else {
@@ -26,7 +26,7 @@ class TableViewController: UITableViewController, UITableViewDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "BasicChartSegue" {
             let indexPath = tableView.indexPathForSelectedRow()
-            let dvc = segue.destinationViewController as BasicChartViewController
+            let dvc = segue.destinationViewController as! BasicChartViewController
             dvc.selectedChart = indexPath!.row
         }
     }

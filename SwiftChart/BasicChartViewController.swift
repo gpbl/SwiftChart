@@ -51,6 +51,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             
             // Chart with y-min, y-max and y-labels formatter
             
+            
             let data: Array<Float> = [3, 6, -2, 6, 2, 4, -4, 3, -6, -1, -5]
             
             let series = ChartSeries(data)
@@ -64,7 +65,12 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             
             // Format y-axis, e.g. with units
             chart.yLabelsFormatter = { String(Int($1)) +  "ºC" }
-            
+        
+        case 3:
+            // Create a new series specifying x and y values
+            let data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
+            let series = ChartSeries(data: data)
+            chart.addSeries(series)
             
         default: break;
             

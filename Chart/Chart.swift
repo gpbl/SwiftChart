@@ -190,7 +190,7 @@ class Chart: UIControl {
         super.init(coder: aDecoder)
     }
     
-    convenience override init() {
+    convenience init() {
         self.init(frame: CGRectZero)
     }
     

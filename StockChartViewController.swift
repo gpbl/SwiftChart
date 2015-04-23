@@ -129,11 +129,13 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
     }
     
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        super.didRotateFromInterfaceOrientation(fromInterfaceOrientation)
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         
         // Redraw chart on rotation
         chart.setNeedsDisplay()
+        
     }
     
     

@@ -20,19 +20,20 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         
         switch selectedChart {
         case 0:
-            
-            let chart2 = Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+            title = "Basic Chart"
             
             // Simple chart
+            let chart2 = Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+            
             let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
             series.color = ChartColors.greenColor()
             chart.addSeries(series)
             
             
         case 1:
+            title = "Multiple + Areas Chart"
             
             // Example with multiple series, the first two with area enabled
-            
             let series1 = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
             series1.color = ChartColors.yellowColor()
             series1.area = true
@@ -48,10 +49,9 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             chart.addSeries([series1, series2, series3])
             
         case 2:
+            title = "Below Zero Chart"
             
             // Chart with y-min, y-max and y-labels formatter
-            
-            
             let data: Array<Float> = [3, 6, -2, 6, 2, 4, -4, 3, -6, -1, -5]
             
             let series = ChartSeries(data)
@@ -65,8 +65,10 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             
             // Format y-axis, e.g. with units
             chart.yLabelsFormatter = { String(Int($1)) +  "ºC" }
-        
+            
         case 3:
+            title = "Specific Values Chart"
+            
             // Create a new series specifying x and y values
             let data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
             let series = ChartSeries(data: data)
@@ -75,12 +77,9 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         default: break;
             
         }
-        
-        
     }
     
-    // Chart delegate
-    
+    // MARK: - Chart delegate
     func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
         for (seriesIndex, dataIndex) in enumerate(indexes) {
             if let value = chart.valueForSeries(seriesIndex, atIndex: dataIndex) {
@@ -93,6 +92,10 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         
     }
     
+    func animationDurationForSerieAtIndex(index: Int) -> CFTimeInterval {
+        let values: Array<CFTimeInterval> = [1.0, 1.6, 2.2]
+        return values[index]
+    }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         
@@ -100,7 +103,6 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         
         // Redraw chart on rotation
         chart.setNeedsDisplay()
-        
     }
     
 }

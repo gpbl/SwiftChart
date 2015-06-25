@@ -14,7 +14,7 @@ protocol ChartDelegate {
     
     :param: chart The chart that has been touched.
     :param: indexes Each element of this array contains the index of the data that has been touched, one for each series.
-            If the series hasn't been touched, its index will be nil.
+    If the series hasn't been touched, its index will be nil.
     :param: x The value on the x-axis that has been touched.
     :param: left The distance from the left side of the chart.
     
@@ -29,6 +29,14 @@ protocol ChartDelegate {
     
     */
     func didFinishTouchingChart(chart: Chart)
+    
+    /**
+    Allows different animation's duration for each serie.
+    
+    :param: serieIndex Index of the serie
+    
+    */
+    func animationDurationForSerieAtIndex(serieIndex: Int) -> CFTimeInterval
 }
 
 /**
@@ -164,6 +172,16 @@ class Chart: UIControl {
     */
     var areaAlphaComponent: CGFloat = 0.1
     
+    /**
+    Whether the chart should animate or not, default is true.
+    */
+    var animate: Bool = true
+    
+    /**
+    Set the time for the animations. It's overridden by the delegate's method
+    */
+    var animationDuration: CFTimeInterval?
+    
     // MARK: Private variables
     
     private var highlightShapeLayer: CAShapeLayer!
@@ -217,7 +235,7 @@ class Chart: UIControl {
             addSeries(s)
         }
     }
-
+    
     /**
     Remove the series at the specified index.
     */
@@ -258,7 +276,7 @@ class Chart: UIControl {
     }
     
     private func drawChart() {
-
+        
         drawingHeight = bounds.height - bottomInset - topInset
         drawingWidth = bounds.width
         
@@ -444,6 +462,11 @@ class Chart: UIControl {
         lineLayer.lineWidth = lineWidth
         lineLayer.lineJoin = kCALineJoinBevel
         
+        // Animating lines
+        if animate {
+            animateDrawingLine(layer: lineLayer, index: seriesIndex)
+        }
+        
         self.layer.addSublayer(lineLayer)
         
         layerStore.append(lineLayer)
@@ -475,6 +498,11 @@ class Chart: UIControl {
             areaLayer.fillColor = series[seriesIndex].colors.below.colorWithAlphaComponent(areaAlphaComponent).CGColor
         }
         areaLayer.lineWidth = 0
+        
+        // Animate areas
+        if animate {
+            animateDrawingArea(layer: areaLayer, color: areaLayer.fillColor, index: seriesIndex)
+        }
         
         self.layer.addSublayer(areaLayer)
         
@@ -539,7 +567,7 @@ class Chart: UIControl {
         
         for (i, value) in enumerate(scaled) {
             let x = CGFloat(value)
-
+            
             
             // Add vertical grid for each label, except axes on the left and right
             
@@ -548,7 +576,7 @@ class Chart: UIControl {
                 CGContextAddLineToPoint(context, x, bounds.height)
                 CGContextStrokePath(context)
             }
-
+            
             if x == drawingWidth {
                 // Do not add label at the most right position
                 continue
@@ -639,6 +667,38 @@ class Chart: UIControl {
         }
         
         UIGraphicsEndImageContext()
+        
+    }
+    
+    // MARK: - Animations
+    
+    func animateDrawingLine(#layer: CAShapeLayer, index: Int) {
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = delegate!.animationDurationForSerieAtIndex(index) ?? animationDuration ?? 1.2
+        
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        animation.fillMode = kCAFillModeBoth
+        animation.removedOnCompletion = false
+        
+        layer.strokeStart = 0
+        layer.strokeEnd = 1
+        layer.addAnimation(animation, forKey: animation.keyPath)
+        
+    }
+    
+    func animateDrawingArea(#layer: CAShapeLayer, color: CGColorRef, index: Int) {
+        let animation = CABasicAnimation(keyPath: "fillColor")
+        animation.fromValue = UIColor.clearColor().CGColor
+        animation.toValue = color
+        animation.duration = delegate!.animationDurationForSerieAtIndex(index) ?? animationDuration ?? 1.2
+        
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        animation.fillMode = kCAFillModeBoth
+        animation.removedOnCompletion = false
+        
+        layer.addAnimation(animation, forKey: animation.keyPath)
         
     }
     
@@ -789,5 +849,3 @@ class Chart: UIControl {
         return (x: p1.x - (p2.x - p1.x) / (p2.y - p1.y) * p1.y, y: 0)
     }
 }
-
-

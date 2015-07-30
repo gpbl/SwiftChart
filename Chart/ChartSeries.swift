@@ -37,4 +37,3 @@ class ChartSeries {
         self.data = data.map ({ (Float($0.x), Float($0.y))})
     }
 }
-

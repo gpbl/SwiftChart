@@ -21,6 +21,7 @@ class TableViewController: UITableViewController, UITableViewDelegate {
         else {
             performSegueWithIdentifier("BasicChartSegue", sender: nil)
         }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

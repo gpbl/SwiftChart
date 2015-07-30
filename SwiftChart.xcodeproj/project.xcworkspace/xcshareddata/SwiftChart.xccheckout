@@ -5,23 +5,23 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>2FB00766-EC55-478F-9044-C94FB09B963A</string>
+	<string>387D2BAC-9022-4A60-AC68-E96F466EFCAB</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>SwiftChart</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>F97539AAC6A9217E19D39C74A6E4A0209901EE10</key>
-		<string>github.com:gpbl/SwiftChart.git</string>
+		<string>https://github.com/norfred/SwiftChart.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>SwiftChart.xcodeproj/project.xcworkspace</string>
+	<string>SwiftChart.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>F97539AAC6A9217E19D39C74A6E4A0209901EE10</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>github.com:gpbl/SwiftChart.git</string>
+	<string>https://github.com/norfred/SwiftChart.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>

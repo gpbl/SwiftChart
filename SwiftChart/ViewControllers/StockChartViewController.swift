@@ -22,7 +22,6 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
         labelLeadingMarginInitialConstant = labelLeadingMarginConstraint.constant
         initializeChart()
-        
     }
     
     func initializeChart() {
@@ -55,8 +54,8 @@ class StockChartViewController: UIViewController, ChartDelegate {
         let series = ChartSeries(serieData)
         series.area = true
         
-        // Configure chart layout
         
+        // Configure chart layout
         chart.lineWidth = 0.5
         chart.labelFont = UIFont(name: "HelveticaNeue-Light", size: 12)!
         chart.xLabels = labels
@@ -69,12 +68,10 @@ class StockChartViewController: UIViewController, ChartDelegate {
         chart.minY = minElement(serieData) - 5
         
         chart.addSeries(series)
-        
     }
-    // Chart delegate
     
+    // MARK: - Chart delegate
     func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
-        
         if let value = chart.valueForSeries(0, atIndex: indexes[0]) {
             
             let numberFormatter = NSNumberFormatter()
@@ -97,9 +94,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
             }
             
             labelLeadingMarginConstraint.constant = constant
-            
         }
-        
     }
     
     func didFinishTouchingChart(chart: Chart) {
@@ -107,7 +102,12 @@ class StockChartViewController: UIViewController, ChartDelegate {
         labelLeadingMarginConstraint.constant = labelLeadingMarginInitialConstant
     }
     
+    func animationDurationForSerieAtIndex(index: Int) -> CFTimeInterval {
+        let values: Array<CFTimeInterval> = [1.0, 1.6, 2.2]
+        return values[index]
+    }
     
+    // MARK: - Parsing
     func getStockValues() -> Array<Dictionary<String, Any>> {
         
         // Read the JSON file
@@ -126,7 +126,6 @@ class StockChartViewController: UIViewController, ChartDelegate {
         }
         
         return values
-        
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -135,8 +134,6 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
         // Redraw chart on rotation
         chart.setNeedsDisplay()
-        
     }
-    
     
 }

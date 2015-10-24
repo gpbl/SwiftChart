@@ -537,7 +537,7 @@ class Chart: UIControl {
         let scaled = scaleValuesOnXAxis(labels)
         let padding: CGFloat = 5
         
-        for (i, value) in scaled.enumerate() {
+        scaled.enumerate().forEach { (i, value) in
             let x = CGFloat(value)
 
             
@@ -551,7 +551,7 @@ class Chart: UIControl {
 
             if x == drawingWidth {
                 // Do not add label at the most right position
-                continue
+                return
             }
             
             // Add label
@@ -601,7 +601,8 @@ class Chart: UIControl {
         let scaled = scaleValuesOnYAxis(labels)
         let padding: CGFloat = 5
         let zero = CGFloat(getZeroValueOnYAxis())
-        for (i, value) in scaled.enumerate() {
+        
+        scaled.enumerate().forEach { (i, value) in
             
             let y = CGFloat(value)
             
@@ -739,7 +740,8 @@ class Chart: UIControl {
     private class func findClosestInValues(values: Array<Float>, forValue value: Float) -> (lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?) {
         var lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?
         
-        for (i, currentValue) in values.enumerate() {
+        values.enumerate().forEach { (i, currentValue) in
+            
             if currentValue <= value && (lowestValue == nil || lowestValue! < currentValue) {
                 lowestValue = currentValue
                 lowestIndex = i
@@ -761,7 +763,9 @@ class Chart: UIControl {
     private class func segmentLine(line: ChartLineSegment) -> Array<ChartLineSegment> {
         var segments: Array<ChartLineSegment> = []
         var segment: ChartLineSegment = []
-        for (i, point) in line.enumerate() {
+        
+        line.enumerate().forEach { (i, point) in
+        
             segment.append(point)
             if i < line.count - 1 {
                 let nextPoint = line[i+1]
@@ -778,6 +782,7 @@ class Chart: UIControl {
                 // End of the line
                 segments.append(segment)
             }
+            
         }
         return segments
     }

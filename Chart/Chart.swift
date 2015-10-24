@@ -285,7 +285,7 @@ class Chart: UIControl {
             // Separate each line in multiple segments over and below the x axis
             let segments = Chart.segmentLine(series.data as ChartLineSegment)
             
-            for (i, segment) in segments.enumerate() {
+            segments.forEach({ segment in
                 let scaledXValues = scaleValuesOnXAxis( segment.map( { return $0.x } ) )
                 let scaledYValues = scaleValuesOnYAxis( segment.map( { return $0.y } ) )
                 
@@ -295,7 +295,7 @@ class Chart: UIControl {
                 if series.area {
                     drawArea(xValues: scaledXValues, yValues: scaledYValues, seriesIndex: index)
                 }
-            }
+            })
         }
         
         drawAxes()

@@ -119,7 +119,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         // Parse data
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let values = jsonValues.map() { (value: NSDictionary) -> Dictionary<String, Any> in
+        let values = jsonValues.map { (value: NSDictionary) -> Dictionary<String, Any> in
             let date = dateFormatter.dateFromString(value["date"]! as! String)
             let close = (value["close"]! as! NSNumber).floatValue
             return ["date": date!, "close": close]

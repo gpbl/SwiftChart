@@ -21,8 +21,6 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         switch selectedChart {
         case 0:
             
-            let chart2 = Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
-            
             // Simple chart
             let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
             series.color = ChartColors.greenColor()

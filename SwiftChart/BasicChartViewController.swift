@@ -82,9 +82,9 @@ class BasicChartViewController: UIViewController, ChartDelegate {
     // Chart delegate
     
     func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
-        for (seriesIndex, dataIndex) in enumerate(indexes) {
+        for (seriesIndex, dataIndex) in indexes.enumerate() {
             if let value = chart.valueForSeries(seriesIndex, atIndex: dataIndex) {
-                println("Touched series: \(seriesIndex): data index: \(dataIndex!); series value: \(value); x-axis value: \(x) (from left: \(left))")
+                print("Touched series: \(seriesIndex): data index: \(dataIndex!); series value: \(value); x-axis value: \(x) (from left: \(left))")
             }
         }
     }

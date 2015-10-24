@@ -39,13 +39,13 @@ class StockChartViewController: UIViewController, ChartDelegate {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "MM"
         
-        for (i, value) in enumerate(stockValues) {
+        for (i, value) in stockValues.enumerate() {
             
             serieData.append(value["close"] as! Float)
             
             // Use only one label for each month
-            let month = dateFormatter.stringFromDate(value["date"] as! NSDate).toInt()!
-            let monthAsString:String = dateFormatter.monthSymbols[month - 1] as! String
+            let month = Int(dateFormatter.stringFromDate(value["date"] as! NSDate))!
+            let monthAsString:String = dateFormatter.monthSymbols[month - 1] 
             if (labels.count == 0 || labelsAsString.last != monthAsString) {
                 labels.append(Float(i))
                 labelsAsString.append(monthAsString)
@@ -66,7 +66,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         chart.xLabelsTextAlignment = .Center
         chart.yLabelsOnRightSide = true
         // Add some padding above the x-axis
-        chart.minY = minElement(serieData) - 5
+        chart.minY = serieData.minElement()! - 5
         
         chart.addSeries(series)
         
@@ -113,13 +113,13 @@ class StockChartViewController: UIViewController, ChartDelegate {
         // Read the JSON file
         let filePath = NSBundle.mainBundle().pathForResource("AAPL", ofType: "json")!
         let jsonData = NSData(contentsOfFile: filePath)
-        let json: NSDictionary = NSJSONSerialization.JSONObjectWithData(jsonData!, options: nil, error: nil) as! NSDictionary
+        let json: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(jsonData!, options: [])) as! NSDictionary
         let jsonValues = json["quotes"] as! Array<NSDictionary>
         
         // Parse data
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        var values = jsonValues.map() { (value: NSDictionary) -> Dictionary<String, Any> in
+        let values = jsonValues.map() { (value: NSDictionary) -> Dictionary<String, Any> in
             let date = dateFormatter.dateFromString(value["date"]! as! String)
             let close = (value["close"]! as! NSNumber).floatValue
             return ["date": date!, "close": close]

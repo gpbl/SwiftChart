@@ -192,6 +192,8 @@
 		2404EEA31A0D5AE800BCB7D6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0710;
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Giampaolo Bellavite";
 				TargetAttributes = {

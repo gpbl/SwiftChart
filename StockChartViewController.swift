@@ -58,7 +58,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         // Configure chart layout
         
         chart.lineWidth = 0.5
-        chart.labelFont = UIFont(name: "HelveticaNeue-Light", size: 12)!
+        chart.labelFont = UIFont.systemFontOfSize(12)
         chart.xLabels = labels
         chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
             return labelsAsString[labelIndex]

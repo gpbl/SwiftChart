@@ -12,11 +12,11 @@ protocol ChartDelegate {
     /**
     Tells the delegate that the specified chart has been touched.
     
-    :param: chart The chart that has been touched.
-    :param: indexes Each element of this array contains the index of the data that has been touched, one for each series.
+    - parameter chart: The chart that has been touched.
+    - parameter indexes: Each element of this array contains the index of the data that has been touched, one for each series.
             If the series hasn't been touched, its index will be nil.
-    :param: x The value on the x-axis that has been touched.
-    :param: left The distance from the left side of the chart.
+    - parameter x: The value on the x-axis that has been touched.
+    - parameter left: The distance from the left side of the chart.
     
     */
     func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat)
@@ -25,7 +25,7 @@ protocol ChartDelegate {
     Tells the delegate that the user finished touching the chart. The user will "finish" touching the
     chart only swiping left/right outside the chart.
     
-    :param: chart The chart that has been touched.
+    - parameter chart: The chart that has been touched.
     
     */
     func didFinishTouchingChart(chart: Chart)
@@ -186,7 +186,7 @@ class Chart: UIControl {
         backgroundColor = UIColor.clearColor()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -280,12 +280,12 @@ class Chart: UIControl {
         
         // Draw content
         
-        for (index, series) in enumerate(self.series) {
+        for (index, series) in self.series.enumerate() {
             
             // Separate each line in multiple segments over and below the x axis
-            var segments = Chart.segmentLine(series.data as ChartLineSegment)
+            let segments = Chart.segmentLine(series.data as ChartLineSegment)
             
-            for (i, segment) in enumerate(segments) {
+            segments.forEach({ segment in
                 let scaledXValues = scaleValuesOnXAxis( segment.map( { return $0.x } ) )
                 let scaledYValues = scaleValuesOnYAxis( segment.map( { return $0.y } ) )
                 
@@ -295,7 +295,7 @@ class Chart: UIControl {
                 if series.area {
                     drawArea(xValues: scaledXValues, yValues: scaledYValues, seriesIndex: index)
                 }
-            }
+            })
         }
         
         drawAxes()
@@ -326,10 +326,10 @@ class Chart: UIControl {
             let yValues =  series.data.map( { (point: ChartPoint) -> Float in
                 return point.y } )
             
-            let newMinX = minElement(xValues)
-            let newMinY = minElement(yValues)
-            let newMaxX = maxElement(xValues)
-            let newMaxY = maxElement(yValues)
+            let newMinX = xValues.minElement()!
+            let newMinY = yValues.minElement()!
+            let newMaxX = xValues.maxElement()!
+            let newMaxY = yValues.maxElement()!
             
             if min.x == nil || newMinX < min.x! { min.x = newMinX }
             if min.y == nil || newMinY < min.y! { min.y = newMinY }
@@ -340,15 +340,15 @@ class Chart: UIControl {
         // Check in labels
         
         if xLabels != nil {
-            let newMinX = minElement(xLabels!)
-            let newMaxX = maxElement(xLabels!)
+            let newMinX = (xLabels!).minElement()!
+            let newMaxX = (xLabels!).maxElement()!
             if min.x == nil || newMinX < min.x { min.x = newMinX }
             if max.x == nil || newMaxX > max.x { max.x = newMaxX }
         }
         
         if yLabels != nil {
-            let newMinY = minElement(yLabels!)
-            let newMaxY = maxElement(yLabels!)
+            let newMinY = (yLabels!).minElement()!
+            let newMaxY = (yLabels!).maxElement()!
             if min.y == nil || newMinY < min.y { min.y = newMinY }
             if max.y == nil || newMaxY > max.y { max.y = newMaxY }
         }
@@ -411,14 +411,14 @@ class Chart: UIControl {
     private func isVerticalSegmentAboveXAxis(yValues: Array<Float>) -> Bool {
         
         // YValues are "reverted" from top to bottom, so min is actually the maxz
-        let min = maxElement(yValues)
+        let min = yValues.maxElement()!
         let zero = getZeroValueOnYAxis()
         
         return min <= zero
         
     }
     
-    private func drawLine(#xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) -> CAShapeLayer {
+    private func drawLine(xValues xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) -> CAShapeLayer {
         
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let path = CGPathCreateMutable()
@@ -430,7 +430,7 @@ class Chart: UIControl {
             CGPathAddLineToPoint(path, nil, CGFloat(xValues[i]), CGFloat(y))
         }
         
-        var lineLayer = CAShapeLayer()
+        let lineLayer = CAShapeLayer()
         lineLayer.frame = self.bounds
         lineLayer.path = path
         
@@ -451,7 +451,7 @@ class Chart: UIControl {
         return lineLayer
     }
     
-    private func drawArea(#xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
+    private func drawArea(xValues xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let area = CGPathCreateMutable()
         let zero = CGFloat(getZeroValueOnYAxis())
@@ -464,7 +464,7 @@ class Chart: UIControl {
         
         CGPathAddLineToPoint(area, nil, CGFloat(xValues.last!), zero)
         
-        var areaLayer = CAShapeLayer()
+        let areaLayer = CAShapeLayer()
         areaLayer.frame = self.bounds
         areaLayer.path = area
         areaLayer.strokeColor = nil
@@ -537,7 +537,7 @@ class Chart: UIControl {
         let scaled = scaleValuesOnXAxis(labels)
         let padding: CGFloat = 5
         
-        for (i, value) in enumerate(scaled) {
+        for (i, value) in scaled.enumerate() {
             let x = CGFloat(value)
 
             
@@ -601,7 +601,7 @@ class Chart: UIControl {
         let scaled = scaleValuesOnYAxis(labels)
         let padding: CGFloat = 5
         let zero = CGFloat(getZeroValueOnYAxis())
-        for (i, value) in enumerate(scaled) {
+        for (i, value) in scaled.enumerate() {
             
             let y = CGFloat(value)
             
@@ -660,7 +660,7 @@ class Chart: UIControl {
             CGPathMoveToPoint(path, nil, left, 0)
             CGPathAddLineToPoint(path, nil, left, drawingHeight + topInset)
             
-            var shapeLayer = CAShapeLayer()
+            let shapeLayer = CAShapeLayer()
             shapeLayer.frame = self.bounds
             shapeLayer.path = path
             shapeLayer.strokeColor = highlightLineColor.CGColor
@@ -711,15 +711,15 @@ class Chart: UIControl {
         delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
         
     }
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }
     
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }
     
@@ -739,7 +739,7 @@ class Chart: UIControl {
     private class func findClosestInValues(values: Array<Float>, forValue value: Float) -> (lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?) {
         var lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?
         
-        for (i, currentValue) in enumerate(values) {
+        for (i, currentValue) in values.enumerate() {
             if currentValue <= value && (lowestValue == nil || lowestValue! < currentValue) {
                 lowestValue = currentValue
                 lowestIndex = i
@@ -761,7 +761,7 @@ class Chart: UIControl {
     private class func segmentLine(line: ChartLineSegment) -> Array<ChartLineSegment> {
         var segments: Array<ChartLineSegment> = []
         var segment: ChartLineSegment = []
-        for (i, point) in enumerate(line) {
+        for (i, point) in line.enumerate() {
             segment.append(point)
             if i < line.count - 1 {
                 let nextPoint = line[i+1]

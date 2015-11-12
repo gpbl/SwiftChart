@@ -14,6 +14,7 @@ class ChartSeries {
     var data: Array<(x: Float, y: Float)>
     var area: Bool = false
     var line: Bool = true
+    var points: Bool = true
     var color: UIColor = ChartColors.blueColor() {
         didSet {
             colors = (above: color, below: color)

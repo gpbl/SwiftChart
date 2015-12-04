@@ -36,7 +36,7 @@ series.color = ChartColors.greenColor()
 chart.addSerie(series)
 ```
 
-More examples can be found in the `SwiftChart.xcodeproj` project from the [source files](https://github.com/gpbl/SwiftChart/archive/latest.zip)
+More examples can be found in the `SwiftChart.xcodeproj` project from the [source files](https://github.com/gpbl/SwiftChart/releases/latest).
 
 ### To initialize a chart
 

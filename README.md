@@ -1,17 +1,18 @@
 SwiftChart
 ===========
 
-A charting library for iOS, written in swift.
+A simple line / area charting library for iOS, written in Swift.
 
-![swift](https://cloud.githubusercontent.com/assets/120693/5063755/dcfc9da0-6df3-11e4-9432-974e77a863ed.png)
+📈 Line and area charts
+🌞 Multiple series
+🌒 Partially filled series 
+🏊 Works with signed floats
+🖖 Touch events
 
-**Main features**
-
-* Line and area charts
-* Multiple series
-* Works with signed floats
-* Touch events
-* Partially filled series
+<p align="center">
+<img src="https://cloud.githubusercontent.com/assets/120693/11602670/57ef6b26-9adc-11e5-9f95-b226a2491654.png" height="180"><img src="https://cloud.githubusercontent.com/assets/120693/11602672/5c303ac6-9adc-11e5-9006-3275a16b7ec8.png" height="180">
+<img src="https://cloud.githubusercontent.com/assets/120693/11602674/5ed8a808-9adc-11e5-9e30-f55beacf9a94.png" height="180"><img src="https://cloud.githubusercontent.com/assets/120693/11602678/660d660e-9adc-11e5-8a67-0c3036c20862.gif" height="180">
+</p>
 
 ## Installation
 

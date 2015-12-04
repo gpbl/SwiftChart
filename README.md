@@ -24,6 +24,11 @@ chart.addSerie(series)
 
 More examples can be found in the `SwiftChart.xcodeproj` project.
 
+## Installation
+
+1. Download **SwiftChart.zip** from the [last release](https://github.com/gpbl/SwiftChart/releases/latest) and extract its content in your project's folder.
+2. From the Xcode project, choose *Add Files to <ProjectName>...* from the *File* menu and add the extracted files.
+
 ## Usage
 
 The library includes:
@@ -32,17 +37,6 @@ The library includes:
 - the [ChartSeries](Chart/ChartSeries.swift) class, for creating datasets and configure their appearance
 - the [ChartDelegate](Chart/Chart.swift) protocol, which tells other objects about the chart’s touch events
 - the [ChartColor](Chart/ChartColors.swift) struct, containing some predefined colors
-
-### Installation
-
-Add the content of the [Chart folder](Chart) to your project, for example by including it as git submodule:
-
-```bash
-cd myProject
-git submodule add https://github.com/gpbl/SwiftChart.git
-```
-
-From XCode, open then your project and choose *Add Files to ProjectName...* from the *File* menu. Select the *Chart* folder from the *SwiftChart* subfolder.
 
 ### To initialize a chart
 

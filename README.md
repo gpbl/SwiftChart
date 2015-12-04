@@ -127,7 +127,7 @@ The `x: Float` argument refers to the value on the x-axis: it is inferred from t
 
 The `left: CGFloat` is the x position on the chart’s view, starting from the left side. It may be used to set the  position for a label moving above the chart: 
 
-![Label on touch](https://cloud.githubusercontent.com/assets/120693/5068773/8be0fa9c-6e52-11e4-8b60-aaf76dc9377d.gif)
+<img src="https://cloud.githubusercontent.com/assets/120693/11602678/660d660e-9adc-11e5-8a67-0c3036c20862.gif" height="200">
 
 ## Reference
 

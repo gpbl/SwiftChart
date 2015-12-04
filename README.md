@@ -13,17 +13,6 @@ A charting library for iOS, written in swift.
 * Touch events
 * Partially filled series
 
-**Example**
-
-```swift
-let chart = Chart()
-let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
-series.color = ChartColors.greenColor()
-chart.addSerie(series)
-```
-
-More examples can be found in the `SwiftChart.xcodeproj` project.
-
 ## Installation
 
 1. Download **SwiftChart.zip** from the [last release](https://github.com/gpbl/SwiftChart/releases/latest) and extract its content in your project's folder.
@@ -37,6 +26,17 @@ The library includes:
 - the [ChartSeries](Chart/ChartSeries.swift) class, for creating datasets and configure their appearance
 - the [ChartDelegate](Chart/Chart.swift) protocol, which tells other objects about the chart’s touch events
 - the [ChartColor](Chart/ChartColors.swift) struct, containing some predefined colors
+
+**Example**
+
+```swift
+let chart = Chart()
+let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
+series.color = ChartColors.greenColor()
+chart.addSerie(series)
+```
+
+More examples can be found in the `SwiftChart.xcodeproj` project from the [source files](https://github.com/gpbl/SwiftChart/archive/latest.zip)
 
 ### To initialize a chart
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ChartDelegate {
+public protocol ChartDelegate {
     
     /**
     Tells the delegate that the specified chart has been touched.
@@ -37,132 +37,132 @@ Represent the x- and the y-axis values for each point in a chart series.
 typealias ChartPoint = (x: Float, y: Float)
 
 @IBDesignable
-class Chart: UIControl {
+public class Chart: UIControl {
     
     // MARK: Options
     
     @IBInspectable
-    var identifier: String?
+    public var identifier: String?
     
     /**
     Series to display in the chart.
     */
-    var series: Array<ChartSeries> = []
+    public var series: Array<ChartSeries> = []
     
     /**
     The values to display as labels on the x-axis. You can format these values with the `xLabelFormatter` attribute.
     As default, it will display the values of the series which has the most data.
     */
-    var xLabels: Array<Float>?
+    public var xLabels: Array<Float>?
     
     /**
     Formatter for the labels on the x-axis. The `index` represents the `xLabels` index, `value` its value:
     */
-    var xLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
+    public var xLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
         String(Int(labelValue))
     }
     
     /**
     Text alignment for the x-labels
     */
-    var xLabelsTextAlignment: NSTextAlignment = .Left
+    public var xLabelsTextAlignment: NSTextAlignment = .Left
     
     /**
     Values to display as labels of the y-axis. If not specified, will display the
     lowest, the middle and the highest values.
     */
-    var yLabels: Array<Float>?
+    public var yLabels: Array<Float>?
     
     /**
     Formatter for the labels on the y-axis.
     */
-    var yLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
+    public var yLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
         String(Int(labelValue))
     }
     
     /**
     Displays the y-axis labels on the right side of the chart.
     */
-    var yLabelsOnRightSide: Bool = false
+    public var yLabelsOnRightSide: Bool = false
     
     /**
     Font used for the labels.
     */
-    var labelFont: UIFont? = UIFont.systemFontOfSize(12)
+    public var labelFont: UIFont? = UIFont.systemFontOfSize(12)
     
     /**
     Font used for the labels.
     */
     @IBInspectable
-    var labelColor: UIColor = UIColor.blackColor()
+    public var labelColor: UIColor = UIColor.blackColor()
     
     /**
     Color for the axes.
     */
     @IBInspectable
-    var axesColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
+    public var axesColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
     
     /**
     Color for the grid.
     */
     @IBInspectable
-    var gridColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
+    public var gridColor: UIColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
     
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
     */
-    var bottomInset: CGFloat = 20
+    public var bottomInset: CGFloat = 20
     
     /**
     Height of the area at the top of the chart, acting a padding to make place for the top y-axis label.
     */
-    var topInset: CGFloat = 20
+    public var topInset: CGFloat = 20
     
     /**
     Width of the chart's lines.
     */
     @IBInspectable
-    var lineWidth: CGFloat = 2
+    public var lineWidth: CGFloat = 2
     
     /**
     Delegate for listening to Chart touch events.
     */
-    var delegate: ChartDelegate?
+    public var delegate: ChartDelegate?
     
     /**
     Custom minimum value for the x-axis.
     */
-    var minX: Float?
+    public var minX: Float?
     
     /**
     Custom minimum value for the y-axis.
     */
-    var minY: Float?
+    public var minY: Float?
     
     /**
     Custom maximum value for the x-axis.
     */
-    var maxX: Float?
+    public var maxX: Float?
     
     /**
     Custom maximum value for the y-axis.
     */
-    var maxY: Float?
+    public var maxY: Float?
     
     /**
     Color for the highlight line.
     */
-    var highlightLineColor = UIColor.grayColor()
+    public var highlightLineColor = UIColor.grayColor()
     
     /**
     Width for the highlight line.
     */
-    var highlightLineWidth: CGFloat = 0.5
+    public var highlightLineWidth: CGFloat = 0.5
     
     /**
     Alpha component for the area's color.
     */
-    var areaAlphaComponent: CGFloat = 0.1
+    public var areaAlphaComponent: CGFloat = 0.1
     
     // MARK: Private variables
     
@@ -186,15 +186,15 @@ class Chart: UIControl {
         backgroundColor = UIColor.clearColor()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    convenience init() {
+    convenience public init() {
         self.init(frame: CGRectZero)
     }
     
-    override func drawRect(rect: CGRect) {
+    override public func drawRect(rect: CGRect) {
         #if TARGET_INTERFACE_BUILDER
             drawIBPlaceholder()
             #else
@@ -205,14 +205,14 @@ class Chart: UIControl {
     /**
     Adds a chart series.
     */
-    func addSeries(series: ChartSeries) {
+    public func addSeries(series: ChartSeries) {
         self.series.append(series)
     }
     
     /**
     Adds multiple series.
     */
-    func addSeries(series: Array<ChartSeries>) {
+    public func addSeries(series: Array<ChartSeries>) {
         for s in series {
             addSeries(s)
         }
@@ -221,21 +221,21 @@ class Chart: UIControl {
     /**
     Remove the series at the specified index.
     */
-    func removeSeriesAtIndex(index: Int) {
+    public func removeSeriesAtIndex(index: Int) {
         series.removeAtIndex(index)
     }
     
     /**
     Remove all the series.
     */
-    func removeSeries() {
+    public func removeSeries() {
         series = []
     }
     
     /**
     Returns the value for the specified series at the given index
     */
-    func valueForSeries(seriesIndex: Int, atIndex dataIndex: Int?) -> Float? {
+    public func valueForSeries(seriesIndex: Int, atIndex dataIndex: Int?) -> Float? {
         if dataIndex == nil { return nil }
         let series = self.series[seriesIndex] as ChartSeries
         return series.data[dataIndex!].y
@@ -712,15 +712,15 @@ class Chart: UIControl {
         delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
         
     }
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override public func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override public func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftChart
 
 class BasicChartViewController: UIViewController, ChartDelegate {
     @IBOutlet weak var chart: Chart!

@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  SwiftChart
 //
-//  Created by Giampaolo Bellavite on 07/11/14.
-//  Copyright (c) 2014 Giampaolo Bellavite. All rights reserved.
+//  Created by Giampaolo Bellavite on 12/11/2015.
+//  Copyright (c) 2015 Giampaolo Bellavite. All rights reserved.
 //
 
 import UIKit

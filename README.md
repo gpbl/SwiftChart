@@ -1,6 +1,10 @@
 SwiftChart
 ===========
 
+[![Version](https://img.shields.io/cocoapods/v/SwiftChart.svg?style=flat)](http://cocoapods.org/pods/SwiftChart)
+[![License](https://img.shields.io/cocoapods/l/SwiftChart.svg?style=flat)](http://cocoapods.org/pods/SwiftChart)
+[![Platform](https://img.shields.io/cocoapods/p/SwiftChart.svg?style=flat)](http://cocoapods.org/pods/SwiftChart)
+
 A simple line / area charting library for iOS, written in Swift.
 
 📈 Line and area charts  
@@ -15,6 +19,17 @@ A simple line / area charting library for iOS, written in Swift.
 </p>
 
 ## Installation
+
+### Cocoapods
+
+SwiftChart is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod "SwiftChart"
+```
+
+### Manually
 
 1. Download **SwiftChart.zip** from the [last release](https://github.com/gpbl/SwiftChart/releases/latest) and extract its content in your project's folder.
 2. From the Xcode project, choose *Add Files to <ProjectName>...* from the *File* menu and add the extracted files.
@@ -37,7 +52,8 @@ series.color = ChartColors.greenColor()
 chart.addSerie(series)
 ```
 
-More examples can be found in the `SwiftChart.xcodeproj` project from the [source files](https://github.com/gpbl/SwiftChart/releases/latest).
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
+
 
 ### To initialize a chart
 
@@ -171,6 +187,6 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 * `colors`: a touple to specify the color above or below the zero, e.g. `(above: ChartsColors.redColor(), below: ChartsColors.blueColor())` 
 * `line`: set it to false to hide the line (useful for drawing only the area).
 
-## Credits
+## License
 
-This project was originally inspired by [swift-linechart](https://github.com/zemirco/swift-linechart).
+SwiftChart is available under the MIT license. See the LICENSE file for more info.

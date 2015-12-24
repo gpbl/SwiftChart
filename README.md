@@ -49,7 +49,7 @@ The library includes:
 let chart = Chart()
 let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
 series.color = ChartColors.greenColor()
-chart.addSerie(series)
+chart.addSeries(series)
 ```
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
@@ -67,16 +67,16 @@ The chart can be initialized from the Interface Builder. Drag a normal View into
 
 #### By coding
 
-To initialize a chart programmatically, use the `new Chart(frame: ...)` initializer, which requires a `frame`:
+To initialize a chart programmatically, use the `Chart(frame: ...)` initializer, which requires a `frame`:
 
 ```swift
-let chart = new Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 ```
 
 If you prefer to use Autolayout, set the frame to `0` and add the constraints later:
 
 ```swift
-let chart = new Chart(frame: CGRectZero)
+let chart = Chart(frame: CGRectZero)
 // add constraints now
 ```
 
@@ -85,8 +85,8 @@ let chart = new Chart(frame: CGRectZero)
 Initialize each series before adding them to the chart. To do so, pass an array to initialize a `ChartSeries` object:
 
 ```swift
-let series = new ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
-chart.addSerie(series)
+let series = ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
+chart.addSeries(series)
 ```
 
 By default, the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Float, y: Float)` touples to the series’ initializer:
@@ -100,7 +100,7 @@ chart.addSeries(series)
 
 #### Multiple series
 
-Using the `chart.addSerie()` and `chart.addSeries()` methods you can add more series. Those will be indentified with a progressive index in the chart’s `series` property.
+Using the `chart.addSeries(series: ChartSeries)` and `chart.addSeries(series: Array<ChartSeries>)` methods you can add more series. Those will be indentified with a progressive index in the chart’s `series` property.
 
 ## Touch events
 
@@ -109,7 +109,7 @@ To make the chart respond to touch events, implement the `ChartDelegate` protoco
 ```swift
 class MyViewController: UIViewController, ChartDelegate {
     override func viewDidLoad() {
-        let chart = new Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+        let chart = Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
         chart.delegate = self
     }
     

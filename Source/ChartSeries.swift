@@ -20,22 +20,21 @@ public class ChartSeries {
         }
     }
     var colors: (above: UIColor, below: UIColor) = (above: ChartColors.blueColor(), below: ChartColors.redColor())
-    
+
     public init(_ data: Array<Float>) {
         self.data = []
-        
-        data.enumerate().forEach { (x, y) in            
+
+        data.enumerate().forEach { (x, y) in
             let point: (x: Float, y: Float) = (x: Float(x), y: y)
             self.data.append(point)
         }
     }
-    
+
     public init(data: Array<(x: Float, y: Float)>) {
         self.data = data
     }
-    
+
     public init(data: Array<(x: Double, y: Double)>) {
         self.data = data.map ({ (Float($0.x), Float($0.y))})
     }
 }
-

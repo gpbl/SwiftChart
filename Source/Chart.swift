@@ -122,13 +122,13 @@ public class Chart: UIControl {
     Width of the chart's lines.
     */
     @IBInspectable
-    var lineWidth: CGFloat = 2
+    public var lineWidth: CGFloat = 2
     
     /**
      Width of the chart's poinst.
      */
     @IBInspectable
-    var pointWidth: CGFloat = 2
+    public var pointWidth: CGFloat = 2
 
     /**
     Delegate for listening to Chart touch events.
@@ -169,6 +169,12 @@ public class Chart: UIControl {
     Alpha component for the area's color.
     */
     public var areaAlphaComponent: CGFloat = 0.1
+    
+    public struct ChartAnimation {
+        public var enabled: Bool = true
+        public var duration: CFTimeInterval = 1
+    }
+    public var animation: ChartAnimation = ChartAnimation()
 
     // MARK: Private variables
 
@@ -466,6 +472,15 @@ public class Chart: UIControl {
         self.layer.addSublayer(lineLayer)
 
         layerStore.append(lineLayer)
+        
+        // animate line drawing
+        if animation.enabled {
+            let animateStrokeEnd = CABasicAnimation(keyPath: "strokeEnd")
+            animateStrokeEnd.duration = animation.duration
+            animateStrokeEnd.fromValue = 0
+            animateStrokeEnd.toValue = 1
+            lineLayer.addAnimation(animateStrokeEnd, forKey: "strokeEnd")
+        }
 
         return lineLayer
     }
@@ -498,6 +513,15 @@ public class Chart: UIControl {
         self.layer.addSublayer(circleLayer)
         
         layerStore.append(circleLayer)
+        
+        // animate the opacity of the poinst
+        if animation.enabled {
+            let animateOpacity = CABasicAnimation(keyPath: "opacity")
+            animateOpacity.duration = animation.duration
+            animateOpacity.fromValue = 0
+            animateOpacity.toValue = 1
+            circleLayer.addAnimation(animateOpacity, forKey: "opacity")
+        }
         
         return circleLayer
     }

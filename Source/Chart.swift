@@ -171,7 +171,7 @@ public class Chart: UIControl {
     public var areaAlphaComponent: CGFloat = 0.1
     
     public struct ChartAnimation {
-        public var enabled: Bool = true
+        public var enabled: Bool = false
         public var duration: CFTimeInterval = 1
     }
     public var animation: ChartAnimation = ChartAnimation()

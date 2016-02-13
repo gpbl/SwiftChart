@@ -20,7 +20,7 @@ A simple line / area charting library for iOS, written in Swift.
 
 ## Installation
 
-### Cocoapods
+### CocoaPods
 
 SwiftChart is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:

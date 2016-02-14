@@ -181,7 +181,7 @@ public class Chart: UIControl {
 
     // MARK: initializations
 
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.clearColor()
     }

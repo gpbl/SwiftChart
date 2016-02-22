@@ -23,8 +23,11 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         case 0:
             
             // Simple chart
+            chart.animation.enabled = true
+            
             let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
             series.color = ChartColors.greenColor()
+            series.points = true
             chart.addSeries(series)
             
             

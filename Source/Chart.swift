@@ -123,6 +123,12 @@ public class Chart: UIControl {
     */
     @IBInspectable
     public var lineWidth: CGFloat = 2
+    
+    /**
+     Width of the chart's poinst.
+     */
+    @IBInspectable
+    public var pointWidth: CGFloat = 2
 
     /**
     Delegate for listening to Chart touch events.
@@ -163,6 +169,12 @@ public class Chart: UIControl {
     Alpha component for the area's color.
     */
     public var areaAlphaComponent: CGFloat = 0.1
+    
+    public struct ChartAnimation {
+        public var enabled: Bool = false
+        public var duration: CFTimeInterval = 1
+    }
+    public var animation: ChartAnimation = ChartAnimation()
 
     // MARK: Private variables
 
@@ -291,6 +303,12 @@ public class Chart: UIControl {
 
                 if series.line {
                     drawLine(xValues: scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                    if series.points {
+                        for i in 1..<scaledXValues.count {
+                            drawPoints(xValues: scaledXValues, yValues: scaledYValues, seriesIndex: index, i: i)
+                        }
+                    }
+
                 }
                 if series.area {
                     drawArea(xValues: scaledXValues, yValues: scaledYValues, seriesIndex: index)
@@ -454,10 +472,60 @@ public class Chart: UIControl {
         self.layer.addSublayer(lineLayer)
 
         layerStore.append(lineLayer)
+        
+        // animate line drawing
+        if animation.enabled {
+            let animateStrokeEnd = CABasicAnimation(keyPath: "strokeEnd")
+            animateStrokeEnd.duration = animation.duration
+            animateStrokeEnd.fromValue = 0
+            animateStrokeEnd.toValue = 1
+            lineLayer.addAnimation(animateStrokeEnd, forKey: "strokeEnd")
+        }
 
         return lineLayer
     }
+    
+    private func drawPoints(xValues xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int, i: Int) -> CAShapeLayer {
+        
+        let circleLayer = CAShapeLayer()
+        let circleRadius: CGFloat = 2.0
 
+        func circleFrame(x: CGFloat, y: CGFloat) -> CGRect {
+            var circleFrame = CGRect(x: x, y: y, width: 2*circleRadius, height: 2*circleRadius)
+            circleFrame.origin.x = x - circleRadius
+            circleFrame.origin.y = y - circleRadius
+            return circleFrame
+        }
+        
+        func circlePath(i: Int) -> UIBezierPath {
+            let x = xValues[i]
+            let y = yValues[i]
+            return UIBezierPath(ovalInRect: circleFrame(CGFloat(x), y: CGFloat(y)))
+        }
+        
+        circleLayer.frame = self.bounds
+        circleLayer.path = circlePath(i).CGPath
+        
+        circleLayer.lineWidth = pointWidth
+        circleLayer.fillColor = series[seriesIndex].colors.above.CGColor
+        circleLayer.strokeColor = series[seriesIndex].colors.above.CGColor
+        
+        self.layer.addSublayer(circleLayer)
+        
+        layerStore.append(circleLayer)
+        
+        // animate the opacity of the poinst
+        if animation.enabled {
+            let animateOpacity = CABasicAnimation(keyPath: "opacity")
+            animateOpacity.duration = animation.duration
+            animateOpacity.fromValue = 0
+            animateOpacity.toValue = 1
+            circleLayer.addAnimation(animateOpacity, forKey: "opacity")
+        }
+        
+        return circleLayer
+    }
+   
     private func drawArea(xValues xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
         let area = CGPathCreateMutable()

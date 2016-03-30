@@ -198,6 +198,7 @@ public class Chart: UIControl {
 
     private func commonInit() {
         backgroundColor = UIColor.clearColor()
+        contentMode = .Redraw // Call drawRect on bounds change
     }
 
     override public func drawRect(rect: CGRect) {

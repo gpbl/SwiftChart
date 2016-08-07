@@ -102,6 +102,24 @@ chart.addSeries(series)
 
 Using the `chart.addSeries(series: ChartSeries)` and `chart.addSeries(series: Array<ChartSeries>)` methods you can add more series. Those will be indentified with a progressive index in the chart’s `series` property.
 
+#### Partially filled series
+
+Use the `chart.xLabels` property to make the x-axis wider than the actual data. For example,
+
+```swift
+let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+let data = [(x: 0.0, y: 0), (x: 3, y: 2.5), (x: 4, y: 2), (x: 5, y: 2.3), (x: 7, y: 3), (x: 8, y: 2.2), (x: 9, y: 2.5)]
+let series = ChartSeries(data: data)
+series.area = true
+chart.xLabels = [0, 3, 6, 9, 12, 15, 18, 21, 24]
+chart.xLabelsFormatter = { String(Int(round($1))) + "h" }
+chart.addSeries(series)
+```
+
+will render:
+
+<img width="443" alt="" src="https://cloud.githubusercontent.com/assets/120693/17461649/26510f96-5c94-11e6-8324-46df266558dd.png">
+
 ## Touch events
 
 To make the chart respond to touch events, implement the `ChartDelegate` protocol in your classes, as a View Controller, and set the chart’s `delegate` property:

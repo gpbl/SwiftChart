@@ -489,7 +489,7 @@ public class Chart: UIControl {
         context.setLineWidth(0.5)
 
         // horizontal axis at the bottom
-        context.move(to: CGPoint(x: CGFloat(0), y: drawingWidth + topInset))
+        context.move(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
         context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
         context.strokePath()
 

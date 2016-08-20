@@ -426,7 +426,7 @@ public class Chart: UIControl {
 
     }
 
-    private func drawLine(xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) -> CAShapeLayer {
+    private func drawLine(xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
 
         let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues: yValues)
         let path = CGMutablePath()
@@ -452,8 +452,6 @@ public class Chart: UIControl {
         self.layer.addSublayer(lineLayer)
 
         layerStore.append(lineLayer)
-
-        return lineLayer
     }
 
     private func drawArea(xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {

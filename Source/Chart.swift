@@ -183,15 +183,22 @@ public class Chart: UIControl {
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clearColor()
+        commonInit()
     }
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        commonInit()
     }
 
     convenience public init() {
-        self.init(frame: CGRectZero)
+        self.init(frame: .zero)
+        commonInit()
+    }
+
+    private func commonInit() {
+        backgroundColor = UIColor.clearColor()
+        contentMode = .Redraw // Call drawRect on bounds change
     }
 
     override public func drawRect(rect: CGRect) {

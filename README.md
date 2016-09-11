@@ -38,7 +38,7 @@ pod "SwiftChart"
 
 The library includes:
 
-- the [Chart](Source/Chart.swift) main class, to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance
+- the [Chart](Source/Chart.swift#L40) main class, to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance
 - the [ChartSeries](Source/ChartSeries.swift) class, for creating datasets and configure their appearance
 - the [ChartDelegate](Source/Chart.swift#L10-L32) protocol, which tells other objects about the chart’s touch events
 - the [ChartColor](Source/ChartColors.swift) struct, containing some predefined colors

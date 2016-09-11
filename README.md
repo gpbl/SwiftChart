@@ -38,10 +38,10 @@ pod "SwiftChart"
 
 The library includes:
 
-- the [Chart](Chart/Chart.swift) main class, to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance
-- the [ChartSeries](Chart/ChartSeries.swift) class, for creating datasets and configure their appearance
-- the [ChartDelegate](Chart/Chart.swift) protocol, which tells other objects about the chart’s touch events
-- the [ChartColor](Chart/ChartColors.swift) struct, containing some predefined colors
+- the [Chart](Source/Chart.swift) main class, to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance
+- the [ChartSeries](Source/ChartSeries.swift) class, for creating datasets and configure their appearance
+- the [ChartDelegate](Source/Chart.swift#L10-L32) protocol, which tells other objects about the chart’s touch events
+- the [ChartColor](Source/ChartColors.swift) struct, containing some predefined colors
 
 **Example**
 
@@ -53,7 +53,6 @@ chart.addSeries(series)
 ```
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 
 ### To initialize a chart
 

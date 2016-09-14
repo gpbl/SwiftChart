@@ -24,7 +24,7 @@ public class ChartSeries {
     public init(_ data: Array<Float>) {
         self.data = []
 
-        data.enumerate().forEach { (x, y) in
+        data.enumerated().forEach { (x, y) in
             let point: (x: Float, y: Float) = (x: Float(x), y: y)
             self.data.append(point)
         }

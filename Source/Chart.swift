@@ -47,7 +47,11 @@ public class Chart: UIControl {
     /**
     Series to display in the chart.
     */
-    public var series: Array<ChartSeries> = []
+    public var series: Array<ChartSeries> = [] {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
 
     /**
     The values to display as labels on the x-axis. You can format these values with the `xLabelFormatter` attribute.

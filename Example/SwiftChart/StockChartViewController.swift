@@ -17,7 +17,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var chart: Chart!
     
-    private var labelLeadingMarginInitialConstant: CGFloat!
+    fileprivate var labelLeadingMarginInitialConstant: CGFloat!
     
     override func viewDidLoad() {
         
@@ -37,15 +37,15 @@ class StockChartViewController: UIViewController, ChartDelegate {
         var labelsAsString: Array<String> = []
         
         // Date formatter to retrieve the month names
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM"
         
-        for (i, value) in stockValues.enumerate() {
+        for (i, value) in stockValues.enumerated() {
             
             serieData.append(value["close"] as! Float)
             
             // Use only one label for each month
-            let month = Int(dateFormatter.stringFromDate(value["date"] as! NSDate))!
+            let month = Int(dateFormatter.string(from: value["date"] as! Date))!
             let monthAsString:String = dateFormatter.monthSymbols[month - 1] 
             if (labels.count == 0 || labelsAsString.last != monthAsString) {
                 labels.append(Float(i))
@@ -59,29 +59,29 @@ class StockChartViewController: UIViewController, ChartDelegate {
         // Configure chart layout
         
         chart.lineWidth = 0.5
-        chart.labelFont = UIFont.systemFontOfSize(12)
+        chart.labelFont = UIFont.systemFont(ofSize: 12)
         chart.xLabels = labels
         chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
             return labelsAsString[labelIndex]
         }
-        chart.xLabelsTextAlignment = .Center
+        chart.xLabelsTextAlignment = .center
         chart.yLabelsOnRightSide = true
         // Add some padding above the x-axis
-        chart.minY = serieData.minElement()! - 5
+        chart.minY = serieData.min()! - 5
         
         chart.addSeries(series)
         
     }
     // Chart delegate
     
-    func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
+    func didTouchChart(_ chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
         
         if let value = chart.valueForSeries(0, atIndex: indexes[0]) {
             
-            let numberFormatter = NSNumberFormatter()
+            let numberFormatter = NumberFormatter()
             numberFormatter.minimumFractionDigits = 2
             numberFormatter.maximumFractionDigits = 2
-            label.text = numberFormatter.stringFromNumber(value)!
+            label.text = numberFormatter.string(from: value)!
             
             // Align the label to the touch left position, centered
             var constant = labelLeadingMarginInitialConstant + left - (label.frame.width / 2)
@@ -103,7 +103,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
     }
     
-    func didFinishTouchingChart(chart: Chart) {
+    func didFinishTouchingChart(_ chart: Chart) {
         label.text = ""
         labelLeadingMarginConstraint.constant = labelLeadingMarginInitialConstant
     }
@@ -112,16 +112,16 @@ class StockChartViewController: UIViewController, ChartDelegate {
     func getStockValues() -> Array<Dictionary<String, Any>> {
         
         // Read the JSON file
-        let filePath = NSBundle.mainBundle().pathForResource("AAPL", ofType: "json")!
-        let jsonData = NSData(contentsOfFile: filePath)
-        let json: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(jsonData!, options: [])) as! NSDictionary
+        let filePath = Bundle.main.path(forResource: "AAPL", ofType: "json")!
+        let jsonData = try? Data(contentsOf: URL(fileURLWithPath: filePath))
+        let json: NSDictionary = (try! JSONSerialization.jsonObject(with: jsonData!, options: [])) as! NSDictionary
         let jsonValues = json["quotes"] as! Array<NSDictionary>
         
         // Parse data
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let values = jsonValues.map { (value: NSDictionary) -> Dictionary<String, Any> in
-            let date = dateFormatter.dateFromString(value["date"]! as! String)
+            let date = dateFormatter.date(from: value["date"]! as! String)
             let close = (value["close"]! as! NSNumber).floatValue
             return ["date": date!, "close": close]
         }
@@ -130,9 +130,9 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        super.viewWillTransition(to: size, with: coordinator)
         
         // Redraw chart on rotation
         chart.setNeedsDisplay()

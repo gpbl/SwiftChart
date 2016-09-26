@@ -11,7 +11,7 @@ import UIKit
 Shorthands for various colors to use freely in the charts.
 */
 public struct ChartColors {
-    static private func colorFromHex(hex: Int) -> UIColor {
+    static fileprivate func colorFromHex(_ hex: Int) -> UIColor {
         let red = CGFloat((hex & 0xFF0000) >> 16) / 255.0
         let green = CGFloat((hex & 0xFF00) >> 8) / 255.0
         let blue = CGFloat((hex & 0xFF)) / 255.0
@@ -20,42 +20,42 @@ public struct ChartColors {
     }
 
     static public func blueColor() -> UIColor {
-        return colorFromHex(hex: 0x4A90E2)
+        return colorFromHex(0x4A90E2)
     }
     static public func orangeColor() -> UIColor {
-        return colorFromHex(hex: 0xF5A623)
+        return colorFromHex(0xF5A623)
     }
     static public func greenColor() -> UIColor {
-        return colorFromHex(hex: 0x7ED321)
+        return colorFromHex(0x7ED321)
     }
     static public func darkGreenColor() -> UIColor {
-        return colorFromHex(hex: 0x417505)
+        return colorFromHex(0x417505)
     }
     static public func redColor() -> UIColor {
-        return colorFromHex(hex: 0xFF3200)
+        return colorFromHex(0xFF3200)
     }
     static public func darkRedColor() -> UIColor {
-        return colorFromHex(hex: 0xD0021B)
+        return colorFromHex(0xD0021B)
     }
     static public func purpleColor() -> UIColor {
-        return colorFromHex(hex: 0x9013FE)
+        return colorFromHex(0x9013FE)
     }
     static public func maroonColor() -> UIColor {
-        return colorFromHex(hex: 0x8B572A)
+        return colorFromHex(0x8B572A)
     }
     static public func pinkColor() -> UIColor {
-        return colorFromHex(hex: 0xBD10E0)
+        return colorFromHex(0xBD10E0)
     }
     static public func greyColor() -> UIColor {
-        return colorFromHex(hex: 0x7f7f7f)
+        return colorFromHex(0x7f7f7f)
     }
     static public func cyanColor() -> UIColor {
-        return colorFromHex(hex: 0x50E3C2)
+        return colorFromHex(0x50E3C2)
     }
     static public func goldColor() -> UIColor {
-        return colorFromHex(hex: 0xbcbd22)
+        return colorFromHex(0xbcbd22)
     }
     static public func yellowColor() -> UIColor {
-        return colorFromHex(hex: 0xF8E71C)
+        return colorFromHex(0xF8E71C)
     }
 }

@@ -10,11 +10,11 @@ import UIKit
 /**
 Represent a series to draw in the line chart. Each series is defined with a dataset and appareance settings.
 */
-public class ChartSeries {
-    public var data: Array<(x: Float, y: Float)>
-    public var area: Bool = false
-    public var line: Bool = true
-    public var color: UIColor = ChartColors.blueColor() {
+open class ChartSeries {
+    open var data: Array<(x: Float, y: Float)>
+    open var area: Bool = false
+    open var line: Bool = true
+    open var color: UIColor = ChartColors.blueColor() {
         didSet {
             colors = (above: color, below: color)
         }

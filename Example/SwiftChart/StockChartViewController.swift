@@ -69,7 +69,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         // Add some padding above the x-axis
         chart.minY = serieData.min()! - 5
         
-        chart.addSeries(series)
+        chart.add(series)
         
     }
     // Chart delegate
@@ -81,7 +81,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
             let numberFormatter = NumberFormatter()
             numberFormatter.minimumFractionDigits = 2
             numberFormatter.maximumFractionDigits = 2
-            label.text = numberFormatter.string(from: value)!
+            label.text = numberFormatter.string(from: NSNumber(value: value))
             
             // Align the label to the touch left position, centered
             var constant = labelLeadingMarginInitialConstant + left - (label.frame.width / 2)

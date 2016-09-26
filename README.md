@@ -49,7 +49,7 @@ The library includes:
 let chart = Chart()
 let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
 series.color = ChartColors.greenColor()
-chart.addSeries(series)
+chart.add(series)
 ```
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
@@ -85,7 +85,7 @@ Initialize each series before adding them to the chart. To do so, pass an array 
 
 ```swift
 let series = ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
-chart.addSeries(series)
+chart.add(series)
 ```
 
 By default, the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Float, y: Float)` touples to the series’ initializer:
@@ -94,12 +94,12 @@ By default, the values on the x-axis are the progressive indexes of the passed a
 // Create a new series specifying x and y values
 let data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
 let series = ChartSeries(data)
-chart.addSeries(series)
+chart.add(series)
 ```
 
 #### Multiple series
 
-Using the `chart.addSeries(series: ChartSeries)` and `chart.addSeries(series: Array<ChartSeries>)` methods you can add more series. Those will be indentified with a progressive index in the chart’s `series` property.
+Using the `chart.add(series: ChartSeries)` and `chart.add(series: Array<ChartSeries>)` methods you can add more series. Those will be indentified with a progressive index in the chart’s `series` property.
 
 #### Partially filled series
 
@@ -112,7 +112,7 @@ let series = ChartSeries(data: data)
 series.area = true
 chart.xLabels = [0, 3, 6, 9, 12, 15, 18, 21, 24]
 chart.xLabelsFormatter = { String(Int(round($1))) + "h" }
-chart.addSeries(series)
+chart.add(series)
 ```
 
 will render:
@@ -192,7 +192,7 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 
 #### Methods
 
-* `addSeries(series: ChartSeries)`: add a series to the chart.
+* `add(series: ChartSeries)`: add a series to the chart.
 * `removeSeries()`: remove all the series from the chart.
 * `removeSeriesAtIndex(index: Int)`: remove a series at the specified index. 
 * `valueForSeries()`: get the value of the specified series at the specified index.

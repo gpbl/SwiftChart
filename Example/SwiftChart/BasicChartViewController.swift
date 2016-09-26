@@ -25,7 +25,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             // Simple chart
             let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
             series.color = ChartColors.greenColor()
-            chart.addSeries(series)
+            chart.add(series)
             
             
         case 1:
@@ -44,7 +44,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             let series3 = ChartSeries([9, 8, 10, 8.5, 9.5, 10])
             series3.color = ChartColors.purpleColor()
             
-            chart.addSeries([series1, series2, series3])
+            chart.add([series1, series2, series3])
             
         case 2:
             
@@ -56,7 +56,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             let series = ChartSeries(data)
             series.area = true
             
-            chart.addSeries(series)
+            chart.add(series)
             
             // Set minimum and maximum values for y-axis
             chart.minY = -7
@@ -69,7 +69,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             // Create a new series specifying x and y values
             let data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
             let series = ChartSeries(data: data)
-            chart.addSeries(series)
+            chart.add(series)
             
         default: break;
             

@@ -14,6 +14,8 @@ open class ChartSeries {
     open var data: Array<(x: Float, y: Float)>
     open var area: Bool = false
     open var line: Bool = true
+    open var bezier: Bool = false
+  
     open var color: UIColor = ChartColors.blueColor() {
         didSet {
             colors = (above: color, below: color)
@@ -37,4 +39,6 @@ open class ChartSeries {
     public init(data: Array<(x: Double, y: Double)>) {
         self.data = data.map ({ (Float($0.x), Float($0.y))})
     }
+  
+  
 }

@@ -54,8 +54,8 @@ class StockChartViewController: UIViewController, ChartDelegate {
         }
         
         let series = ChartSeries(serieData)
-        series.area = true
-        
+        //series.area = true
+        series.bezier = true
         // Configure chart layout
         
         chart.lineWidth = 0.5

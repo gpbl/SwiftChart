@@ -674,7 +674,7 @@ open class Chart: UIControl {
         let left = point.location(in: self).x
         let x = valueFromPointAtX(left)
 
-        if left < 0 || left > drawingWidth {
+        if left < 0 || left > (drawingWidth as CGFloat) {
             // Remove highlight line at the end of the touch event
             if let shapeLayer = highlightShapeLayer {
                 shapeLayer.path = nil

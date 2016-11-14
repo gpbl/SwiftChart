@@ -16,10 +16,10 @@ open class ChartSeries {
     open var line: Bool = true
     open var color: UIColor = ChartColors.blueColor() {
         didSet {
-            colors = (above: color, below: color)
+            colors = (above: color, below: color, 0)
         }
     }
-    var colors: (above: UIColor, below: UIColor) = (above: ChartColors.blueColor(), below: ChartColors.redColor())
+    open var colors: (above: UIColor, below: UIColor, zeroLevel: Float) = (above: ChartColors.blueColor(), below: ChartColors.redColor(), 0)
 
     public init(_ data: Array<Float>) {
         self.data = []

@@ -283,7 +283,7 @@ open class Chart: UIControl {
         for (index, series) in self.series.enumerated() {
 
             // Separate each line in multiple segments over and below the x axis
-            let segments = Chart.segmentLine(series.data as ChartLineSegment)
+            let segments = Chart.segmentLine(series.data as ChartLineSegment, zeroLevel: series.colors.zeroLevel)
 
             segments.forEach({ segment in
                 let scaledXValues = scaleValuesOnXAxis( segment.map({ return $0.x }) )
@@ -405,30 +405,20 @@ open class Chart: UIControl {
         return scaled
     }
 
-    fileprivate func getZeroValueOnYAxis() -> Float {
-        if min.y > 0 {
+    fileprivate func getZeroValueOnYAxis(zeroLevel: Float) -> Float {
+        if min.y > zeroLevel {
             return scaleValueOnYAxis(min.y)
         } else {
-            return scaleValueOnYAxis(0)
+            return scaleValueOnYAxis(zeroLevel)
         }
 
     }
 
     // MARK: - Drawings
 
-    fileprivate func isVerticalSegmentAboveXAxis(_ yValues: Array<Float>) -> Bool {
-
-        // YValues are "reverted" from top to bottom, so min is actually the maxz
-        let min = yValues.max()!
-        let zero = getZeroValueOnYAxis()
-
-        return min <= zero
-
-    }
-
     fileprivate func drawLine(_ xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
-
-        let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
+        // YValues are "reverted" from top to bottom, so 'above' means <= level
+        let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
         let path = CGMutablePath()
         path.move(to: CGPoint(x: CGFloat(xValues.first!), y: CGFloat(yValues.first!)))
         for i in 1..<yValues.count {
@@ -440,7 +430,7 @@ open class Chart: UIControl {
         lineLayer.frame = self.bounds
         lineLayer.path = path
 
-        if isAboveXAxis {
+        if isAboveZeroLine {
             lineLayer.strokeColor = series[seriesIndex].colors.above.cgColor
         } else {
             lineLayer.strokeColor = series[seriesIndex].colors.below.cgColor
@@ -455,9 +445,10 @@ open class Chart: UIControl {
     }
 
     fileprivate func drawArea(_ xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
-        let isAboveXAxis = isVerticalSegmentAboveXAxis(yValues)
+        // YValues are "reverted" from top to bottom, so 'above' means <= level
+        let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
         let area = CGMutablePath()
-        let zero = CGFloat(getZeroValueOnYAxis())
+        let zero = CGFloat(getZeroValueOnYAxis(zeroLevel: series[seriesIndex].colors.zeroLevel))
 
         area.move(to: CGPoint(x: CGFloat(xValues[0]), y: zero))
         for i in 0..<xValues.count {
@@ -468,7 +459,7 @@ open class Chart: UIControl {
         areaLayer.frame = self.bounds
         areaLayer.path = area
         areaLayer.strokeColor = nil
-        if isAboveXAxis {
+        if isAboveZeroLine {
             areaLayer.fillColor = series[seriesIndex].colors.above.withAlphaComponent(areaAlphaComponent).cgColor
         } else {
             areaLayer.fillColor = series[seriesIndex].colors.below.withAlphaComponent(areaAlphaComponent).cgColor
@@ -498,7 +489,7 @@ open class Chart: UIControl {
 
         // horizontal axis when y = 0
         if min.y < 0 && max.y > 0 {
-            let y = CGFloat(getZeroValueOnYAxis())
+            let y = CGFloat(getZeroValueOnYAxis(zeroLevel: 0))
             context.move(to: CGPoint(x: CGFloat(0), y: y))
             context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: y))
             context.strokePath()
@@ -597,7 +588,7 @@ open class Chart: UIControl {
 
         let scaled = scaleValuesOnYAxis(labels)
         let padding: CGFloat = 5
-        let zero = CGFloat(getZeroValueOnYAxis())
+        let zero = CGFloat(getZeroValueOnYAxis(zeroLevel: 0))
 
         scaled.enumerated().forEach { (i, value) in
 
@@ -755,7 +746,7 @@ open class Chart: UIControl {
     Segment a line in multiple lines when the line touches the x-axis, i.e. separating
     positive from negative values.
     */
-    fileprivate class func segmentLine(_ line: ChartLineSegment) -> Array<ChartLineSegment> {
+    fileprivate class func segmentLine(_ line: ChartLineSegment, zeroLevel: Float) -> Array<ChartLineSegment> {
         var segments: Array<ChartLineSegment> = []
         var segment: ChartLineSegment = []
 
@@ -764,9 +755,9 @@ open class Chart: UIControl {
             segment.append(point)
             if i < line.count - 1 {
                 let nextPoint = line[i+1]
-                if point.y * nextPoint.y <= 0 || point.y <= 0 && nextPoint.y == 0 {
-                    // The sign changed, close the segment with the intersection on x-axis
-                    let closingPoint = Chart.intersectionOnXAxisBetween(point, and: nextPoint)
+                if point.y >= zeroLevel && nextPoint.y < zeroLevel || point.y < zeroLevel && nextPoint.y >= zeroLevel {
+                    // The segment intersects zeroLevel, close the segment with the intersection point
+                    let closingPoint = Chart.intersectionWithLevel(point, and: nextPoint, level: zeroLevel)
                     segment.append(closingPoint)
                     segments.append(segment)
                     // Start a new segment
@@ -782,9 +773,11 @@ open class Chart: UIControl {
     }
 
     /**
-    Return the intersection of a line between two points on the x-axis
+    Return the intersection of a line between two points and 'y = level' line
     */
-    fileprivate class func intersectionOnXAxisBetween(_ p1: ChartPoint, and p2: ChartPoint) -> ChartPoint {
-        return (x: p1.x - (p2.x - p1.x) / (p2.y - p1.y) * p1.y, y: 0)
+    fileprivate class func intersectionWithLevel(_ p1: ChartPoint, and p2: ChartPoint, level: Float) -> ChartPoint {
+        let dy1 = level - p1.y
+        let dy2 = level - p2.y
+        return (x: (p2.x * dy1 - p1.x * dy2) / (dy1 - dy2), y: level)
     }
 }

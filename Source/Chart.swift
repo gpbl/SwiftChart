@@ -290,10 +290,18 @@ open class Chart: UIControl {
                 let scaledYValues = scaleValuesOnYAxis( segment.map({ return $0.y }) )
 
                 if series.line {
+                  if series.bezier {
+                    drawBezierLine(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                  } else {
                     drawLine(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                  }
                 }
                 if series.area {
+                  if series.bezier {
+                      drawBezierArea(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                  } else {
                     drawArea(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                  }
                 }
             })
         }
@@ -443,6 +451,62 @@ open class Chart: UIControl {
 
         layerStore.append(lineLayer)
     }
+  
+    fileprivate func drawBezierLine(_ xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int)
+    {
+      
+      let cubicCurveAlgorithm = CubicCurveAlgorithm()
+      let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
+      let path = CGMutablePath()
+      var points = [CGPoint]()
+      
+      
+      if yValues.count < 3{
+        return
+      }
+      
+      for i in 0..<yValues.count {
+        let y = CGFloat(yValues[i])
+        let x = CGFloat(xValues[i])
+        let point = CGPoint(x: x, y: y)
+        
+        points.append(point)
+        //path.addLine(to: CGPoint(x: CGFloat(xValues[i]), y: CGFloat(y)))
+      }
+      
+      let controlPoints = cubicCurveAlgorithm.controlPointsFromPoints(points)
+      
+      for i in 0 ..< points.count {
+        
+        let point = points[i];
+        
+        if i==0 {
+          path.move(to: point)
+        } else {
+          let segment = controlPoints[i-1]
+          path.addCurve(to: point, control1: segment.controlPoint1, control2: segment.controlPoint2)
+        }
+      }
+      
+      
+      let lineLayer = CAShapeLayer()
+      lineLayer.frame = self.bounds
+      lineLayer.path = path
+      
+      if isAboveZeroLine {
+        lineLayer.strokeColor = series[seriesIndex].colors.above.cgColor
+      } else {
+        lineLayer.strokeColor = series[seriesIndex].colors.below.cgColor
+      }
+      lineLayer.fillColor = nil
+      lineLayer.lineWidth = lineWidth
+      
+      self.layer.addSublayer(lineLayer)
+      
+      layerStore.append(lineLayer)
+    }
+
+  
 
     fileprivate func drawArea(_ xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
         // YValues are "reverted" from top to bottom, so 'above' means <= level
@@ -470,6 +534,55 @@ open class Chart: UIControl {
 
         layerStore.append(areaLayer)
     }
+
+
+    fileprivate func drawBezierArea(_ xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int)
+    {
+      
+      // YValues are "reverted" from top to bottom, so 'above' means <= level
+      let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
+      let area = CGMutablePath()
+      let cubicCurveAlgorithm = CubicCurveAlgorithm()
+      let zero = CGFloat(getZeroValueOnYAxis(zeroLevel: series[seriesIndex].colors.zeroLevel))
+
+      
+      var points = [CGPoint]()
+      
+  
+      area.move(to: CGPoint(x: CGFloat(xValues[0]), y: zero))
+      for i in 0..<xValues.count {
+        let y = CGFloat(yValues[i])
+        let x = CGFloat(xValues[i])
+        let point = CGPoint(x: x, y: y)
+        
+        points.append(point)
+      }
+      let controlPoints = cubicCurveAlgorithm.controlPointsFromPoints(points)
+      for i in  1 ..< points.count {
+        let point = points[i];
+    
+        let segment = controlPoints[i-1]
+        area.addCurve(to: point, control1: segment.controlPoint1, control2: segment.controlPoint2)
+      }
+      area.addLine(to: CGPoint(x: CGFloat(xValues.last!), y: zero))
+
+
+      let areaLayer = CAShapeLayer()
+      areaLayer.frame = self.bounds
+      areaLayer.path = area
+      areaLayer.strokeColor = nil
+      if isAboveZeroLine {
+        areaLayer.fillColor = series[seriesIndex].colors.above.withAlphaComponent(areaAlphaComponent).cgColor
+      } else {
+        areaLayer.fillColor = series[seriesIndex].colors.below.withAlphaComponent(areaAlphaComponent).cgColor
+      }
+      areaLayer.lineWidth = 0
+      
+      self.layer.addSublayer(areaLayer)
+
+      layerStore.append(areaLayer)
+    }
+
 
     fileprivate func drawAxes() {
 

@@ -15,6 +15,7 @@
 		79F4E8B780DA8ACB3E8E8D89622D2FB2 /* ChartSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD70E4832602CA03DDCEA1D94A427BE /* ChartSeries.swift */; };
 		9FD23A1F77DB2C32DAC93B9D46FF7136 /* SwiftChart-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C828FAEDC0DED3BB6390C1904EB09A9 /* SwiftChart-dummy.m */; };
 		A375E03799499C5C8DF2D63AB1077963 /* SwiftChart-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 93AB6330D655156F86E02179A7D0E852 /* SwiftChart-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7BA10361DF75A1A001D0698 /* CubicCurveAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BA10341DF75A18001D0698 /* CubicCurveAlgorithm.swift */; };
 		E0E034193F6824C46F7D06C9D3449559 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		93AB6330D655156F86E02179A7D0E852 /* SwiftChart-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftChart-umbrella.h"; sourceTree = "<group>"; };
 		AB5E01653613E82F9F8B7599D02A693F /* Pods-SwiftChart_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SwiftChart_Example-frameworks.sh"; sourceTree = "<group>"; };
 		AE3FDED2EA10415099AD06F872E83A77 /* SwiftChart.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftChart.xcconfig; sourceTree = "<group>"; };
+		B7BA10341DF75A18001D0698 /* CubicCurveAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CubicCurveAlgorithm.swift; sourceTree = "<group>"; };
 		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		C1064C02BC378A7101A8B9260973E770 /* Pods_SwiftChart_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftChart_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDD70E4832602CA03DDCEA1D94A427BE /* ChartSeries.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ChartSeries.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		8F09DBAD2C2435ECD2C7D1CC10646A89 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				B7BA10341DF75A18001D0698 /* CubicCurveAlgorithm.swift */,
 				E42396E2E43386D46D34C77B37FCB606 /* Chart.swift */,
 				54E5174EEAC67209FAB37F9C1B6FA9EC /* ChartColors.swift */,
 				DDD70E4832602CA03DDCEA1D94A427BE /* ChartSeries.swift */,
@@ -247,6 +250,9 @@
 					097181F9325C2CC6DA70EA2C78D6B2C7 = {
 						LastSwiftMigration = 0800;
 					};
+					F39BC0B0A950579E165D0B8A2EFFDA50 = {
+						LastSwiftMigration = 0820;
+					};
 				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
@@ -280,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7BA10361DF75A1A001D0698 /* CubicCurveAlgorithm.swift in Sources */,
 				46594161F99F4344B88C45D9A67B7318 /* Chart.swift in Sources */,
 				2E4566764C9AA79DA9C1FFC740468149 /* ChartColors.swift in Sources */,
 				79F4E8B780DA8ACB3E8E8D89622D2FB2 /* ChartSeries.swift in Sources */,
@@ -343,6 +350,7 @@
 			baseConfigurationReference = F1E2ED7278B3FA95879F7A45687626C9 /* Pods-SwiftChart_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -365,6 +373,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -420,6 +429,7 @@
 			baseConfigurationReference = 122431DDEFE9DA0C9951492E305796FF /* Pods-SwiftChart_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -441,6 +451,7 @@
 				PRODUCT_NAME = Pods_SwiftChart_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

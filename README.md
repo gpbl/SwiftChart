@@ -162,6 +162,26 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 
 <img src="https://cloud.githubusercontent.com/assets/120693/11602678/660d660e-9adc-11e5-8a67-0c3036c20862.gif" height="200">
 
+## Common issues and solutions
+
+### The chart is not showing
+
+The `Chart` class inherits from `UIView`, so if your chart is not displaying it is likely a problem related to the view's size. Check your view constraints and make sure you initialize it on `viewDidLoad`, when UIKit can calculate the view dimensions.
+
+Some tips for debugging an hidden chart:
+
+* start your app and the debug the view debug the UI Hierarchy from the Debug navigator
+* initialize a simple UIView with a colored background instead of the chart to see how it behaves
+* try to not to nest the chart in a subview for better debugging
+
+### How do I update the chart series?
+
+There is no built-in method to update a chart. To accomplish this:
+
+1. remove the old series
+2. add the updated one
+3. call `setNeedsDisplay` to refresh the chart
+
 ## Reference
 
 ![reference](https://cloud.githubusercontent.com/assets/120693/5094993/e3a3e10e-6f65-11e4-8619-b7a05d18190e.png)

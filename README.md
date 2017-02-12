@@ -170,8 +170,8 @@ The `Chart` class inherits from `UIView`, so if your chart is not displaying it 
 
 Some tips for debugging an hidden chart:
 
-* start your app and the debug the view debug the UI Hierarchy from the Debug navigator
-* initialize a simple UIView with a colored background instead of the chart to see how it behaves
+* start your app and then debug the UI Hierarchy from the Debug navigator
+* initialize a simple UIView with a colored background instead of the chart to easily see how the view is positioned
 * try to not to nest the chart in a subview for better debugging
 
 ### How do I update the chart series?

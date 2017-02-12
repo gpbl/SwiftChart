@@ -25,6 +25,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             // Simple chart
             let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
             series.color = ChartColors.greenColor()
+            series.bezier = true
             chart.add(series)
             
             
@@ -70,6 +71,23 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             let data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
             let series = ChartSeries(data: data)
             chart.add(series)
+          
+        case 5:
+          // Create a new series specifying x and y values
+          let series1 = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
+          series1.color = ChartColors.yellowColor()
+          series1.bezier = true
+          series1.area = true
+          
+          let series2 = ChartSeries([1, 0, 0.5, 0.2, 0, 1, 0.8, 0.3, 1])
+          series2.color = ChartColors.redColor()
+          series2.bezier = true
+          series2.area = true
+
+          chart.add([series1, series2])
+
+          
+        
             
         default: break;
             

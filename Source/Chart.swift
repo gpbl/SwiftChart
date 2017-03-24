@@ -107,6 +107,16 @@ open class Chart: UIControl {
     */
     @IBInspectable
     open var gridColor: UIColor = UIColor.gray.withAlphaComponent(0.3)
+    
+    /**
+     Should draw lines for labels on X axis.
+     */
+    open var isDrawGridXAxis: Bool = true
+    
+    /**
+     Should draw lines for labels on Y axis.
+     */
+    open var isDrawGridYAxis: Bool = true
 
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
@@ -300,10 +310,10 @@ open class Chart: UIControl {
 
         drawAxes()
 
-        if xLabels != nil || series.count > 0 {
+        if isDrawGridXAxis && (xLabels != nil || series.count > 0) {
             drawLabelsAndGridOnXAxis()
         }
-        if yLabels != nil || series.count > 0 {
+        if isDrawGridYAxis && (yLabels != nil || series.count > 0) {
             drawLabelsAndGridOnYAxis()
         }
 

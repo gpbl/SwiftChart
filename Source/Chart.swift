@@ -111,12 +111,12 @@ open class Chart: UIControl {
     /**
      Should draw lines for labels on X axis.
      */
-    open var isDrawGridXAxis: Bool = true
+    open var showXLabelsAndGrid: Bool = true
     
     /**
      Should draw lines for labels on Y axis.
      */
-    open var isDrawGridYAxis: Bool = true
+    open var showYLabelsAndGrid: Bool = true
 
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
@@ -310,10 +310,10 @@ open class Chart: UIControl {
 
         drawAxes()
 
-        if isDrawGridXAxis && (xLabels != nil || series.count > 0) {
+        if showXLabelsAndGrid && (xLabels != nil || series.count > 0) {
             drawLabelsAndGridOnXAxis()
         }
-        if isDrawGridYAxis && (yLabels != nil || series.count > 0) {
+        if showYLabelsAndGrid && (yLabels != nil || series.count > 0) {
             drawLabelsAndGridOnYAxis()
         }
 

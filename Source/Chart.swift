@@ -29,6 +29,15 @@ public protocol ChartDelegate {
 
     */
     func didFinishTouchingChart(_ chart: Chart)
+    
+    
+    /**
+     Tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the touchesDidEnd method is being called. 
+     
+     - parameter chart: The chart that has been touched.
+     
+     */
+    func didEndTouchingChart(_ chart: Chart)
 }
 
 /**
@@ -703,6 +712,7 @@ open class Chart: UIControl {
 
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         handleTouchEvents(touches, event: event)
+        delegate?.didEndTouchingChart(self)
     }
 
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {

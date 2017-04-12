@@ -136,7 +136,11 @@ class MyViewController: UIViewController, ChartDelegate {
     }
     
     func didFinishTouchingChart(chart: Chart) {
-        // Do something when finished
+        // Do something when finished (only called after the user swipes out of the chart either on the right or the left side)
+    }
+    
+    func didEndTouchingChart(chart: Chart) {
+       // Do something when the user ends touching the chart
     }
 }
 ```
@@ -196,6 +200,7 @@ There is no built-in method to update a chart. To accomplish this:
 * `delegate`: the delegate for listening to touch events.
 * `highlightLineColor`: color of the highlight line.
 * `highlightLineWidth`: width of the highlight line.
+* `shouldAutoHideHighlightLine`: automatically hide the highlightLine after we've ended touching the chart.
 * `gridColor`: the grid color.
 * `labelColor`: the color of the labels.
 * `labelFont`: the font used for the labels.

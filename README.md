@@ -164,6 +164,8 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 
 ## Common issues and solutions
 
+If you have issue with this library, please tag your question with `swiftcharts` on [Stack Overflow](http://stackoverflow.com/tags/swiftcharts/info).
+
 ### The chart is not showing
 
 The `Chart` class inherits from `UIView`, so if your chart is not displaying it is likely a problem related to the view's size. Check your view constraints and make sure you initialize it on `viewDidLoad`, when UIKit can calculate the view dimensions.

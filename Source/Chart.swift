@@ -29,6 +29,15 @@ public protocol ChartDelegate {
 
     */
     func didFinishTouchingChart(_ chart: Chart)
+    
+    
+    /**
+     Tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the touchesDidEnd method is being called. 
+     
+     - parameter chart: The chart that has been touched.
+     
+     */
+    func didEndTouchingChart(_ chart: Chart)
 }
 
 /**
@@ -107,6 +116,16 @@ open class Chart: UIControl {
     */
     @IBInspectable
     open var gridColor: UIColor = UIColor.gray.withAlphaComponent(0.3)
+    
+    /**
+     Should draw lines for labels on X axis.
+     */
+    open var showXLabelsAndGrid: Bool = true
+    
+    /**
+     Should draw lines for labels on Y axis.
+     */
+    open var showYLabelsAndGrid: Bool = true
 
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
@@ -300,10 +319,10 @@ open class Chart: UIControl {
 
         drawAxes()
 
-        if xLabels != nil || series.count > 0 {
+        if showXLabelsAndGrid && (xLabels != nil || series.count > 0) {
             drawLabelsAndGridOnXAxis()
         }
-        if yLabels != nil || series.count > 0 {
+        if showYLabelsAndGrid && (yLabels != nil || series.count > 0) {
             drawLabelsAndGridOnYAxis()
         }
 
@@ -703,6 +722,7 @@ open class Chart: UIControl {
 
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         handleTouchEvents(touches, event: event)
+        delegate?.didEndTouchingChart(self)
     }
 
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -56,7 +56,11 @@ open class Chart: UIControl {
     /**
     Series to display in the chart.
     */
-    open var series: [ChartSeries] = []
+    open var series: [ChartSeries] = [] {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
 
     /**
     The values to display as labels on the x-axis. You can format these values  with the `xLabelFormatter` attribute. 

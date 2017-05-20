@@ -180,14 +180,6 @@ Some tips for debugging an hidden chart:
 * initialize a simple UIView with a colored background instead of the chart to easily see how the view is positioned
 * try to not to nest the chart in a subview for better debugging
 
-### How do I update the chart series?
-
-There is no built-in method to update a chart. To accomplish this:
-
-1. remove the old series
-2. add the updated one
-3. call `setNeedsDisplay` to refresh the chart
-
 ## Reference
 
 ![reference](https://cloud.githubusercontent.com/assets/120693/5094993/e3a3e10e-6f65-11e4-8619-b7a05d18190e.png)

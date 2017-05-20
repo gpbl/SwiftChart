@@ -91,6 +91,11 @@ open class Chart: UIControl {
     open var xLabelsOrientation: ChartLabelOrientation = .horizontal
 
     /**
+     Skip the last x-label. Setting this to false may make the label overflow the frame width.
+     */
+    open var xLabelsSkipLast: Bool = true
+
+    /**
     Values to display as labels of the y-axis. If not specified, will display the
     lowest, the middle and the highest values.
     */
@@ -561,9 +566,9 @@ open class Chart: UIControl {
 
         let scaled = scaleValuesOnXAxis(labels)
         let padding: CGFloat = 5
-
         scaled.enumerated().forEach { (i, value) in
             let x = CGFloat(value)
+            let isLastLabel = x == drawingWidth
 
             // Add vertical grid for each label, except axes on the left and right
 
@@ -573,7 +578,7 @@ open class Chart: UIControl {
                 context.strokePath()
             }
 
-            if x == drawingWidth {
+            if xLabelsSkipLast && isLastLabel {
                 // Do not add label at the most right position
                 return
             }
@@ -590,8 +595,8 @@ open class Chart: UIControl {
             label.frame.origin.y += topInset
             if xLabelsOrientation == .horizontal {
                 // Add left padding
-                label.frame.origin.x += padding
                 label.frame.origin.y -= (label.frame.height - bottomInset) / 2
+                label.frame.origin.x += padding
 
                 // Set label's text alignment
                 label.frame.size.width = (drawingWidth / CGFloat(labels.count)) - padding * 2
@@ -609,12 +614,11 @@ open class Chart: UIControl {
                     label.frame.origin.x += ((drawingWidth / CGFloat(labels.count)) / 2) - (label.frame.size.width / 2)
                 } else {
                     // Give some space from the vertical line
-                    label.frame.origin.x += 4
+                    label.frame.origin.x += padding
                 }
             }
 
             self.addSubview(label)
-
         }
 
     }

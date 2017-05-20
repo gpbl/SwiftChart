@@ -206,6 +206,7 @@ Some tips for debugging an hidden chart:
 * `xLabelsFormatter` – formats the labels on the x-axis.
 * `xLabelsOrientation` – sets the x-axis labels orientation to vertical or horizontal.
 * `xLabelsTextAlignment` – text-alignment for the x-labels.
+* `xLabelsSkipLast` (default `true`) - Skip the last x-label. Setting this to `false` will make the label overflow the frame width, so use carefully!
 * `yLabelsFormatter` – formats the labels on the y-axis.
 * `yLabelsOnRightSide` – place the y-labels on the right side.
 

@@ -45,6 +45,11 @@ Represent the x- and the y-axis values for each point in a chart series.
 */
 typealias ChartPoint = (x: Float, y: Float)
 
+public enum ChartLabelOrientation {
+    case horizontal
+    case vertical
+}
+
 @IBDesignable
 open class Chart: UIControl {
 
@@ -79,6 +84,11 @@ open class Chart: UIControl {
     Text alignment for the x-labels
     */
     open var xLabelsTextAlignment: NSTextAlignment = .left
+
+    /**
+     Orientation for the x-labels
+     */
+    open var xLabelsOrientation: ChartLabelOrientation = .horizontal
 
     /**
     Values to display as labels of the y-axis. If not specified, will display the
@@ -576,17 +586,32 @@ open class Chart: UIControl {
 
             // Set label size
             label.sizeToFit()
-
-            // Add left padding
-            label.frame.origin.x += padding
-
             // Center label vertically
             label.frame.origin.y += topInset
-            label.frame.origin.y -= (label.frame.height - bottomInset) / 2
+            if xLabelsOrientation == .horizontal {
+                // Add left padding
+                label.frame.origin.x += padding
+                label.frame.origin.y -= (label.frame.height - bottomInset) / 2
 
-            // Set label's text alignment
-            label.frame.size.width = (drawingWidth / CGFloat(labels.count)) - padding * 2
-            label.textAlignment = xLabelsTextAlignment
+                // Set label's text alignment
+                label.frame.size.width = (drawingWidth / CGFloat(labels.count)) - padding * 2
+                label.textAlignment = xLabelsTextAlignment
+            } else {
+                label.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
+
+                // Adjust vertical position according to the label's height
+                label.frame.origin.y += label.frame.size.height / 2
+
+                // Adjust horizontal position as the series line
+                label.frame.origin.x = x
+                if xLabelsTextAlignment == .center {
+                    // Align horizontally in series
+                    label.frame.origin.x += ((drawingWidth / CGFloat(labels.count)) / 2) - (label.frame.size.width / 2)
+                } else {
+                    // Give some space from the vertical line
+                    label.frame.origin.x += 4
+                }
+            }
 
             self.addSubview(label)
 

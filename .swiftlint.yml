@@ -1,0 +1,4 @@
+disabled_rules:
+  - large_tuple
+  - identifier_name
+  - type_body_length

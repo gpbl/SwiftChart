@@ -7,32 +7,32 @@
 
 import UIKit
 
-public protocol ChartDelegate {
+public protocol ChartDelegate: class {
 
     /**
     Tells the delegate that the specified chart has been touched.
 
     - parameter chart: The chart that has been touched.
-    - parameter indexes: Each element of this array contains the index of the data that has been touched, one for each series.
-            If the series hasn't been touched, its index will be nil.
+    - parameter indexes: Each element of this array contains the index of the data that has been touched, one for each 
+      series. If the series hasn't been touched, its index will be nil.
     - parameter x: The value on the x-axis that has been touched.
     - parameter left: The distance from the left side of the chart.
 
     */
-    func didTouchChart(_ chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat)
+    func didTouchChart(_ chart: Chart, indexes: [Int?], x: Float, left: CGFloat)
 
     /**
-    Tells the delegate that the user finished touching the chart. The user will "finish" touching the
-    chart only swiping left/right outside the chart.
+    Tells the delegate that the user finished touching the chart. The user will 
+    "finish" touching the chart only swiping left/right outside the chart.
 
     - parameter chart: The chart that has been touched.
 
     */
     func didFinishTouchingChart(_ chart: Chart)
-    
-    
     /**
-     Tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the touchesDidEnd method is being called. 
+     Tells the delegate that the user ended touching the chart. The user 
+     will "end" touching the chart whenever the touchesDidEnd method is 
+     being called.
      
      - parameter chart: The chart that has been touched.
      
@@ -56,13 +56,13 @@ open class Chart: UIControl {
     /**
     Series to display in the chart.
     */
-    open var series: Array<ChartSeries> = []
+    open var series: [ChartSeries] = []
 
     /**
-    The values to display as labels on the x-axis. You can format these values with the `xLabelFormatter` attribute.
+    The values to display as labels on the x-axis. You can format these values  with the `xLabelFormatter` attribute. 
     As default, it will display the values of the series which has the most data.
     */
-    open var xLabels: Array<Float>?
+    open var xLabels: [Float]?
 
     /**
     Formatter for the labels on the x-axis. The `index` represents the `xLabels` index, `value` its value:
@@ -80,7 +80,7 @@ open class Chart: UIControl {
     Values to display as labels of the y-axis. If not specified, will display the
     lowest, the middle and the highest values.
     */
-    open var yLabels: Array<Float>?
+    open var yLabels: [Float]?
 
     /**
     Formatter for the labels on the y-axis.
@@ -116,12 +116,10 @@ open class Chart: UIControl {
     */
     @IBInspectable
     open var gridColor: UIColor = UIColor.gray.withAlphaComponent(0.3)
-    
     /**
      Should draw lines for labels on X axis.
      */
     open var showXLabelsAndGrid: Bool = true
-    
     /**
      Should draw lines for labels on Y axis.
      */
@@ -146,7 +144,7 @@ open class Chart: UIControl {
     /**
     Delegate for listening to Chart touch events.
     */
-    open var delegate: ChartDelegate?
+    weak open var delegate: ChartDelegate?
 
     /**
     Custom minimum value for the x-axis.
@@ -186,7 +184,7 @@ open class Chart: UIControl {
     // MARK: Private variables
 
     fileprivate var highlightShapeLayer: CAShapeLayer!
-    fileprivate var layerStore: Array<CAShapeLayer> = []
+    fileprivate var layerStore: [CAShapeLayer] = []
 
     fileprivate var drawingHeight: CGFloat!
     fileprivate var drawingWidth: CGFloat!
@@ -196,7 +194,7 @@ open class Chart: UIControl {
     fileprivate var max: ChartPoint!
 
     // Represent a set of points corresponding to a segment line on the chart.
-    typealias ChartLineSegment = Array<ChartPoint>
+    typealias ChartLineSegment = [ChartPoint]
 
     // MARK: initializations
 
@@ -231,7 +229,7 @@ open class Chart: UIControl {
     /**
     Adds multiple series.
     */
-    open func add(_ series: Array<ChartSeries>) {
+    open func add(_ series: [ChartSeries]) {
         for s in series {
             add(s)
         }
@@ -259,7 +257,6 @@ open class Chart: UIControl {
         let series = self.series[seriesIndex] as ChartSeries
         return series.data[dataIndex!].y
     }
-
 
     fileprivate func drawIBPlaceholder() {
         let placeholder = UIView(frame: self.frame)
@@ -381,7 +378,7 @@ open class Chart: UIControl {
 
     }
 
-    fileprivate func scaleValuesOnXAxis(_ values: Array<Float>) -> Array<Float> {
+    fileprivate func scaleValuesOnXAxis(_ values: [Float]) -> [Float] {
         let width = Float(drawingWidth)
 
         var factor: Float
@@ -395,7 +392,7 @@ open class Chart: UIControl {
         return scaled
     }
 
-    fileprivate func scaleValuesOnYAxis(_ values: Array<Float>) -> Array<Float> {
+    fileprivate func scaleValuesOnYAxis(_ values: [Float]) -> [Float] {
 
         let height = Float(drawingHeight)
         var factor: Float
@@ -435,7 +432,7 @@ open class Chart: UIControl {
 
     // MARK: - Drawings
 
-    fileprivate func drawLine(_ xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
+    fileprivate func drawLine(_ xValues: [Float], yValues: [Float], seriesIndex: Int) {
         // YValues are "reverted" from top to bottom, so 'above' means <= level
         let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
         let path = CGMutablePath()
@@ -463,7 +460,7 @@ open class Chart: UIControl {
         layerStore.append(lineLayer)
     }
 
-    fileprivate func drawArea(_ xValues: Array<Float>, yValues: Array<Float>, seriesIndex: Int) {
+    fileprivate func drawArea(_ xValues: [Float], yValues: [Float], seriesIndex: Int) {
         // YValues are "reverted" from top to bottom, so 'above' means <= level
         let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
         let area = CGMutablePath()
@@ -519,7 +516,6 @@ open class Chart: UIControl {
         context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
         context.strokePath()
 
-
         // vertical axis on the right
         context.move(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
         context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
@@ -533,7 +529,7 @@ open class Chart: UIControl {
         context.setStrokeColor(gridColor.cgColor)
         context.setLineWidth(0.5)
 
-        var labels: Array<Float>
+        var labels: [Float]
         if xLabels == nil {
             // Use labels from the first series
             labels = series[0].data.map({ (point: ChartPoint) -> Float in
@@ -547,7 +543,6 @@ open class Chart: UIControl {
 
         scaled.enumerated().forEach { (i, value) in
             let x = CGFloat(value)
-
 
             // Add vertical grid for each label, except axes on the left and right
 
@@ -582,7 +577,6 @@ open class Chart: UIControl {
             label.frame.size.width = (drawingWidth / CGFloat(labels.count)) - padding * 2
             label.textAlignment = xLabelsTextAlignment
 
-
             self.addSubview(label)
 
         }
@@ -595,7 +589,7 @@ open class Chart: UIControl {
         context.setStrokeColor(gridColor.cgColor)
         context.setLineWidth(0.5)
 
-        var labels: Array<Float>
+        var labels: [Float]
         if yLabels == nil {
             labels = [(min.y + max.y) / 2, max.y]
             if yLabelsOnRightSide || min.y != 0 {
@@ -699,7 +693,7 @@ open class Chart: UIControl {
             return
         }
 
-        var indexes: Array<Int?> = []
+        var indexes: [Int?] = []
 
         for series in self.series {
             var index: Int? = nil
@@ -728,8 +722,6 @@ open class Chart: UIControl {
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }
-    
-
 
     // MARK: - Utilities
 
@@ -743,7 +735,15 @@ open class Chart: UIControl {
         return -value
     }
 
-    fileprivate class func findClosestInValues(_ values: Array<Float>, forValue value: Float) -> (lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?) {
+    fileprivate class func findClosestInValues(
+        _ values: [Float],
+        forValue value: Float
+    ) -> (
+            lowestValue: Float?,
+            highestValue: Float?,
+            lowestIndex: Int?,
+            highestIndex: Int?
+        ) {
         var lowestValue: Float?, highestValue: Float?, lowestIndex: Int?, highestIndex: Int?
 
         values.enumerated().forEach { (i, currentValue) in
@@ -758,16 +758,20 @@ open class Chart: UIControl {
             }
 
         }
-        return (lowestValue: lowestValue, highestValue: highestValue, lowestIndex: lowestIndex, highestIndex: highestIndex)
+        return (
+            lowestValue: lowestValue,
+            highestValue: highestValue,
+            lowestIndex: lowestIndex,
+            highestIndex: highestIndex
+        )
     }
-
 
     /**
     Segment a line in multiple lines when the line touches the x-axis, i.e. separating
     positive from negative values.
     */
-    fileprivate class func segmentLine(_ line: ChartLineSegment, zeroLevel: Float) -> Array<ChartLineSegment> {
-        var segments: Array<ChartLineSegment> = []
+    fileprivate class func segmentLine(_ line: ChartLineSegment, zeroLevel: Float) -> [ChartLineSegment] {
+        var segments: [ChartLineSegment] = []
         var segment: ChartLineSegment = []
 
         line.enumerated().forEach { (i, point) in

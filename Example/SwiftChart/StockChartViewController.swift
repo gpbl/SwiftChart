@@ -108,6 +108,10 @@ class StockChartViewController: UIViewController, ChartDelegate {
         labelLeadingMarginConstraint.constant = labelLeadingMarginInitialConstant
     }
     
+    func didEndTouchingChart(_ chart: Chart) {
+        
+    }
+    
     
     func getStockValues() -> Array<Dictionary<String, Any>> {
         

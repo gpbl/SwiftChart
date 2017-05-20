@@ -92,6 +92,9 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         
     }
     
+    func didEndTouchingChart(_ chart: Chart) {
+        
+    }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         

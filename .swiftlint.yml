@@ -2,3 +2,5 @@ disabled_rules:
   - large_tuple
   - identifier_name
   - type_body_length
+  - cyclomatic_complexity
+  - file_length

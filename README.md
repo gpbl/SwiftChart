@@ -138,6 +138,10 @@ class MyViewController: UIViewController, ChartDelegate {
     func didFinishTouchingChart(chart: Chart) {
         // Do something when finished
     }
+
+    func didEndTouchingChart(chart: Chart) {
+        // Do something when ending touching chart
+    }
 }
 ```
 
@@ -225,6 +229,13 @@ There is no built-in method to update a chart. To accomplish this:
 * `line`: set it to `false` to hide the line (useful for drawing only the area).
 * `color`: the series color.
 * `colors`: a touple to specify the color above or below the zero. For example, `(above: ChartsColors.redColor(), below: ChartsColors.blueColor(), -4)` will use red for values above `-4`, and blue for values below -4. 
+
+### ChartDelegate
+
+* `didTouchChart`: tells the delegate that the specified chart has been touched.
+* `didFinishTouchingChart`: tells the delegate that the user finished touching the chart. The user will "finish" touching the chart only swiping left/right outside the chart.
+* `didEndTouchingChart`: tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the touchesDidEnd method is being called. 
+
 
 ## License
 

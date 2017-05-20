@@ -179,6 +179,11 @@ open class Chart: UIControl {
     Width for the highlight line.
     */
     open var highlightLineWidth: CGFloat = 0.5
+    
+    /**
+     Wether we should automatically hide the highlightLine after touches have ended.
+     */
+    open var autoHideHighlightLine: Bool = false
 
     /**
     Alpha component for the area's color.
@@ -658,6 +663,8 @@ open class Chart: UIControl {
 
     fileprivate func drawHighlightLineFromLeftPosition(_ left: CGFloat) {
         if let shapeLayer = highlightShapeLayer {
+            shapeLayer.isHidden = false
+            
             // Use line already created
             let path = CGMutablePath()
 
@@ -727,6 +734,7 @@ open class Chart: UIControl {
 
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         handleTouchEvents(touches, event: event)
+        highlightShapeLayer?.isHidden = autoHideHighlightLine
         delegate?.didEndTouchingChart(self)
     }
 

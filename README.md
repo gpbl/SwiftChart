@@ -222,7 +222,7 @@ Some tips for debugging an hidden chart:
 * `area` – draws an area below the series’ line.
 * `line` – set it to `false` to hide the line (useful for drawing only the area).
 * `color` – the series color.
-* `colors` – a touple to specify the color above or below the zero. For example, `(above: ChartsColors.redColor(), below: ChartsColors.blueColor(), -4)` will use red for values above `-4`, and blue for values below -4. 
+* `colors` – a touple to specify the color above or below the zero. For example, `(above: ChartColors.redColor(), below: ChartColors.blueColor(), -4)` will use red for values above `-4`, and blue for values below -4. 
 
 ### ChartDelegate
 

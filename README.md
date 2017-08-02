@@ -93,7 +93,7 @@ By default, the values on the x-axis are the progressive indexes of the passed a
 ```swift
 // Create a new series specifying x and y values
 let data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
-let series = ChartSeries(data)
+let series = ChartSeries(data: data)
 chart.add(series)
 ```
 

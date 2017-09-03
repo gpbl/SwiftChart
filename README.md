@@ -88,7 +88,7 @@ let series = ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
 chart.add(series)
 ```
 
-By default, the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Float, y: Float)` touples to the series’ initializer:
+By default, the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Float, y: Float)` tuples to the series’ initializer:
 
 ```swift
 // Create a new series specifying x and y values
@@ -222,7 +222,7 @@ Some tips for debugging an hidden chart:
 * `area` – draws an area below the series’ line.
 * `line` – set it to `false` to hide the line (useful for drawing only the area).
 * `color` – the series color.
-* `colors` – a touple to specify the color above or below the zero. For example, `(above: ChartColors.redColor(), below: ChartColors.blueColor(), -4)` will use red for values above `-4`, and blue for values below -4. 
+* `colors` – a tuple to specify the color above or below the zero. For example, `(above: ChartColors.redColor(), below: ChartColors.blueColor(), -4)` will use red for values above `-4`, and blue for values below -4. 
 
 ### ChartDelegate
 

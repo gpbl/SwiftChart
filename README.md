@@ -203,12 +203,14 @@ Some tips for debugging an hidden chart:
 * `minX` – minimum x-value.
 * `minY` – minimum y-value.
 * `topInset` – height of the area at the top of the chart, acting a padding to make place for the top y-axis label.
+* `leftInset` –  width of the area at the left of the chart, acting a padding to make place for the left x-axis label.
 * `xLabelsFormatter` – formats the labels on the x-axis.
 * `xLabelsOrientation` – sets the x-axis labels orientation to vertical or horizontal.
 * `xLabelsTextAlignment` – text-alignment for the x-labels.
 * `xLabelsSkipLast` (default `true`) - Skip the last x-label. Setting this to `false` will make the label overflow the frame width, so use carefully!
 * `yLabelsFormatter` – formats the labels on the y-axis.
 * `yLabelsOnRightSide` – place the y-labels on the right side.
+* `showHighlightLine` (default `true`) – boolen to show or hide the highlight line on touch of the graph.
 
 #### Methods
 

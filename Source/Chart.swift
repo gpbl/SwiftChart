@@ -153,7 +153,12 @@ open class Chart: UIControl {
     Height of the area at the top of the chart, acting a padding to make place for the top y-axis label.
     */
     open var topInset: CGFloat = 20
-
+    
+    /**
+     Height of the area at the left of the chart, acting a padding to make place for the left x-axis label.
+     */
+    open var leftInset: CGFloat = 0
+    
     /**
     Width of the chart's lines.
     */
@@ -303,8 +308,8 @@ open class Chart: UIControl {
     fileprivate func drawChart() {
 
         drawingHeight = bounds.height - bottomInset - topInset
-        drawingWidth = bounds.width
-
+        drawingWidth = bounds.width - leftInset
+        
         let minMax = getMinMax()
         min = minMax.min
         max = minMax.max
@@ -414,8 +419,9 @@ open class Chart: UIControl {
         } else {
             factor = width / (max.x - min.x)
         }
-
-        let scaled = values.map { factor * ($0 - self.min.x) }
+        
+        let reversedValues = Array(values.reversed())
+        let scaled = reversedValues.map {Float(self.leftInset) + width - factor * ($0 - self.min.x) }
         return scaled
     }
 
@@ -522,30 +528,32 @@ open class Chart: UIControl {
 
         // horizontal axis at the bottom
         context.move(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
+        context.addLine(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: drawingHeight + topInset))
         context.strokePath()
 
         // horizontal axis at the top
-        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
+        context.move(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: CGFloat(0)))
+        context.addLine(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: CGFloat(0)))
         context.strokePath()
 
         // horizontal axis when y = 0
         if min.y < 0 && max.y > 0 {
             let y = CGFloat(getZeroValueOnYAxis(zeroLevel: 0))
             context.move(to: CGPoint(x: CGFloat(0), y: y))
-            context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: y))
+            context.addLine(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: y))
             context.strokePath()
         }
-
-        // vertical axis on the left
-        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
-        context.strokePath()
-
+        
+        if leftInset < 20 {
+            // vertical axis on the left
+            context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
+            context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
+            context.strokePath()
+        }
+        
         // vertical axis on the right
-        context.move(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
+        context.move(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: CGFloat(0)))
+        context.addLine(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: drawingHeight + topInset))
         context.strokePath()
 
     }
@@ -632,7 +640,11 @@ open class Chart: UIControl {
 
         var labels: [Float]
         if yLabels == nil {
-            labels = [(min.y + max.y) / 2, max.y]
+            if leftInset < 20 {
+                labels = [(min.y + max.y) / 2, max.y]
+            } else {
+                labels = [min.y, (min.y + max.y) / 2, max.y]
+            }
             if yLabelsOnRightSide || min.y != 0 {
                 labels.insert(min.y, at: 0)
             }

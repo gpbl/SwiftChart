@@ -186,8 +186,9 @@ open class Chart: UIControl {
     open var maxY: Float?
 
     /**
-    Color for the highlight line.
-    */
+     Should show highlight line when touched.
+     */
+    open var showHighlightLine: Bool = true
     open var highlightLineColor = UIColor.gray
 
     /**
@@ -726,9 +727,11 @@ open class Chart: UIControl {
             delegate?.didFinishTouchingChart(self)
             return
         }
-
-        drawHighlightLineFromLeftPosition(left)
-
+        
+        if showHighlightLine == true {
+            drawHighlightLineFromLeftPosition(left)
+        }
+        
         if delegate == nil {
             return
         }

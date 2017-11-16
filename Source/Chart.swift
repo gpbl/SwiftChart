@@ -194,6 +194,10 @@ open class Chart: UIControl {
      Should show highlight line when touched.
      */
     open var showHighlightLine: Bool = true
+    
+    /**
+     Color for the highlight line
+     */
     open var highlightLineColor = UIColor.gray
 
     /**

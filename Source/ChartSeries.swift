@@ -11,7 +11,7 @@ import UIKit
 Represent a series to draw in the line chart. Each series is defined with a dataset and appareance settings.
 */
 open class ChartSeries {
-    open var data: [(x: Float, y: Float)]
+    open var data: [(x: Double, y: Double)]
     open var area: Bool = false
     open var line: Bool = true
     open var color: UIColor = ChartColors.blueColor() {
@@ -22,23 +22,23 @@ open class ChartSeries {
     open var colors: (
         above: UIColor,
         below: UIColor,
-        zeroLevel: Float
+        zeroLevel: Double
     ) = (above: ChartColors.blueColor(), below: ChartColors.redColor(), 0)
 
-    public init(_ data: [Float]) {
+    public init(_ data: [Double]) {
         self.data = []
 
         data.enumerated().forEach { (x, y) in
-            let point: (x: Float, y: Float) = (x: Float(x), y: y)
+            let point: (x: Double, y: Double) = (x: Double(x), y: y)
             self.data.append(point)
         }
     }
 
-    public init(data: [(x: Float, y: Float)]) {
+    public init(data: [(x: Double, y: Double)]) {
         self.data = data
     }
-
-    public init(data: [(x: Double, y: Double)]) {
-        self.data = data.map ({ (Float($0.x), Float($0.y))})
+    
+    public init(data: [(x: Float, y: Float)]) {
+        self.data = data.map { (Double($0.x), Double($0.y)) }
     }
 }

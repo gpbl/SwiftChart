@@ -328,8 +328,8 @@ open class Chart: UIControl {
             let segments = Chart.segmentLine(series.data as ChartLineSegment, zeroLevel: series.colors.zeroLevel)
 
             segments.forEach({ segment in
-                let scaledXValues = scaleValuesOnXAxis( segment.map({ return $0.x }) )
-                let scaledYValues = scaleValuesOnYAxis( segment.map({ return $0.y }) )
+                let scaledXValues = scaleValuesOnXAxis( segment.map { $0.x } )
+                let scaledYValues = scaleValuesOnYAxis( segment.map { $0.y } )
 
                 if series.line {
                     drawLine(scaledXValues, yValues: scaledYValues, seriesIndex: index)
@@ -354,7 +354,6 @@ open class Chart: UIControl {
     // MARK: - Scaling
 
     fileprivate func getMinMax() -> (min: ChartPoint, max: ChartPoint) {
-
         // Start with user-provided values
 
         var min = (x: minX, y: minY)
@@ -363,15 +362,13 @@ open class Chart: UIControl {
         // Check in datasets
 
         for series in self.series {
-            let xValues =  series.data.map({ (point: ChartPoint) -> Double in
-                return point.x })
-            let yValues =  series.data.map({ (point: ChartPoint) -> Double in
-                return point.y })
+            let xValues =  series.data.map { $0.x }
+            let yValues =  series.data.map { $0.y }
 
-            let newMinX = xValues.min()!
-            let newMinY = yValues.min()!
-            let newMaxX = xValues.max()!
-            let newMaxY = yValues.max()!
+            let newMinX = xValues.minOrZero()
+            let newMinY = yValues.minOrZero()
+            let newMaxX = xValues.maxOrZero()
+            let newMaxY = yValues.maxOrZero()
 
             if min.x == nil || newMinX < min.x! { min.x = newMinX }
             if min.y == nil || newMinY < min.y! { min.y = newMinY }
@@ -381,16 +378,16 @@ open class Chart: UIControl {
 
         // Check in labels
 
-        if xLabels != nil {
-            let newMinX = (xLabels!).min()!
-            let newMaxX = (xLabels!).max()!
+        if let xLabels = self.xLabels {
+            let newMinX = xLabels.minOrZero()
+            let newMaxX = xLabels.maxOrZero()
             if min.x == nil || newMinX < min.x! { min.x = newMinX }
             if max.x == nil || newMaxX > max.x! { max.x = newMaxX }
         }
 
-        if yLabels != nil {
-            let newMinY = (yLabels!).min()!
-            let newMaxY = (yLabels!).max()!
+        if let yLabels = self.yLabels {
+            let newMinY = yLabels.minOrZero()
+            let newMaxY = yLabels.maxOrZero()
             if min.y == nil || newMinY < min.y! { min.y = newMinY }
             if max.y == nil || newMaxY > max.y! { max.y = newMaxY }
         }
@@ -401,7 +398,6 @@ open class Chart: UIControl {
         if max.y == nil { max.y = 0 }
 
         return (min: (x: min.x!, y: min.y!), max: (x: max.x!, max.y!))
-
     }
 
     fileprivate func scaleValuesOnXAxis(_ values: [Double]) -> [Double] {
@@ -419,7 +415,6 @@ open class Chart: UIControl {
     }
 
     fileprivate func scaleValuesOnYAxis(_ values: [Double]) -> [Double] {
-
         let height = Double(drawingHeight)
         var factor: Double
         if max.y - min.y == 0 {
@@ -434,7 +429,6 @@ open class Chart: UIControl {
     }
 
     fileprivate func scaleValueOnYAxis(_ value: Double) -> Double {
-
         let height = Double(drawingHeight)
         var factor: Double
         if max.y - min.y == 0 {
@@ -453,7 +447,6 @@ open class Chart: UIControl {
         } else {
             return scaleValueOnYAxis(zeroLevel)
         }
-
     }
 
     // MARK: - Drawings
@@ -514,7 +507,6 @@ open class Chart: UIControl {
     }
 
     fileprivate func drawAxes() {
-
         let context = UIGraphicsGetCurrentContext()!
         context.setStrokeColor(axesColor.cgColor)
         context.setLineWidth(0.5)
@@ -546,11 +538,9 @@ open class Chart: UIControl {
         context.move(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
         context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
         context.strokePath()
-
     }
 
     fileprivate func drawLabelsAndGridOnXAxis() {
-
         let context = UIGraphicsGetCurrentContext()!
         context.setStrokeColor(gridColor.cgColor)
         context.setLineWidth(0.5)
@@ -617,14 +607,11 @@ open class Chart: UIControl {
                     label.frame.origin.x += padding
                 }
             }
-
             self.addSubview(label)
         }
-
     }
 
     fileprivate func drawLabelsAndGridOnYAxis() {
-
         let context = UIGraphicsGetCurrentContext()!
         context.setStrokeColor(gridColor.cgColor)
         context.setLineWidth(0.5)
@@ -676,11 +663,8 @@ open class Chart: UIControl {
             label.frame.origin.y -= label.frame.height
 
             self.addSubview(label)
-
         }
-
         UIGraphicsEndImageContext()
-
     }
 
     // MARK: - Touch events
@@ -710,7 +694,6 @@ open class Chart: UIControl {
             layer.addSublayer(shapeLayer)
             layerStore.append(shapeLayer)
         }
-
     }
 
     func handleTouchEvents(_ touches: Set<UITouch>, event: UIEvent!) {
@@ -746,10 +729,9 @@ open class Chart: UIControl {
             }
             indexes.append(index)
         }
-
         delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
-
     }
+
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }
@@ -815,7 +797,6 @@ open class Chart: UIControl {
         var segment: ChartLineSegment = []
 
         line.enumerated().forEach { (i, point) in
-
             segment.append(point)
             if i < line.count - 1 {
                 let nextPoint = line[i+1]
@@ -831,7 +812,6 @@ open class Chart: UIControl {
                 // End of the line
                 segments.append(segment)
             }
-
         }
         return segments
     }
@@ -843,5 +823,16 @@ open class Chart: UIControl {
         let dy1 = level - p1.y
         let dy2 = level - p2.y
         return (x: (p2.x * dy1 - p1.x * dy2) / (dy1 - dy2), y: level)
+    }
+}
+
+extension Sequence where Element == Double {
+
+    func minOrZero() -> Double {
+        return self.min() ?? 0.0
+    }
+
+    func maxOrZero() -> Double {
+        return self.max() ?? 0.0
     }
 }

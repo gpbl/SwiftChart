@@ -289,6 +289,17 @@ open class Chart: UIControl {
         return series.data[dataIndex!].y
     }
 
+    /**
+    Finish touching the chart, by removing the highlight line and calling the delegate method.
+    */
+    public func finishTouchingChart() {
+        // Remove highlight line at the end of the touch event
+        if let shapeLayer = highlightShapeLayer {
+            shapeLayer.path = nil
+        }
+        delegate?.didFinishTouchingChart(self)
+    }
+    
     fileprivate func drawIBPlaceholder() {
         let placeholder = UIView(frame: self.frame)
         placeholder.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1)
@@ -724,11 +735,7 @@ open class Chart: UIControl {
         let x = valueFromPointAtX(left)
 
         if left < 0 || left > (drawingWidth as CGFloat) {
-            // Remove highlight line at the end of the touch event
-            if let shapeLayer = highlightShapeLayer {
-                shapeLayer.path = nil
-            }
-            delegate?.didFinishTouchingChart(self)
+            finishTouchingChart()
             return
         }
 
@@ -753,8 +760,8 @@ open class Chart: UIControl {
         }
 
         delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
-
     }
+
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         handleTouchEvents(touches, event: event)
     }

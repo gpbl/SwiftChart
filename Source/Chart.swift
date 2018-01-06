@@ -194,6 +194,10 @@ open class Chart: UIControl {
     Width for the highlight line.
     */
     open var highlightLineWidth: CGFloat = 0.5
+    /**
+     Removes highlight line when touches end.
+     */
+    open var removesHighlighLineOnTouchesEnded = false
 
     /**
     Alpha component for the area's color.
@@ -756,6 +760,11 @@ open class Chart: UIControl {
 
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         handleTouchEvents(touches, event: event)
+        if self.removesHighlighLineOnTouchesEnded {
+            if let shapeLayer = highlightShapeLayer {
+                shapeLayer.path = nil
+            }
+        }
         delegate?.didEndTouchingChart(self)
     }
 

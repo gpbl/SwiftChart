@@ -194,7 +194,7 @@ Some tips for debugging an hidden chart:
 * `delegate` – the delegate for listening to touch events.
 * `highlightLineColor` – color of the highlight line.
 * `highlightLineWidth` – width of the highlight line.
-* `removesHighlighLineOnTouchesEnded` (default `false`) – if true will hide the highlight line as soon as you stop swiping over the chart.
+* `hideHighlightLineOnTouchEnd` (default `false`) – hide the highlight line when the touch event ends (e.g. when stop swiping over the chart).
 * `gridColor` – the grid color.
 * `labelColor` – the color of the labels.
 * `labelFont` – the font used for the labels.

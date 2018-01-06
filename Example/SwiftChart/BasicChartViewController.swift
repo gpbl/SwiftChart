@@ -18,7 +18,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         // Draw the chart selected from the TableViewController
         
         chart.delegate = self
-        
+
         switch selectedChart {
         case 0:
             
@@ -74,8 +74,6 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         default: break;
             
         }
-        
-        
     }
     
     // Chart delegate

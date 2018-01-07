@@ -54,13 +54,13 @@ chart.add(series)
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-### To initialize a chart
+## To initialize a chart
 
-#### From the Interface Builder
+### From the Interface Builder
 
 The chart can be initialized from the Interface Builder. Drag a normal View into a View Controller and assign to it the `Chart` Custom Class from the Identity Inspector.
 
-#### Programmatically
+### Programmatically
 
 To initialize a chart programmatically, use the `Chart(frame: ...)` initializer, which requires a `frame`:
 
@@ -75,7 +75,7 @@ let chart = Chart(frame: CGRectZero)
 // add constraints now
 ```
 
-### Adding series
+## Adding series
 
 Initialize each series before adding them to the chart. To do so, pass an array to initialize a `ChartSeries` object:
 
@@ -84,33 +84,40 @@ let series = ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
 chart.add(series)
 ```
 
-By default, the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Double, y: Double)` tuples to the series initializer:
+**Result:** 
+
+<img width="400" alt="screen shot 2018-01-07 at 10 51 02" src="https://user-images.githubusercontent.com/120693/34648353-b66f352a-f398-11e7-98b9-9d15dcbdd692.png">
+
+
+As you can see, as default the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Double, y: Double)` tuples to the series initializer:
 
 ```swift
 // Create a new series specifying x and y values
 let data = [
-    (x: 0, y: 0), 
-    (x: 0.5, y: 3.1), 
-    (x: 1.2, y: 2), 
-    (x: 2.1, y: -4.2), 
-    (x: 2.6, y: 1.1)
+    (x: 0, y: 0),
+    (x: 1, y: 3.1),
+    (x: 4, y: 2),
+    (x: 5, y: 4.2),
+    (x: 7, y: 5),
+    (x: 9, y: 9),
+    (x: 10, y: 8)
 ]
 let series = ChartSeries(data: data)
 chart.add(series)
 ```
 
-#### Multiple series
+**Result:** 
 
-Using the `chart.add(series: ChartSeries)` and `chart.add(series: Array<ChartSeries>)` methods you can add more series. Those will be indentified with a progressive index in the chart’s `series` property.
+<img width="400" src="https://user-images.githubusercontent.com/120693/34648477-f8a0c48a-f399-11e7-9e36-123171b6413b.png">
 
-#### Partially filled series
+### Partially filled series
 
-Use the `chart.xLabels` property to make the x-axis wider than the actual data. For example,
+Use the `chart.xLabels` property to make the x-axis showing more labels than those inferred from the actual data. For example,
 
 ```swift
 let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 let data = [
-    (x: 0.0, y: 0), 
+    (x: 0, y: 0), 
     (x: 3, y: 2.5), 
     (x: 4, y: 2), 
     (x: 5, y: 2.3), 
@@ -125,9 +132,78 @@ chart.xLabelsFormatter = { String(Int(round($1))) + "h" }
 chart.add(series)
 ```
 
-will render:
+**Result:**
 
-<img width="443" alt="" src="https://cloud.githubusercontent.com/assets/120693/17461649/26510f96-5c94-11e6-8324-46df266558dd.png">
+<img width="400" src="https://user-images.githubusercontent.com/120693/34648482-28818ee6-f39a-11e7-99d3-0eb0f1402f73.png">
+
+
+### Different colors above and below zero
+
+The chart displays the series in different colors when below or above the zero-axis:
+
+```swift
+let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+let data: [Double] = [0, -2, -2, 3, -3, 4, 1, 0, -1]
+            
+let series = ChartSeries(data)
+series.area = true
+
+chart.add(series)
+
+// Set minimum and maximum values for y-axis
+chart.minY = -7
+chart.maxY = 7
+
+// Format y-axis, e.g. with units
+chart.yLabelsFormatter = { String(Int($1)) +  "ºC" }
+```
+
+**Result:**
+
+<img width="410" src="https://user-images.githubusercontent.com/120693/34648596-3f0538be-f39c-11e7-9cb3-ea06c025b09c.png">
+
+You can customize the zero-axis and the colors with the `colors` options in the `ChartSeries` class.
+
+```swift
+series.colors = (
+    above: ChartColors.greenColor(), 
+    below: ChartColors.yellowColor(), 
+    zeroLevel: -1
+)
+```
+
+**Result:**
+
+<img width="410" src="https://user-images.githubusercontent.com/120693/34648597-3f269158-f39c-11e7-90d3-d3dfb120c95d.png">
+
+
+### Multiple series
+
+Using the `chart.add(series: ChartSeries)` and `chart.add(series: Array<ChartSeries>)` methods you can add more series. Those will be indentified with a progressive index in the chart’s `series` property.
+
+
+```swift
+let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+
+let series1 = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
+series1.color = ChartColors.yellowColor()
+series1.area = true
+
+let series2 = ChartSeries([1, 0, 0.5, 0.2, 0, 1, 0.8, 0.3, 1])
+series2.color = ChartColors.redColor()
+series2.area = true
+
+// A partially filled series
+let series3 = ChartSeries([9, 8, 10, 8.5, 9.5, 10])
+series3.color = ChartColors.purpleColor()
+
+chart.add([series1, series2, series3])
+```
+
+**Result:**
+
+<img width="412" alt="screen shot 2018-01-07 at 11 06 55" src="https://user-images.githubusercontent.com/120693/34648532-282fcda8-f39b-11e7-93f3-c502329752b5.png">
+
 
 ## Touch events
 
@@ -229,7 +305,17 @@ Some tips for debugging an hidden chart:
 * `area` – draws an area below the series’ line.
 * `line` – set it to `false` to hide the line (useful for drawing only the area).
 * `color` – the series color.
-* `colors` – a tuple to specify the color above or below the zero. For example, `(above: ChartColors.redColor(), below: ChartColors.blueColor(), -4)` will use red for values above `-4`, and blue for values below -4. 
+* `colors` – a tuple to specify the color above or below the zero (or another value). 
+    
+  For example, to use red for values above `-4`, and blue for values below `-4`. 
+  ```swift
+  series.colors = (
+      above: ChartColors.redColor(), 
+      below: ChartColors.blueColor(), 
+      zeroLevel: -4
+  )
+  ```` 
+  
 
 ## `ChartDelegate`
 

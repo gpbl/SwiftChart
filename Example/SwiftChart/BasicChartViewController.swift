@@ -25,10 +25,23 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         case 0:
             
             // Simple chart
-            let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
-            series.color = ChartColors.greenColor()
-            chart.add(series)
-            
+          let data = [
+            (x: 0, y: 0),
+            (x: 3, y: 2.5),
+            (x: 4, y: 2),
+            (x: 5, y: 2.3),
+            (x: 7, y: 3),
+            (x: 8, y: 2.2),
+            (x: 9, y: 2.5)
+          ]
+          let series = ChartSeries(data: data)
+          series.area = true
+          chart.xLabels = [0, 3, 6, 9, 12, 15, 18, 21, 24]
+          chart.xLabelsFormatter = { String(Int(round($1))) + "h" }
+          chart.add(series)
+//          let series = ChartSeries(data: data)
+//          chart.add(series)
+
             
         case 1:
             
@@ -51,11 +64,14 @@ class BasicChartViewController: UIViewController, ChartDelegate {
         case 2:
             
             // Chart with y-min, y-max and y-labels formatter
-            
-            
             let data: [Double] = [0, -2, -2, 3, -3, 4, 1, 0, -1]
             
             let series = ChartSeries(data)
+            series.colors = (
+              above: ChartColors.greenColor(),
+              below: ChartColors.yellowColor(),
+              zeroLevel: -1
+            )
             series.area = true
             
             chart.add(series)

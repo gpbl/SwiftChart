@@ -10,6 +10,8 @@ import UIKit
 import SwiftChart
 
 class BasicChartViewController: UIViewController, ChartDelegate {
+
+
     @IBOutlet weak var chart: Chart!
     var selectedChart = 0
     
@@ -51,7 +53,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
             // Chart with y-min, y-max and y-labels formatter
             
             
-            let data: [Float] = [0, -2, -2, 3, -3, 4, 1, 0, -1]
+            let data: [Double] = [0, -2, -2, 3, -3, 4, 1, 0, -1]
             
             let series = ChartSeries(data)
             series.area = true
@@ -78,7 +80,7 @@ class BasicChartViewController: UIViewController, ChartDelegate {
     
     // Chart delegate
     
-    func didTouchChart(_ chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
+    func didTouchChart(_ chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
         for (seriesIndex, dataIndex) in indexes.enumerated() {
             if let value = chart.valueForSeries(seriesIndex, atIndex: dataIndex) {
                 print("Touched series: \(seriesIndex): data index: \(dataIndex!); series value: \(value); x-axis value: \(x) (from left: \(left))")

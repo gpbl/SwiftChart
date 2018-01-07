@@ -32,8 +32,8 @@ class StockChartViewController: UIViewController, ChartDelegate {
         // Initialize data series and labels
         let stockValues = getStockValues()
         
-        var serieData: [Float] = []
-        var labels: [Float] = []
+        var serieData: [Double] = []
+        var labels: [Double] = []
         var labelsAsString: Array<String> = []
         
         // Date formatter to retrieve the month names
@@ -42,13 +42,13 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
         for (i, value) in stockValues.enumerated() {
             
-            serieData.append(value["close"] as! Float)
+            serieData.append(value["close"] as! Double)
             
             // Use only one label for each month
             let month = Int(dateFormatter.string(from: value["date"] as! Date))!
             let monthAsString:String = dateFormatter.monthSymbols[month - 1] 
             if (labels.count == 0 || labelsAsString.last != monthAsString) {
-                labels.append(Float(i))
+                labels.append(Double(i))
                 labelsAsString.append(monthAsString)
             }
         }
@@ -61,7 +61,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         chart.lineWidth = 0.5
         chart.labelFont = UIFont.systemFont(ofSize: 12)
         chart.xLabels = labels
-        chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Float) -> String in
+        chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Double) -> String in
             return labelsAsString[labelIndex]
         }
         chart.xLabelsTextAlignment = .center
@@ -74,7 +74,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
     }
     // Chart delegate
     
-    func didTouchChart(_ chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
+    func didTouchChart(_ chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
         
         if let value = chart.valueForSeries(0, atIndex: indexes[0]) {
             
@@ -126,7 +126,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let values = jsonValues.map { (value: NSDictionary) -> Dictionary<String, Any> in
             let date = dateFormatter.date(from: value["date"]! as! String)
-            let close = (value["close"]! as! NSNumber).floatValue
+            let close = (value["close"]! as! NSNumber).doubleValue
             return ["date": date!, "close": close]
         }
         

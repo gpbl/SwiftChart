@@ -10,7 +10,7 @@ A simple line / area charting library for iOS, written in Swift.
 📈 Line and area charts  
 🌞 Multiple series  
 🌒 Partially filled series  
-🏊 Works with signed floats  
+🏊 Works with signed Double  
 🖖 Touch events
 
 <p align="center">
@@ -58,13 +58,9 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 #### From the Interface Builder
 
-The chart can be initialized from the Interface Builder. Drag a normal View into a View Controller and assign to it the `Chart` Custom Class from the Identity Inspector:
- 
-![Example](https://cloud.githubusercontent.com/assets/120693/5063826/c01f26d2-6df6-11e4-8122-cb086709d96c.png)
+The chart can be initialized from the Interface Builder. Drag a normal View into a View Controller and assign to it the `Chart` Custom Class from the Identity Inspector.
 
-> Parts of the chart’s appearance can be set from the Attribute Inspector.
-
-#### By coding
+#### Programmatically
 
 To initialize a chart programmatically, use the `Chart(frame: ...)` initializer, which requires a `frame`:
 
@@ -88,11 +84,17 @@ let series = ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
 chart.add(series)
 ```
 
-By default, the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Float, y: Float)` tuples to the series’ initializer:
+By default, the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Double, y: Double)` tuples to the series initializer:
 
 ```swift
 // Create a new series specifying x and y values
-let data = [(x: 0, y: 0), (x: 0.5, y: 3.1), (x: 1.2, y: 2), (x: 2.1, y: -4.2), (x: 2.6, y: 1.1)]
+let data = [
+    (x: 0, y: 0), 
+    (x: 0.5, y: 3.1), 
+    (x: 1.2, y: 2), 
+    (x: 2.1, y: -4.2), 
+    (x: 2.6, y: 1.1)
+]
 let series = ChartSeries(data: data)
 chart.add(series)
 ```
@@ -107,7 +109,15 @@ Use the `chart.xLabels` property to make the x-axis wider than the actual data. 
 
 ```swift
 let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
-let data = [(x: 0.0, y: 0), (x: 3, y: 2.5), (x: 4, y: 2), (x: 5, y: 2.3), (x: 7, y: 3), (x: 8, y: 2.2), (x: 9, y: 2.5)]
+let data = [
+    (x: 0.0, y: 0), 
+    (x: 3, y: 2.5), 
+    (x: 4, y: 2), 
+    (x: 5, y: 2.3), 
+    (x: 7, y: 3), 
+    (x: 8, y: 2.2), 
+    (x: 9, y: 2.5)
+]
 let series = ChartSeries(data: data)
 series.area = true
 chart.xLabels = [0, 3, 6, 9, 12, 15, 18, 21, 24]
@@ -121,7 +131,7 @@ will render:
 
 ## Touch events
 
-To make the chart respond to touch events, implement the `ChartDelegate` protocol in your classes, as a View Controller, and set the chart’s `delegate` property:
+To make the chart respond to touch events, implement the `ChartDelegate` protocol in your class, e.g. a View Controller, and then set the chart’s `delegate` property:
 
 ```swift
 class MyViewController: UIViewController, ChartDelegate {
@@ -131,7 +141,7 @@ class MyViewController: UIViewController, ChartDelegate {
     }
     
     // Chart delegate
-    func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
+    func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
         // Do something on touch
     }
     
@@ -148,7 +158,7 @@ class MyViewController: UIViewController, ChartDelegate {
 The `didTouchChart` method passes an array of indexes, one for each series, with an optional `Int` referring to the data’s index:
 
 ```swift
- func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Float, left: CGFloat) {
+ func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
         for (serieIndex, dataIndex) in enumerate(indexes) {
             if dataIndex != nil {
                 // The series at serieIndex has been touched
@@ -160,7 +170,7 @@ The `didTouchChart` method passes an array of indexes, one for each series, with
 
 You can use `chart.valueForSeries()` to access the value for the touched position.
 
-The `x: Float` argument refers to the value on the x-axis: it is inferred from the horizontal position of the touch event, and may be not part of the series values.
+The `x: Double` argument refers to the value on the x-axis: it is inferred from the horizontal position of the touch event, and may be not part of the series values.
 
 The `left: CGFloat` is the x position on the chart’s view, starting from the left side. It may be used to set the  position for a label moving above the chart: 
 
@@ -168,7 +178,7 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 
 ## Common issues and solutions
 
-If you have issue with this library, please tag your question with `swiftcharts` on [Stack Overflow](http://stackoverflow.com/tags/swiftcharts/info).
+If you have issue with this library, please tag your question with `swiftchart` on [Stack Overflow](http://stackoverflow.com/tags/swiftcharts/info).
 
 ### The chart is not showing
 
@@ -180,13 +190,9 @@ Some tips for debugging an hidden chart:
 * initialize a simple UIView with a colored background instead of the chart to easily see how the view is positioned
 * try to not to nest the chart in a subview for better debugging
 
-## Reference
+## `Chart` class
 
-![reference](https://cloud.githubusercontent.com/assets/120693/5094993/e3a3e10e-6f65-11e4-8619-b7a05d18190e.png)
-
-### Chart class
-
-#### Chart options
+### `Chart` options
 
 * `areaAlphaComponent` – alpha factor for the area’s color.
 * `axesColor` – the axes’ color.
@@ -211,26 +217,27 @@ Some tips for debugging an hidden chart:
 * `yLabelsFormatter` – formats the labels on the y-axis.
 * `yLabelsOnRightSide` – place the y-labels on the right side.
 
-#### Methods
+### Methods
 
 * `add(series: ChartSeries)` – add a series to the chart.
 * `removeSeries()` – remove all the series from the chart.
 * `removeSeriesAtIndex(index: Int)` – remove a series at the specified index. 
 * `valueForSeries()` – get the value of the specified series at the specified index.
 
-### ChartSeries class
+## `ChartSeries` class
 
 * `area` – draws an area below the series’ line.
 * `line` – set it to `false` to hide the line (useful for drawing only the area).
 * `color` – the series color.
 * `colors` – a tuple to specify the color above or below the zero. For example, `(above: ChartColors.redColor(), below: ChartColors.blueColor(), -4)` will use red for values above `-4`, and blue for values below -4. 
 
-### ChartDelegate
+## `ChartDelegate`
 
 * `didTouchChart` – tells the delegate that the specified chart has been touched.
 * `didFinishTouchingChart` – tells the delegate that the user finished touching the chart. The user will "finish" touching the chart only swiping left/right outside the chart.
 * `didEndTouchingChart` – tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the touchesDidEnd method is being called. 
 
+---
 
 ## License
 

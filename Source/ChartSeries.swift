@@ -37,6 +37,10 @@ open class ChartSeries {
     public init(data: [(x: Double, y: Double)]) {
         self.data = data
     }
+
+    public init(data: [(x: Int, y: Double)]) {
+      self.data = data.map { (Double($0.x), Double($0.y)) }
+    }
     
     public init(data: [(x: Float, y: Float)]) {
         self.data = data.map { (Double($0.x), Double($0.y)) }

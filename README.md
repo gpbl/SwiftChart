@@ -80,6 +80,7 @@ let chart = Chart(frame: CGRectZero)
 Initialize each series before adding them to the chart. To do so, pass an array to initialize a `ChartSeries` object:
 
 ```swift
+let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 let series = ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
 chart.add(series)
 ```
@@ -92,6 +93,7 @@ chart.add(series)
 As you can see, as default the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Double, y: Double)` tuples to the series initializer:
 
 ```swift
+let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 // Create a new series specifying x and y values
 let data = [
     (x: 0, y: 0),
@@ -127,8 +129,13 @@ let data = [
 ]
 let series = ChartSeries(data: data)
 series.area = true
+
+// Use `xLabels` to add more labels, even if empty
 chart.xLabels = [0, 3, 6, 9, 12, 15, 18, 21, 24]
+
+// Format the labels with a unit
 chart.xLabelsFormatter = { String(Int(round($1))) + "h" }
+
 chart.add(series)
 ```
 

@@ -242,10 +242,10 @@ The `didTouchChart` method passes an array of indexes, one for each series, with
 
 ```swift
  func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
-        for (serieIndex, dataIndex) in enumerate(indexes) {
+        for (seriesIndex, dataIndex) in enumerate(indexes) {
             if dataIndex != nil {
-                // The series at serieIndex has been touched
-                let value = chart.valueForSeries(serieIndex, atIndex: dataIndex)
+                // The series at `seriesIndex` is that which has been touched
+                let value = chart.valueForSeries(seriesIndex, atIndex: dataIndex)
             }
         }
     }
@@ -305,7 +305,7 @@ Some tips for debugging an hidden chart:
 * `add(series: ChartSeries)` – add a series to the chart.
 * `removeSeries()` – remove all the series from the chart.
 * `removeSeriesAtIndex(index: Int)` – remove a series at the specified index. 
-* `valueForSeries()` – get the value of the specified series at the specified index.
+* `valueForSeries(seriesIndex: Int, dataIndex: Int)` – get the value of the specified series at the specified index.
 
 ## `ChartSeries` class
 

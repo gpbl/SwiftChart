@@ -277,35 +277,40 @@ Some tips for debugging an hidden chart:
 
 ### `Chart` options
 
-* `areaAlphaComponent` – alpha factor for the area’s color.
-* `axesColor` – the axes’ color.
-* `bottomInset` – height of the area at the bottom of the chart, containing the labels for the x-axis.
-* `delegate` – the delegate for listening to touch events.
-* `highlightLineColor` – color of the highlight line.
-* `highlightLineWidth` – width of the highlight line.
-* `hideHighlightLineOnTouchEnd` (default `false`) – hide the highlight line when the touch event ends (e.g. when stop swiping over the chart).
-* `gridColor` – the grid color.
-* `labelColor` – the color of the labels.
-* `labelFont` – the font used for the labels.
-* `lineWidth` – width of the chart’s lines.
-* `maxX` – custom maximum x-value.
-* `maxY` – custom maximum y-value.
-* `minX` – minimum x-value.
-* `minY` – minimum y-value.
-* `topInset` – height of the area at the top of the chart, acting a padding to make place for the top y-axis label.
-* `xLabelsFormatter` – formats the labels on the x-axis.
-* `xLabelsOrientation` – sets the x-axis labels orientation to vertical or horizontal.
-* `xLabelsTextAlignment` – text-alignment for the x-labels.
-* `xLabelsSkipLast` (default `true`) - Skip the last x-label. Setting this to `false` will make the label overflow the frame width, so use carefully!
-* `yLabelsFormatter` – formats the labels on the y-axis.
-* `yLabelsOnRightSide` – place the y-labels on the right side.
+| Option name                   | Type                      | Description                                                                                                                    |
+|-------------------------------|---------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| `areaAlphaComponent`          | `CGFloat`                 | Alpha factor for the areas colors (default `0.1`)                                                                              |
+| `axesColor`                   | `UIColor`                 | The color of the axes (default `.gray`)                                                                                        |
+| `bottomInset`                 | `CGFloat`                 | Height of the area at the bottom of the chart, containing the labels for the x-axis  (default `20`)                            |
+| `delegate`                    | `ChartDelegate`           | The delegate to listen to touch events                                                                                         |
+| `highlightLineColor`          | `UIColor`                 | The color of the highlight line (default `gray`)                                                                               |
+| `highlightLineWidth`          | `CGFloat`                 | The width of the highlight line (default `0.5`)                                                                                |
+| `hideHighlightLineOnTouchEnd` | `Bool`                    | Hide the highlight line when the touch event ends, e.g. when stop swiping over the chart  (default `false`)                    |
+| `gridColor`                   | `UIColor`                 | The color of the grid (default `.gray`)                                                                                        |
+| `labelColor`                  | `UIColor`                 | The color of the labels (default `.black`)                                                                                     |
+| `labelFont`                   | `UIFont?`                 | The font used for the labels                                                                                                   |
+| `lineWidth`                   | `CGFloat`                 | The width of the chart's lines (default `2`)                                                                                   |
+| `maxX`                        | `Double?`                 | A custom maximum x-value                                                                                                       |
+| `maxY`                        | `Double?`                 | A custom maximum y-value                                                                                                       |
+| `minX`                        | `Double?`                 | A custom minimum x-value                                                                                                       |
+| `minY`                        | `Double?`                 | A custom minimum y-value                                                                                                       |
+| `topInset`                    | `CGFloat`                 | Height of the area at the top of the chart, acting a padding to make place for the top y-axis label (default `20`)             |
+| `xLabelsFormatter`            | `(Int, Double) -> String` | Function to format the labels on the x-axis                                                                                    |
+| `xLabelsOrientation`          | `ChartLabelOrientation`   | Sets the x-axis labels orientation to `vertical` or `horizontal` (default `.horizontal`)                                       |
+| `xLabelsTextAlignment`        | `NSTextAlignment`         | Alignment for the text in the x-labels (default `.left`)                                                                       |
+| `xLabelsSkipLast`             | `Bool`                    | Skip the last x-label. Setting this to `false` will make the label overflow the frame width, so use carefully (default `true`) |
+| `yLabelsFormatter`            | `(Int, Double) -> String` | Function to format the labels on the y-axis                                                                                    |
+| `yLabelsOnRightSide`          | `Bool`                    | Place the y-labels on the right side (default `false`)                                                                         |
 
-### Methods
+### Public Methods
 
-* `add(series: ChartSeries)` – add a series to the chart.
-* `removeSeries()` – remove all the series from the chart.
-* `removeSeriesAtIndex(index: Int)` – remove a series at the specified index. 
-* `valueForSeries(seriesIndex: Int, dataIndex: Int)` – get the value of the specified series at the specified index.
+| Method Name       | Signature                                                  | Description                                                   |
+|-------------------|------------------------------------------------------------|---------------------------------------------------------------|
+| `add`             | `(_ series: ChartSeries)`                                  | Add a series to the chart                                     |
+| `add`             | `(_ series: [ChartSeries])`                                | Add multiple series to the chart                              |
+| `removeSeriesAt`  | `(_ index: Int)`                                           | Remove the series at the specified index.                     |
+| `removeAllSeries` |                                                            | Remove all the series.                                        |
+| `valueForSeries`  | `(_ seriesIndex: Int, atIndex dataIndex: Int?) -> Double?` | Returns the value for the specified series at the given index |
 
 ## `ChartSeries` class
 

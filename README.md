@@ -7,10 +7,10 @@ SwiftChart
 
 A simple line and area charting library for iOS.
 
-📈 Line and area charts  
-🌞 Multiple series  
-🌒 Partially filled series  
-🏊 Works with signed Double  
+📈 Line and area charts
+🌞 Multiple series
+🌒 Partially filled series
+🏊 Works with signed Double
 🖖 Touch events
 
 <p align="center">
@@ -19,40 +19,40 @@ A simple line and area charting library for iOS.
 </p>
 
 ---
+<details>
+    <summary><strong>Table of Content</strong></summary>
 
 <!-- TOC -->
-<details>
-    <summary>Toggle table of content</summary>
 
-- [Installation](#installation)
-  - [CocoaPods](#cocoapods)
-  - [Manually](#manually)
-- [Usage](#usage)
-  - [To initialize a chart](#to-initialize-a-chart)
-    - [From the Interface Builder](#from-the-interface-builder)
-    - [Programmatically](#programmatically)
-  - [Adding series](#adding-series)
-    - [Partially filled series](#partially-filled-series)
-    - [Different colors above and below zero](#different-colors-above-and-below-zero)
-    - [Multiple series](#multiple-series)
-  - [Touch events](#touch-events)
-  - [Common issues and solutions](#common-issues-and-solutions)
-    - [The chart is not showing](#the-chart-is-not-showing)
+- [Getting started](#getting-started)
+  - [To install SwiftChart via CocoaPods](#to-install-swiftchart-via-cocoapods)
+  - [To install SwiftChart manually](#to-install-swiftchart-manually)
+  - [What’s included in SwiftChart](#whats-included-in-swiftchart)
+- [How to use SwiftChart](#how-to-use-swiftchart)
+  - [Initialize a chart from the Interface Builder](#initialize-a-chart-from-the-interface-builder)
+  - [Initialize a chart programmatically](#initialize-a-chart-programmatically)
+  - [Adding a series to a chart](#adding-a-series-to-a-chart)
+  - [Using partially filled series](#using-partially-filled-series)
+  - [Using different colors above and below zero](#using-different-colors-above-and-below-zero)
+  - [Adding multiple series to a chart](#adding-multiple-series-to-a-chart)
+  - [Configuring touch events](#configuring-touch-events)
 - [API](#api)
-  - [`Chart` class](#chart-class)
-    - [`Chart` options](#chart-options)
+  - [The `Chart` class](#the-chart-class)
+    - [Chart options](#chart-options)
     - [Public Methods](#public-methods)
-  - [`ChartSeries` class](#chartseries-class)
-  - [`ChartDelegate`](#chartdelegate)
+  - [The `ChartSeries` class](#the-chartseries-class)
+  - [The `ChartDelegate` protocol](#the-chartdelegate-protocol)
+- [Common issues and solutions](#common-issues-and-solutions)
+  - [The chart is not showing](#the-chart-is-not-showing)
 - [License](#license)
 
+<!-- /TOC -->
 </details>
 
-<!-- /TOC -->
 
-# Installation
+# Getting started
 
-## CocoaPods
+## To install SwiftChart via CocoaPods
 
 SwiftChart is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
@@ -61,12 +61,12 @@ it, simply add the following line to your Podfile:
 pod "SwiftChart"
 ```
 
-## Manually
+## To install SwiftChart manually
 
 1. Download **SwiftChart.zip** from the [last release](https://github.com/gpbl/SwiftChart/releases/latest) and extract its content in your project's folder.
 2. From the Xcode project, choose *Add Files to <ProjectName>...* from the *File* menu and add the extracted files.
 
-# Usage
+## What’s included in SwiftChart
 
 The library includes:
 
@@ -86,13 +86,13 @@ chart.add(series)
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-## To initialize a chart
+# How to use SwiftChart
 
-### From the Interface Builder
+## Initialize a chart from the Interface Builder
 
 The chart can be initialized from the Interface Builder. Drag a normal View into a View Controller and assign to it the `Chart` Custom Class from the Identity Inspector.
 
-### Programmatically
+## Initialize a chart programmatically
 
 To initialize a chart programmatically, use the `Chart(frame: ...)` initializer, which requires a `frame`:
 
@@ -107,7 +107,7 @@ let chart = Chart(frame: CGRectZero)
 // add constraints now
 ```
 
-## Adding series
+## Adding a series to a chart
 
 Initialize each series before adding them to the chart. To do so, pass an array to initialize a `ChartSeries` object:
 
@@ -117,10 +117,9 @@ let series = ChartSeries([0, 6.5, 2, 8, 4.1, 7, -3.1, 10, 8])
 chart.add(series)
 ```
 
-**Result:** 
+**Result:**
 
-<img width="400" alt="screen shot 2018-01-07 at 10 51 02" src="https://user-images.githubusercontent.com/120693/34648353-b66f352a-f398-11e7-98b9-9d15dcbdd692.png">
-
+<img width="400" src="https://user-images.githubusercontent.com/120693/34648353-b66f352a-f398-11e7-98b9-9d15dcbdd692.png">
 
 As you can see, as default the values on the x-axis are the progressive indexes of the passed array. You can customize those values by passing an array of `(x: Double, y: Double)` tuples to the series initializer:
 
@@ -128,36 +127,36 @@ As you can see, as default the values on the x-axis are the progressive indexes 
 let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 // Create a new series specifying x and y values
 let data = [
-    (x: 0, y: 0),
-    (x: 1, y: 3.1),
-    (x: 4, y: 2),
-    (x: 5, y: 4.2),
-    (x: 7, y: 5),
-    (x: 9, y: 9),
-    (x: 10, y: 8)
+  (x: 0, y: 0),
+  (x: 1, y: 3.1),
+  (x: 4, y: 2),
+  (x: 5, y: 4.2),
+  (x: 7, y: 5),
+  (x: 9, y: 9),
+  (x: 10, y: 8)
 ]
 let series = ChartSeries(data: data)
 chart.add(series)
 ```
 
-**Result:** 
+**Result:**
 
 <img width="400" src="https://user-images.githubusercontent.com/120693/34648477-f8a0c48a-f399-11e7-9e36-123171b6413b.png">
 
-### Partially filled series
+## Using partially filled series
 
 Use the `chart.xLabels` property to make the x-axis showing more labels than those inferred from the actual data. For example,
 
 ```swift
 let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 let data = [
-    (x: 0, y: 0), 
-    (x: 3, y: 2.5), 
-    (x: 4, y: 2), 
-    (x: 5, y: 2.3), 
-    (x: 7, y: 3), 
-    (x: 8, y: 2.2), 
-    (x: 9, y: 2.5)
+  (x: 0, y: 0),
+  (x: 3, y: 2.5),
+  (x: 4, y: 2),
+  (x: 5, y: 2.3),
+  (x: 7, y: 3),
+  (x: 8, y: 2.2),
+  (x: 9, y: 2.5)
 ]
 let series = ChartSeries(data: data)
 series.area = true
@@ -175,15 +174,14 @@ chart.add(series)
 
 <img width="400" src="https://user-images.githubusercontent.com/120693/34648482-28818ee6-f39a-11e7-99d3-0eb0f1402f73.png">
 
-
-### Different colors above and below zero
+## Using different colors above and below zero
 
 The chart displays the series in different colors when below or above the zero-axis:
 
 ```swift
 let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 let data: [Double] = [0, -2, -2, 3, -3, 4, 1, 0, -1]
-            
+
 let series = ChartSeries(data)
 series.area = true
 
@@ -205,9 +203,9 @@ You can customize the zero-axis and the colors with the `colors` options in the 
 
 ```swift
 series.colors = (
-    above: ChartColors.greenColor(), 
-    below: ChartColors.yellowColor(), 
-    zeroLevel: -1
+  above: ChartColors.greenColor(),
+  below: ChartColors.yellowColor(),
+  zeroLevel: -1
 )
 ```
 
@@ -216,7 +214,7 @@ series.colors = (
 <img width="410" src="https://user-images.githubusercontent.com/120693/34648597-3f269158-f39c-11e7-90d3-d3dfb120c95d.png">
 
 
-### Multiple series
+## Adding multiple series to a chart
 
 Using the `chart.add(series: ChartSeries)` and `chart.add(series: Array<ChartSeries>)` methods you can add more series. Those will be indentified with a progressive index in the chart’s `series` property.
 
@@ -243,30 +241,29 @@ chart.add([series1, series2, series3])
 
 <img width="412" alt="screen shot 2018-01-07 at 11 06 55" src="https://user-images.githubusercontent.com/120693/34648532-282fcda8-f39b-11e7-93f3-c502329752b5.png">
 
-
-## Touch events
+## Configuring touch events
 
 To make the chart respond to touch events, implement the `ChartDelegate` protocol in your class, e.g. a View Controller, and then set the chart’s `delegate` property:
 
 ```swift
 class MyViewController: UIViewController, ChartDelegate {
-    override func viewDidLoad() {
-        let chart = Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
-        chart.delegate = self
-    }
-    
-    // Chart delegate
-    func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
-        // Do something on touch
-    }
-    
-    func didFinishTouchingChart(chart: Chart) {
-        // Do something when finished
-    }
+  override func viewDidLoad() {
+    let chart = Chart(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+    chart.delegate = self
+  }
 
-    func didEndTouchingChart(chart: Chart) {
-        // Do something when ending touching chart
-    }
+  // Chart delegate
+  func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
+    // Do something on touch
+  }
+
+  func didFinishTouchingChart(chart: Chart) {
+    // Do something when finished
+  }
+
+  func didEndTouchingChart(chart: Chart) {
+    // Do something when ending touching chart
+  }
 }
 ```
 
@@ -274,42 +271,36 @@ The `didTouchChart` method passes an array of indexes, one for each series, with
 
 ```swift
  func didTouchChart(chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
-        for (seriesIndex, dataIndex) in enumerate(indexes) {
-            if dataIndex != nil {
-                // The series at `seriesIndex` is that which has been touched
-                let value = chart.valueForSeries(seriesIndex, atIndex: dataIndex)
-            }
-        }
+    for (seriesIndex, dataIndex) in enumerate(indexes) {
+      if dataIndex != nil {
+        // The series at `seriesIndex` is that which has been touched
+        let value = chart.valueForSeries(seriesIndex, atIndex: dataIndex)
+      }
     }
+  }
 ```
 
 You can use `chart.valueForSeries()` to access the value for the touched position.
 
 The `x: Double` argument refers to the value on the x-axis: it is inferred from the horizontal position of the touch event, and may be not part of the series values.
 
-The `left: CGFloat` is the x position on the chart’s view, starting from the left side. It may be used to set the  position for a label moving above the chart: 
+The `left: CGFloat` is the x position on the chart’s view, starting from the left side. It may be used to set the  position for a label moving above the chart:
 
 <img src="https://cloud.githubusercontent.com/assets/120693/11602678/660d660e-9adc-11e5-8a67-0c3036c20862.gif" height="200">
 
-## Common issues and solutions
-
-If you have issue with this library, please tag your question with `swiftchart` on [Stack Overflow](http://stackoverflow.com/tags/swiftcharts/info).
-
-### The chart is not showing
-
-The `Chart` class inherits from `UIView`, so if your chart is not displaying it is likely a problem related to the view's size. Check your view constraints and make sure you initialize it on `viewDidLoad`, when UIKit can calculate the view dimensions.
-
-Some tips for debugging an hidden chart:
-
-* start your app and then debug the UI Hierarchy from the Debug navigator
-* initialize a simple UIView with a colored background instead of the chart to easily see how the view is positioned
-* try to not to nest the chart in a subview for better debugging
-
 # API
 
-## `Chart` class
+## The `Chart` class
 
-### `Chart` options
+Use the `Chart` class to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance.
+
+**Example**
+
+```swift
+let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+```
+
+### Chart options
 
 | Option name                   | Type                      | Description                                                                                                                    |
 |-------------------------------|---------------------------|--------------------------------------------------------------------------------------------------------------------------------|
@@ -346,28 +337,47 @@ Some tips for debugging an hidden chart:
 | `removeAllSeries` |                                                            | Remove all the series.                                        |
 | `valueForSeries`  | `(_ seriesIndex: Int, atIndex dataIndex: Int?) -> Double?` | Returns the value for the specified series at the given index |
 
-## `ChartSeries` class
+## The `ChartSeries` class
 
-* `area` – draws an area below the series’ line.
-* `line` – set it to `false` to hide the line (useful for drawing only the area).
-* `color` – the series color.
-* `colors` – a tuple to specify the color above or below the zero (or another value). 
-    
-  For example, to use red for values above `-4`, and blue for values below `-4`. 
-  ```swift
-  series.colors = (
-      above: ChartColors.redColor(), 
-      below: ChartColors.blueColor(), 
-      zeroLevel: -4
-  )
-  ```` 
-  
+Use the `ChartSeries` class to create a chart series and configure its appearance or behavior.
 
-## `ChartDelegate`
+**Example**
 
-* `didTouchChart` – tells the delegate that the specified chart has been touched.
-* `didFinishTouchingChart` – tells the delegate that the user finished touching the chart. The user will "finish" touching the chart only swiping left/right outside the chart.
-* `didEndTouchingChart` – tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the touchesDidEnd method is being called. 
+```swift
+let data: [Double] = [0, -2, -2, 3, -3, 4, 1, 0, -1]
+let series = ChartSeries(data)
+```
+
+| Option name | Type                                                  | Description                                                                                                        |
+|-------------|-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `area`      | `Bool`                                                | Draws an area below the series line (default `false`)                                                              |
+| `line`      | `Bool`                                                | When set to `false`, will hide the series line. Useful for drawing only the area with `area=true` (default `true`) |
+| `color`     | `UIColor`                                             | The series color. You can use the `ChartColors` struct for some colors shortcuts. (default `.blueColor()`)         |
+| `colors`    | `(above: UIColor, below: UIColor, zeroLevel: Double)` | A tuple to specify the color above or below the zero (or the value specified by `zeroLevel`).                      |
+
+## The `ChartDelegate` protocol
+
+Use the `ChartDelegate` protocol to tell other objects about the chart’s touch events.
+
+| Method                   | Description                                                                                                                                            |
+|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `didTouchChart`          | Tells the delegate that the specified chart has been touched                                                                                           |
+| `didFinishTouchingChart` | Tells the delegate that the user finished touching the chart. The user will "finish" touching the chart only swiping left/right outside the chart.     |
+| `didEndTouchingChart`    | Tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the `touchesDidEnd` method is being called. |
+
+# Common issues and solutions
+
+If you have issue with this library, please tag your question with `swiftchart` on [Stack Overflow](http://stackoverflow.com/tags/swiftcharts/info).
+
+## The chart is not showing
+
+The `Chart` class inherits from `UIView`, so if your chart is not displaying it is likely a problem related to the view's size. Check your view constraints and make sure you initialize it on `viewDidLoad`, when UIKit can calculate the view dimensions.
+
+Some tips for debugging an hidden chart:
+
+* start your app and then debug the UI Hierarchy from the Debug navigator
+* initialize a simple UIView with a colored background instead of the chart to easily see how the view is positioned
+* try to not to nest the chart in a subview for better debugging
 
 # License
 

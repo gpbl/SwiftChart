@@ -7,25 +7,25 @@
 - Initialize a serie with `Int` x-values
 
 ### Fixed
-- Fixed a crash when using empty series data (#88 by @trein)
+- Fixed a crash when using empty series data ([#88](https://github.com/gpbl/SwiftChart/issues/88) by [@trein](https://github.com/trein))
 
 ### Changed 
-- **(Breaking)** Use `Double` instead of `Float` (#87 by @trein)
+- **(Breaking)** Use `Double` instead of `Float` ([#87](https://github.com/gpbl/SwiftChart/issues/87) by [@trein](https://github.com/trein))
 
 ## [v0.5.0](https://github.com/gpbl/SwiftChart/releases/tag/0.5.0) - 2017-05-20
 
 ### Added
-- New `xLabelsOrientation` option to switch the x-labels orientation between horizontal or vertical (#61)
-- New `xLabelsSkipLast` option. Set it to `false` to print the last x-label (#37)
+- New `xLabelsOrientation` option to switch the x-labels orientation between horizontal or vertical ([#61](https://github.com/gpbl/SwiftChart/issues/61))
+- New `xLabelsSkipLast` option. Set it to `false` to print the last x-label ([#37](https://github.com/gpbl/SwiftChart/issues/37))
 
 ### Changed 
-- Automatically redraw the chart when changing series (#25 by @duemunk)
-- Update chart on resize (#24 by @duemunk)
+- Automatically redraw the chart when changing series ([#25](https://github.com/gpbl/SwiftChart/issues/25) by [@duemunk](https://github.com/duemunk))
+- Update chart on resize ([#24](https://github.com/gpbl/SwiftChart/issues/24) by [@duemunk](https://github.com/duemunk))
 
 ## [v0.4.0](https://github.com/gpbl/SwiftChart/releases/tag/0.4.0) - 2016-11-14
 
 ### Changed 
-- Custom threshold for positive/negative data colors (#45 by @algrid)
+- Custom threshold for positive/negative data colors ([#45](https://github.com/gpbl/SwiftChart/issues/45) by [@algrid](https://github.com/algrid))
 
 **This is a potentially breaking change**
 If you were setting the `ChartSeries.colors`, you must set the new `zeroLevel` value to `0` to keep the same functionality:
@@ -44,7 +44,7 @@ If you were setting the `ChartSeries.colors`, you must set the new `zeroLevel` v
 ## [v0.2.2](https://github.com/gpbl/SwiftChart/releases/tag/0.2.2) - 2016-07-06
 
 ### Fixed 
-- Fixed an issue with negative/positive values (#26)
+- Fixed an issue with negative/positive values ([#26](https://github.com/gpbl/SwiftChart/issues/26))
 
 ## [v0.2.1](https://github.com/gpbl/SwiftChart/releases/tag/0.2.1) - 2016-02-14
 

@@ -5,7 +5,7 @@ SwiftChart
 [![License](https://img.shields.io/cocoapods/l/SwiftChart.svg?style=flat)](http://cocoapods.org/pods/SwiftChart)
 [![Platform](https://img.shields.io/cocoapods/p/SwiftChart.svg?style=flat)](http://cocoapods.org/pods/SwiftChart)
 
-A simple line / area charting library for iOS, written in Swift.
+A simple line and area charting library for iOS.
 
 📈 Line and area charts  
 🌞 Multiple series  
@@ -18,9 +18,41 @@ A simple line / area charting library for iOS, written in Swift.
 <img src="https://cloud.githubusercontent.com/assets/120693/11602674/5ed8a808-9adc-11e5-9e30-f55beacf9a94.png" height="180"><img src="https://cloud.githubusercontent.com/assets/120693/11602678/660d660e-9adc-11e5-8a67-0c3036c20862.gif" height="180">
 </p>
 
-## Installation
+---
 
-### CocoaPods
+<!-- TOC -->
+<details>
+    <summary>Toggle table of content</summary>
+
+- [Installation](#installation)
+  - [CocoaPods](#cocoapods)
+  - [Manually](#manually)
+- [Usage](#usage)
+  - [To initialize a chart](#to-initialize-a-chart)
+    - [From the Interface Builder](#from-the-interface-builder)
+    - [Programmatically](#programmatically)
+  - [Adding series](#adding-series)
+    - [Partially filled series](#partially-filled-series)
+    - [Different colors above and below zero](#different-colors-above-and-below-zero)
+    - [Multiple series](#multiple-series)
+  - [Touch events](#touch-events)
+  - [Common issues and solutions](#common-issues-and-solutions)
+    - [The chart is not showing](#the-chart-is-not-showing)
+- [API](#api)
+  - [`Chart` class](#chart-class)
+    - [`Chart` options](#chart-options)
+    - [Public Methods](#public-methods)
+  - [`ChartSeries` class](#chartseries-class)
+  - [`ChartDelegate`](#chartdelegate)
+- [License](#license)
+
+</details>
+
+<!-- /TOC -->
+
+# Installation
+
+## CocoaPods
 
 SwiftChart is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
@@ -29,12 +61,12 @@ it, simply add the following line to your Podfile:
 pod "SwiftChart"
 ```
 
-### Manually
+## Manually
 
 1. Download **SwiftChart.zip** from the [last release](https://github.com/gpbl/SwiftChart/releases/latest) and extract its content in your project's folder.
 2. From the Xcode project, choose *Add Files to <ProjectName>...* from the *File* menu and add the extracted files.
 
-## Usage
+# Usage
 
 The library includes:
 
@@ -273,6 +305,8 @@ Some tips for debugging an hidden chart:
 * initialize a simple UIView with a colored background instead of the chart to easily see how the view is positioned
 * try to not to nest the chart in a subview for better debugging
 
+# API
+
 ## `Chart` class
 
 ### `Chart` options
@@ -335,8 +369,6 @@ Some tips for debugging an hidden chart:
 * `didFinishTouchingChart` – tells the delegate that the user finished touching the chart. The user will "finish" touching the chart only swiping left/right outside the chart.
 * `didEndTouchingChart` – tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the touchesDidEnd method is being called. 
 
----
-
-## License
+# License
 
 SwiftChart is available under the MIT license. See the LICENSE file for more info.

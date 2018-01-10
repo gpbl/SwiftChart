@@ -25,8 +25,8 @@ A simple line and area charting library for iOS.
 <!-- TOC -->
 
 - [Getting started](#getting-started)
-  - [To install SwiftChart via CocoaPods](#to-install-swiftchart-via-cocoapods)
-  - [To install SwiftChart manually](#to-install-swiftchart-manually)
+  - [Installing SwiftChart via CocoaPods](#installing-swiftchart-via-cocoapods)
+  - [Installing SwiftChart manually](#installing-swiftchart-manually)
   - [What’s included in SwiftChart](#whats-included-in-swiftchart)
 - [How to use SwiftChart](#how-to-use-swiftchart)
   - [Initialize a chart from the Interface Builder](#initialize-a-chart-from-the-interface-builder)
@@ -381,12 +381,6 @@ Shorthands for various colors.
 let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
 series.color = ChartColors.blueColor()
 ```
-
-## `ChartPoint` typealias
-
-`(x: Double, y: Double)`. Represent the x- and the y-axis values for each point in a chart series.
-
-## `ChartLabelOrientation` enum
 
 # Common issues and solutions
 

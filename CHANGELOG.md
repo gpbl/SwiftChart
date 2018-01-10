@@ -56,6 +56,6 @@ If you were setting the `ChartSeries.colors`, you must set the new `zeroLevel` v
 ### Changed
 - Added cocoapods support
 
-## [v0.1.0](https://github.com/gpbl/SwiftChart/releases/tag/0.1.0) - 2015-12-04
+## [v0.1.0](https://github.com/gpbl/SwiftChart/releases/tag/0.1.0) - 2014-11-07
 
 First release!

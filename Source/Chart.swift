@@ -45,6 +45,9 @@ Represent the x- and the y-axis values for each point in a chart series.
 */
 typealias ChartPoint = (x: Double, y: Double)
 
+/**
+Set the a x-label orientation.
+*/
 public enum ChartLabelOrientation {
     case horizontal
     case vertical
@@ -74,30 +77,30 @@ open class Chart: UIControl {
     open var xLabels: [Double]?
 
     /**
-    Formatter for the labels on the x-axis. The `index` represents the `xLabels` index, `value` its value:
+    Formatter for the labels on the x-axis. `index` represents the `xLabels` index, `value` its value.
     */
     open var xLabelsFormatter = { (labelIndex: Int, labelValue: Double) -> String in
         String(Int(labelValue))
     }
 
     /**
-    Text alignment for the x-labels
+    Text alignment for the x-labels.
     */
     open var xLabelsTextAlignment: NSTextAlignment = .left
 
     /**
-     Orientation for the x-labels
-     */
+    Orientation for the x-labels.
+    */
     open var xLabelsOrientation: ChartLabelOrientation = .horizontal
 
     /**
-     Skip the last x-label. Setting this to false may make the label overflow the frame width.
-     */
+    Skip the last x-label. Setting this to false may make the label overflow the frame width.
+    */
     open var xLabelsSkipLast: Bool = true
 
     /**
-    Values to display as labels of the y-axis. If not specified, will display the
-    lowest, the middle and the highest values.
+    Values to display as labels of the y-axis. If not specified, will display the lowest, the middle and the highest
+    values.
     */
     open var yLabels: [Double]?
 
@@ -119,7 +122,7 @@ open class Chart: UIControl {
     open var labelFont: UIFont? = UIFont.systemFont(ofSize: 12)
 
     /**
-    Font used for the labels.
+    The color used for the labels.
     */
     @IBInspectable
     open var labelColor: UIColor = UIColor.black
@@ -136,12 +139,12 @@ open class Chart: UIControl {
     @IBInspectable
     open var gridColor: UIColor = UIColor.gray.withAlphaComponent(0.3)
     /**
-     Should draw lines for labels on X axis.
-     */
+    Enable the lines for the labels on the x-axis
+    */
     open var showXLabelsAndGrid: Bool = true
     /**
-     Should draw lines for labels on Y axis.
-     */
+    Enable the lines for the labels on the y-axis
+    */
     open var showYLabelsAndGrid: Bool = true
 
     /**
@@ -196,12 +199,12 @@ open class Chart: UIControl {
     open var highlightLineWidth: CGFloat = 0.5
 
     /**
-    Hide the highlight line when touch event ends
+    Hide the highlight line when touch event ends, e.g. when stop swiping over the chart
     */
     open var hideHighlightLineOnTouchEnd = false
 
     /**
-    Alpha component for the area's color.
+    Alpha component for the area color.
     */
     open var areaAlphaComponent: CGFloat = 0.1
 
@@ -258,7 +261,7 @@ open class Chart: UIControl {
     }
 
     /**
-    Adds multiple series.
+    Adds multiple chart series.
     */
     open func add(_ series: [ChartSeries]) {
         for s in series {
@@ -281,7 +284,7 @@ open class Chart: UIControl {
     }
 
     /**
-    Returns the value for the specified series at the given index
+    Return the value for the specified series at the given index.
     */
     open func valueForSeries(_ seriesIndex: Int, atIndex dataIndex: Int?) -> Double? {
         if dataIndex == nil { return nil }
@@ -837,11 +840,9 @@ open class Chart: UIControl {
 }
 
 extension Sequence where Element == Double {
-
     func minOrZero() -> Double {
         return self.min() ?? 0.0
     }
-
     func maxOrZero() -> Double {
         return self.max() ?? 0.0
     }

@@ -7,11 +7,11 @@ SwiftChart
 
 A simple line and area charting library for iOS.
 
-📈 Line and area charts
-🌞 Multiple series
-🌒 Partially filled series
-🏊 Works with signed Double
-🖖 Touch events
+* 📈 Line and area charts 
+* 🌞 Multiple series 
+* 🌒 Partially filled series  
+* 🏊 Works with signed `Double`
+* 🖖 Touch events 
 
 <p align="center">
 <img src="https://cloud.githubusercontent.com/assets/120693/11602670/57ef6b26-9adc-11e5-9f95-b226a2491654.png" height="180"><img src="https://cloud.githubusercontent.com/assets/120693/11602672/5c303ac6-9adc-11e5-9006-3275a16b7ec8.png" height="180">
@@ -37,11 +37,14 @@ A simple line and area charting library for iOS.
   - [Adding multiple series to a chart](#adding-multiple-series-to-a-chart)
   - [Configuring touch events](#configuring-touch-events)
 - [API](#api)
-  - [The `Chart` class](#the-chart-class)
+  - [`Chart` class](#chart-class)
     - [Chart options](#chart-options)
     - [Public Methods](#public-methods)
-  - [The `ChartSeries` class](#the-chartseries-class)
-  - [The `ChartDelegate` protocol](#the-chartdelegate-protocol)
+  - [`ChartSeries` class](#chartseries-class)
+  - [`ChartDelegate` protocol](#chartdelegate-protocol)
+  - [`ChartColors` enum](#chartcolors-enum)
+  - [`ChartPoint` typealias](#chartpoint-typealias)
+  - [`ChartLabelOrientation` enum](#chartlabelorientation-enum)
 - [Common issues and solutions](#common-issues-and-solutions)
   - [The chart is not showing](#the-chart-is-not-showing)
 - [License](#license)
@@ -52,7 +55,7 @@ A simple line and area charting library for iOS.
 
 # Getting started
 
-## To install SwiftChart via CocoaPods
+## Installing SwiftChart via CocoaPods
 
 SwiftChart is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
@@ -61,7 +64,7 @@ it, simply add the following line to your Podfile:
 pod "SwiftChart"
 ```
 
-## To install SwiftChart manually
+## Installing SwiftChart manually
 
 1. Download **SwiftChart.zip** from the [last release](https://github.com/gpbl/SwiftChart/releases/latest) and extract its content in your project's folder.
 2. From the Xcode project, choose *Add Files to <ProjectName>...* from the *File* menu and add the extracted files.
@@ -290,7 +293,7 @@ The `left: CGFloat` is the x position on the chart’s view, starting from the l
 
 # API
 
-## The `Chart` class
+## `Chart` class
 
 Use the `Chart` class to initialize and configure the chart’s content, e.g. for adding series or setting up the its appearance.
 
@@ -302,44 +305,47 @@ let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 
 ### Chart options
 
-| Option name                   | Type                      | Description                                                                                                                    |
-|-------------------------------|---------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| `areaAlphaComponent`          | `CGFloat`                 | Alpha factor for the areas colors (default `0.1`)                                                                              |
-| `axesColor`                   | `UIColor`                 | The color of the axes (default `.gray`)                                                                                        |
-| `bottomInset`                 | `CGFloat`                 | Height of the area at the bottom of the chart, containing the labels for the x-axis  (default `20`)                            |
-| `delegate`                    | `ChartDelegate`           | The delegate to listen to touch events                                                                                         |
-| `highlightLineColor`          | `UIColor`                 | The color of the highlight line (default `gray`)                                                                               |
-| `highlightLineWidth`          | `CGFloat`                 | The width of the highlight line (default `0.5`)                                                                                |
-| `hideHighlightLineOnTouchEnd` | `Bool`                    | Hide the highlight line when the touch event ends, e.g. when stop swiping over the chart  (default `false`)                    |
-| `gridColor`                   | `UIColor`                 | The color of the grid (default `.gray`)                                                                                        |
-| `labelColor`                  | `UIColor`                 | The color of the labels (default `.black`)                                                                                     |
-| `labelFont`                   | `UIFont?`                 | The font used for the labels                                                                                                   |
-| `lineWidth`                   | `CGFloat`                 | The width of the chart's lines (default `2`)                                                                                   |
-| `maxX`                        | `Double?`                 | A custom maximum x-value                                                                                                       |
-| `maxY`                        | `Double?`                 | A custom maximum y-value                                                                                                       |
-| `minX`                        | `Double?`                 | A custom minimum x-value                                                                                                       |
-| `minY`                        | `Double?`                 | A custom minimum y-value                                                                                                       |
-| `topInset`                    | `CGFloat`                 | Height of the area at the top of the chart, acting a padding to make place for the top y-axis label (default `20`)             |
-| `xLabelsFormatter`            | `(Int, Double) -> String` | Function to format the labels on the x-axis                                                                                    |
-| `xLabelsOrientation`          | `ChartLabelOrientation`   | Sets the x-axis labels orientation to `vertical` or `horizontal` (default `.horizontal`)                                       |
-| `xLabelsTextAlignment`        | `NSTextAlignment`         | Alignment for the text in the x-labels (default `.left`)                                                                       |
-| `xLabelsSkipLast`             | `Bool`                    | Skip the last x-label. Setting this to `false` will make the label overflow the frame width, so use carefully (default `true`) |
-| `yLabelsFormatter`            | `(Int, Double) -> String` | Function to format the labels on the y-axis                                                                                    |
-| `yLabelsOnRightSide`          | `Bool`                    | Place the y-labels on the right side (default `false`)                                                                         |
+| Option Name                   | Description                                                                                                                                                                                                 |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `areaAlphaComponent`          | Alpha factor for the areas colors (`CGFloat`, default `0.1`)                                                                                                                                                |
+| `axesColor`                   | The color of the axes (`UIColor`, default `.gray`)                                                                                                                                                          |
+| `bottomInset`                 | Height of the area at the bottom of the chart, containing the labels for the x-axis  (`CGFloat`, default `20`)                                                                                              |
+| `delegate`                    | The delegate to listen to touch events (`ChartDelegate`)                                                                                                                                                    |
+| `highlightLineColor`          | The color of the highlight line (`UIColor`, default `gray`)                                                                                                                                                 |
+| `highlightLineWidth`          | The width of the highlight line (`CGFloat`, default `0.5`)                                                                                                                                                  |
+| `hideHighlightLineOnTouchEnd` | Hide the highlight line when the touch event ends, e.g. when stop swiping over the chart (`Bool`, default `false`)                                                                                         |
+| `gridColor`                   | The color of the grid (`UIColor`, default `.gray`)                                                                                                                                                          |
+| `labelColor`                  | The color of the labels (`UIColor`, default `.black`)                                                                                                                                                       |
+| `labelFont`                   | The font used for the labels (`UIFont?`)                                                                                                                                                                    |
+| `lineWidth`                   | The width of the chart's lines (`CGFloat`, default `2`)                                                                                                                                                     |
+| `maxX`                        | A custom maximum x-value (`Double?`)                                                                                                                                                                        |
+| `maxY`                        | A custom maximum y-value (`Double?`)                                                                                                                                                                        |
+| `minX`                        | A custom minimum x-value (`Double?`)                                                                                                                                                                        |
+| `minY`                        | A custom minimum y-value (`Double?`)                                                                                                                                                                        |
+| `showXLabelsAndGrid`          | Enable the lines for the labels on the x-axis (`Bool`, default `true`)                                                                                                                                      |
+| `showYLabelsAndGrid`          | Enable the lines for the labels on the y-axis (`Bool`, default `true`)                                                                                                                                      |
+| `topInset`                    | Height of the area at the top of the chart, acting a padding to make place for the top y-axis label (`CGFloat`, default `20`)                                                                               |
+| `xLabels`                     | The values to display as labels on the x-axis. You can format these values  with the `xLabelFormatter` attribute. As default, it will display the values of the series which has the most data. `[Double]?` |
+| `xLabelsFormatter`            | Function to format the labels on the x-axis (`(Int, Double) -> String`)                                                                                                                                     |
+| `xLabelsOrientation:`         | Set the x-axis labels orientation to `vertical` or `horizontal` (`ChartLabelOrientation`, default `.horizontal`)                                                                                            |
+| `xLabelsTextAlignment:`       | Alignment for the text in the x-labels (`NSTextAlignment`, default `.left`)                                                                                                                                 |
+| `xLabelsSkipLast:`            | Skip the last x-label. Setting this to `false` will make the label overflow the frame width, so use carefully (`Bool`, default `true`)                                                                      |
+| `yLabels`                     | Values to display as labels of the y-axis. If not specified, will display the lowest, the middle and the highest values.                                                                                    |
+| `yLabelsFormatter`            | Function to format the labels on the y-axis (`(Int, Double) -> String`)                                                                                                                                     |
+| `yLabelsOnRightSide`          | Place the y-labels on the right side (`Bool`, default `false`)                                                                                                                                              |
 
 ### Public Methods
 
-| Method Name       | Signature                                                  | Description                                                   |
-|-------------------|------------------------------------------------------------|---------------------------------------------------------------|
-| `add`             | `(_ series: ChartSeries)`                                  | Add a series to the chart                                     |
-| `add`             | `(_ series: [ChartSeries])`                                | Add multiple series to the chart                              |
-| `removeSeriesAt`  | `(_ index: Int)`                                           | Remove the series at the specified index.                     |
-| `removeAllSeries` |                                                            | Remove all the series.                                        |
-| `valueForSeries`  | `(_ seriesIndex: Int, atIndex dataIndex: Int?) -> Double?` | Returns the value for the specified series at the given index |
+| Method Name       | Description                                                                                                              |
+|-------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `add`             | Add a series to the chart `(_ series: ChartSeries)` `(_ series: [ChartSeries])`                                          |
+| `removeSeriesAt`  | Remove the series at the specified index `(_ index: Int)`                                                                |
+| `removeAllSeries` | Remove all the series                                                                                                    |
+| `valueForSeries`  | Returns the value for the specified series at the given index `(_ seriesIndex: Int, atIndex dataIndex: Int?) -> Double?` |
 
-## The `ChartSeries` class
+## `ChartSeries` class
 
-Use the `ChartSeries` class to create a chart series and configure its appearance or behavior.
+Use the `ChartSeries` class to create a chart series and configure its appearance and behavior.
 
 **Example**
 
@@ -348,14 +354,14 @@ let data: [Double] = [0, -2, -2, 3, -3, 4, 1, 0, -1]
 let series = ChartSeries(data)
 ```
 
-| Option name | Type                                                  | Description                                                                                                        |
-|-------------|-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| `area`      | `Bool`                                                | Draws an area below the series line (default `false`)                                                              |
-| `line`      | `Bool`                                                | When set to `false`, will hide the series line. Useful for drawing only the area with `area=true` (default `true`) |
-| `color`     | `UIColor`                                             | The series color. You can use the `ChartColors` struct for some colors shortcuts. (default `.blueColor()`)         |
-| `colors`    | `(above: UIColor, below: UIColor, zeroLevel: Double)` | A tuple to specify the color above or below the zero (or the value specified by `zeroLevel`).                      |
+| Option Name | Description                                                                                                                                        |
+|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `area`      | Draws an area below the series line (`Bool`, default `false`)                                                                                      |
+| `line`      | When set to `false`, will hide the series line. Useful for drawing only the area with `area=true` (`Bool`, default `true`)                         |
+| `color`     | The series color. You can use the `ChartColors` struct for some colors shortcuts. (`UIColor`, default `.blueColor()`)                              |
+| `colors`    | A tuple to specify the color above or below the zero (or the value specified by `zeroLevel`) `(above: UIColor, below: UIColor, zeroLevel: Double)` |
 
-## The `ChartDelegate` protocol
+## `ChartDelegate` protocol
 
 Use the `ChartDelegate` protocol to tell other objects about the chart’s touch events.
 
@@ -364,6 +370,23 @@ Use the `ChartDelegate` protocol to tell other objects about the chart’s touch
 | `didTouchChart`          | Tells the delegate that the specified chart has been touched                                                                                           |
 | `didFinishTouchingChart` | Tells the delegate that the user finished touching the chart. The user will "finish" touching the chart only swiping left/right outside the chart.     |
 | `didEndTouchingChart`    | Tells the delegate that the user ended touching the chart. The user will "end" touching the chart whenever the `touchesDidEnd` method is being called. |
+
+## `ChartColors` enum
+
+Shorthands for various colors.
+
+**Example**
+
+```swift
+let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
+series.color = ChartColors.blueColor()
+```
+
+## `ChartPoint` typealias
+
+`(x: Double, y: Double)`. Represent the x- and the y-axis values for each point in a chart series.
+
+## `ChartLabelOrientation` enum
 
 # Common issues and solutions
 

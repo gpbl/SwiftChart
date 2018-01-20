@@ -184,7 +184,12 @@ open class Chart: UIControl {
     Custom maximum value for the x-axis.
     */
     open var maxX: Float?
-
+    
+    /**
+     Color for the highlight line.
+     */
+    open var highlightLineColor = UIColor.gray
+    
     /**
     Custom maximum value for the y-axis.
     */

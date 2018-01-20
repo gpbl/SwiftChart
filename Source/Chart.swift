@@ -191,12 +191,6 @@ open class Chart: UIControl {
     open var maxY: Float?
 
     /**
-     Should show highlight line when touched.
-     */
-    open var showHighlightLine: Bool = true
-    open var highlightLineColor = UIColor.gray
-
-    /**
     Width for the highlight line.
     */
     open var highlightLineWidth: CGFloat = 0.5
@@ -740,10 +734,8 @@ open class Chart: UIControl {
             delegate?.didFinishTouchingChart(self)
             return
         }
-        
-        if showHighlightLine == true {
-            drawHighlightLineFromLeftPosition(left)
-        }
+
+        drawHighlightLineFromLeftPosition(left)
         
         if delegate == nil {
             return

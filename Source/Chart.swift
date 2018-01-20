@@ -155,7 +155,7 @@ open class Chart: UIControl {
     open var topInset: CGFloat = 20
     
     /**
-     Height of the area at the left of the chart, acting a padding to make place for the left x-axis label.
+    Width of the area at the left of the chart, acting a padding to make place for the left x-axis label.
      */
     open var leftInset: CGFloat = 0
     
@@ -184,16 +184,15 @@ open class Chart: UIControl {
     Custom maximum value for the x-axis.
     */
     open var maxX: Float?
-
+    
     /**
     Custom maximum value for the y-axis.
     */
     open var maxY: Float?
-
+    
     /**
-     Should show highlight line when touched.
+     Color for the highlight line.
      */
-    open var showHighlightLine: Bool = true
     open var highlightLineColor = UIColor.gray
 
     /**
@@ -544,18 +543,19 @@ open class Chart: UIControl {
             context.strokePath()
         }
         
-        if leftInset < 20 {
+        //Display vertical axis to the right if left inset
+        if leftInset == 0 {
             // vertical axis on the left
             context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
             context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
             context.strokePath()
+        } else {
+            // vertical axis on the right
+            context.move(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: CGFloat(0)))
+            context.addLine(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: drawingHeight + topInset))
+            context.strokePath()
         }
         
-        // vertical axis on the right
-        context.move(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth + leftInset), y: drawingHeight + topInset))
-        context.strokePath()
-
     }
 
     fileprivate func drawLabelsAndGridOnXAxis() {
@@ -739,10 +739,8 @@ open class Chart: UIControl {
             delegate?.didFinishTouchingChart(self)
             return
         }
-        
-        if showHighlightLine == true {
-            drawHighlightLineFromLeftPosition(left)
-        }
+
+        drawHighlightLineFromLeftPosition(left)
         
         if delegate == nil {
             return

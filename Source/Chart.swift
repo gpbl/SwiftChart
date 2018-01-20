@@ -155,7 +155,7 @@ open class Chart: UIControl {
     open var topInset: CGFloat = 20
     
     /**
-     Height of the area at the left of the chart, acting a padding to make place for the left x-axis label.
+    Width of the area at the left of the chart, acting a padding to make place for the left x-axis label.
      */
     open var leftInset: CGFloat = 0
     

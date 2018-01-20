@@ -8,37 +8,59 @@
 import UIKit
 
 /**
-Represent a series to draw in the line chart. Each series is defined with a dataset and appareance settings.
+The `ChartSeries` class create a chart series and configure its appearance and behavior.
 */
 open class ChartSeries {
-    open var data: [(x: Float, y: Float)]
-    open var area: Bool = false
+    /**
+    The data used for the chart series.
+    */
+    open var data: [(x: Double, y: Double)]
+
+    /**
+    When set to `false`, will hide the series line. Useful for drawing only the area with `area=true`.
+    */
     open var line: Bool = true
+
+    /**
+    Draws an area below the series line.
+    */
+    open var area: Bool = false
+
+    /**
+    The series color.
+    */
     open var color: UIColor = ChartColors.blueColor() {
         didSet {
             colors = (above: color, below: color, 0)
         }
     }
+
+    /**
+    A tuple to specify the color above or below the zero
+    */
     open var colors: (
         above: UIColor,
         below: UIColor,
-        zeroLevel: Float
+        zeroLevel: Double
     ) = (above: ChartColors.blueColor(), below: ChartColors.redColor(), 0)
 
-    public init(_ data: [Float]) {
+    public init(_ data: [Double]) {
         self.data = []
-
         data.enumerated().forEach { (x, y) in
-            let point: (x: Float, y: Float) = (x: Float(x), y: y)
+            let point: (x: Double, y: Double) = (x: Double(x), y: y)
             self.data.append(point)
         }
     }
 
-    public init(data: [(x: Float, y: Float)]) {
+    public init(data: [(x: Double, y: Double)]) {
         self.data = data
     }
 
-    public init(data: [(x: Double, y: Double)]) {
-        self.data = data.map ({ (Float($0.x), Float($0.y))})
+    public init(data: [(x: Int, y: Double)]) {
+      self.data = data.map { (Double($0.x), Double($0.y)) }
+    }
+    
+    public init(data: [(x: Float, y: Float)]) {
+        self.data = data.map { (Double($0.x), Double($0.y)) }
     }
 }

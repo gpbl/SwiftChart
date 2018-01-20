@@ -210,7 +210,6 @@ Some tips for debugging an hidden chart:
 * `xLabelsSkipLast` (default `true`) - Skip the last x-label. Setting this to `false` will make the label overflow the frame width, so use carefully!
 * `yLabelsFormatter` – formats the labels on the y-axis.
 * `yLabelsOnRightSide` – place the y-labels on the right side.
-* `showHighlightLine` (default `true`) – boolen to show or hide the highlight line on touch of the graph.
 
 #### Methods
 

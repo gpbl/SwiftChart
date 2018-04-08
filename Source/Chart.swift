@@ -65,9 +65,11 @@ open class Chart: UIControl {
     Series to display in the chart.
     */
     open var series: [ChartSeries] = [] {
-        didSet {
-            setNeedsDisplay()
+      didSet {
+        DispatchQueue.main.async {
+          self.setNeedsDisplay()
         }
+      }
     }
 
     /**

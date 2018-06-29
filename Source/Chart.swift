@@ -330,19 +330,38 @@ open class Chart: UIControl {
         }
         layerStore.removeAll()
 
+        // Remove old accessibility elements
+        
+        self.accessibilityChartElements.removeAll()
+        self.accessibilityChartDataIndices.removeAll()
+        
+        // Create a summary accessibility element
+        
+        let element = UIAccessibilityElement(accessibilityContainer: self)
+        element.accessibilityLabel = "Line Chart. \(series.count) dataset\(series.count == 1 ? "" : "s")."
+        element.accessibilityFrame = self.convert(bounds, to: UIScreen.main.coordinateSpace)
+        element.accessibilityTraits = UIAccessibilityTraitHeader
+        
+        self.accessibilityChartElements.append(element)
+        
         // Draw content
 
         for (index, series) in self.series.enumerated() {
 
             // Separate each line in multiple segments over and below the x axis
-            let segments = Chart.segmentLine(series.data as ChartLineSegment, zeroLevel: series.colors.zeroLevel)
+            // Accessibility indices keeps track of data points and ignores separation points
+            let (segments, accessibilityIndices) = Chart.segmentLine(series.data as ChartLineSegment,
+                                                                     zeroLevel: series.colors.zeroLevel)
 
-            segments.forEach({ segment in
+            // This property is used in drawLine() to generate the accessibilityLabels
+            self.accessibilityChartDataIndices = accessibilityIndices
+            
+            segments.enumerated().forEach({ (i, segment) in
                 let scaledXValues = scaleValuesOnXAxis( segment.map { $0.x } )
                 let scaledYValues = scaleValuesOnYAxis( segment.map { $0.y } )
-
+                
                 if series.line {
-                    drawLine(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                    drawLine(scaledXValues, yValues: scaledYValues, seriesIndex: index, segmentIndex: i)
                 }
                 if series.area {
                     drawArea(scaledXValues, yValues: scaledYValues, seriesIndex: index)
@@ -459,16 +478,86 @@ open class Chart: UIControl {
         }
     }
 
+    // MARK: - Accessibility
+    
+    fileprivate var accessibilityChartElements: [UIAccessibilityElement] = []
+    
+    fileprivate var accessibilityChartDataIndices: [Set<Int>] = []
+    
+    open override var isAccessibilityElement: Bool {
+        get { return false }
+        set { }
+    }
+    
+    open override func accessibilityElementCount() -> Int {
+        return self.accessibilityChartElements.count
+    }
+    
+    open override func accessibilityElement(at index: Int) -> Any? {
+        return self.accessibilityChartElements[index]
+    }
+    
+    open override func index(ofAccessibilityElement element: Any) -> Int {
+        guard let chartElement = element as? UIAccessibilityElement else { return NSNotFound }
+        return self.accessibilityChartElements.index(of: chartElement) ?? NSNotFound
+    }
+    
     // MARK: - Drawings
 
-    fileprivate func drawLine(_ xValues: [Double], yValues: [Double], seriesIndex: Int) {
+    fileprivate func drawLine(_ xValues: [Double], yValues: [Double], seriesIndex: Int, segmentIndex: Int) {
         // YValues are "reverted" from top to bottom, so 'above' means <= level
         let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
         let path = CGMutablePath()
         path.move(to: CGPoint(x: CGFloat(xValues.first!), y: CGFloat(yValues.first!)))
+        
+        // Since drawing starts from the second point, create an accessibility element for the first data point.
+        let dimension: CGFloat = 9.0
+        var dataSetIndexOffset: Int = 0
+        let counts = self.accessibilityChartDataIndices.map { $0.count }
+
+        // If we're drawing the first segment, then generate an element.
+        // Otherwise, the first element is a separation point between positive/negative
+        if self.accessibilityChartDataIndices[segmentIndex].contains(0) {
+            let rect = CGRect(x: CGFloat(xValues.first!) - dimension,
+                              y: CGFloat(yValues.first!) - dimension,
+                              width: 2 * dimension,
+                              height: 2 * dimension)
+            
+            let ax = series[seriesIndex].data.first!.x
+            let ay = series[seriesIndex].data.first!.y
+            
+            let element = UIAccessibilityElement(accessibilityContainer: self)
+            element.accessibilityLabel = String(format: "%.2f, %.2f", ax, ay)
+            element.accessibilityFrame = self.convert(rect, to: UIScreen.main.coordinateSpace)
+            
+            self.accessibilityChartElements.append(element)
+        }
+        
+        // This offset is used to compute the correct index into the data based on the number of valid data points already generated in prior segments.
+        dataSetIndexOffset += segmentIndex > 0  && counts.count > 1 ? counts[0..<segmentIndex].reduce(0, +) - 1 : 0
+        
         for i in 1..<yValues.count {
-            let y = yValues[i]
-            path.addLine(to: CGPoint(x: CGFloat(xValues[i]), y: CGFloat(y)))
+            let x = CGFloat(xValues[i])
+            let y = CGFloat(yValues[i])
+            path.addLine(to: CGPoint(x: x, y: y))
+            
+            // If the current index is not a separation point on the zero line, then generate an accessibility point
+            if self.accessibilityChartDataIndices[segmentIndex].contains(i) {
+                let rect = CGRect(x: x - dimension,
+                                  y: y - dimension,
+                                  width: 2 * dimension,
+                                  height: 2 * dimension)
+                
+                let ax = series[seriesIndex].data[i + dataSetIndexOffset].x
+                let ay = series[seriesIndex].data[i + dataSetIndexOffset].y
+
+                let element = UIAccessibilityElement(accessibilityContainer: self)
+                element.accessibilityLabel = "Dataset \(seriesIndex + 1):" + String(format: " x: %.2f, y: %.2f", ax, ay)
+                element.accessibilityFrame = self.convert(rect, to: UIScreen.main.coordinateSpace)
+                
+                self.accessibilityChartElements.append(element)
+                
+            }
         }
 
         let lineLayer = CAShapeLayer()
@@ -588,6 +677,9 @@ open class Chart: UIControl {
             label.font = labelFont
             label.text = xLabelsFormatter(i, labels[i])
             label.textColor = labelColor
+            
+            // Remove accessibility for individual labels, since we'll add it for the entire chart
+            label.isAccessibilityElement = false
 
             // Set label size
             label.sizeToFit()
@@ -664,6 +756,9 @@ open class Chart: UIControl {
             label.textColor = labelColor
             label.sizeToFit()
 
+            // Remove accessibility for individual labels, since we'll add it for the entire chart
+            label.isAccessibilityElement = false
+            
             if yLabelsOnRightSide {
                 label.frame.origin.x = drawingWidth
                 label.frame.origin.x -= label.frame.width + padding
@@ -807,28 +902,55 @@ open class Chart: UIControl {
     Segment a line in multiple lines when the line touches the x-axis, i.e. separating
     positive from negative values.
     */
-    fileprivate class func segmentLine(_ line: ChartLineSegment, zeroLevel: Double) -> [ChartLineSegment] {
+    fileprivate class func segmentLine(_ line: ChartLineSegment,
+                                       zeroLevel: Double) -> ([ChartLineSegment], [Set<Int>]) {
         var segments: [ChartLineSegment] = []
         var segment: ChartLineSegment = []
 
+        // These are used to keep track of the indices of elements that are from the dataset vs those that are points on the zero line
+        // They closely mirror the update pattern for segment/segments
+        var accessibilityIndices: [Set<Int>] = []
+        var accessibilityIndexSet: Set<Int> = []
+        
         line.enumerated().forEach { (i, point) in
             segment.append(point)
+            accessibilityIndexSet.insert(i)
+            
             if i < line.count - 1 {
                 let nextPoint = line[i+1]
                 if point.y >= zeroLevel && nextPoint.y < zeroLevel || point.y < zeroLevel && nextPoint.y >= zeroLevel {
                     // The segment intersects zeroLevel, close the segment with the intersection point
                     let closingPoint = Chart.intersectionWithLevel(point, and: nextPoint, level: zeroLevel)
                     segment.append(closingPoint)
+                    
                     segments.append(segment)
+                    accessibilityIndices.append(accessibilityIndexSet)
+                    
                     // Start a new segment
                     segment = [closingPoint]
+                    accessibilityIndexSet = []
+                } else {
+                    // If it's not a closing point, keep note of the index for accessibility clients.
+                    accessibilityIndexSet.insert(i)
                 }
             } else {
                 // End of the line
                 segments.append(segment)
+                accessibilityIndices.append(accessibilityIndexSet)
             }
         }
-        return segments
+        
+        // The indices of data points are relative to the original data array.
+        // This removes traversed element counts from earlier segment indices to make each index relative to the segment the data point occurs in.
+        var previousElementsOffset: Int = accessibilityIndices.first?.count ?? 0
+        for (i, indexSet) in accessibilityIndices.enumerated() {
+            guard i > 0 else { continue }
+            defer { previousElementsOffset += indexSet.count }
+            
+            accessibilityIndices[i] = Set(indexSet.map { $0 - previousElementsOffset + 1 })
+        }
+
+        return (segments, accessibilityIndices)
     }
 
     /**

@@ -502,6 +502,29 @@ open class Chart: UIControl {
         return self.accessibilityChartElements.index(of: chartElement) ?? NSNotFound
     }
     
+    fileprivate func createAccessibilityElement(forSeriesIndex seriesIndex: Int,
+                                                withX x: CGFloat,
+                                                y: CGFloat,
+                                               dataValueIndex index: Int,
+                                               indexOffset offset: Int = 0) -> UIAccessibilityElement {
+        // Note: This creates the accessibility element with each side 44.0 units since it is doubled
+        let dimension: CGFloat = 22.0
+
+        let rect = CGRect(x: x - dimension,
+                          y: y - dimension,
+                          width: 2 * dimension,
+                          height: 2 * dimension)
+        
+        let ax = series[seriesIndex].data[index + offset].x
+        let ay = series[seriesIndex].data[index + offset].y
+        
+        let element = UIAccessibilityElement(accessibilityContainer: self)
+        element.accessibilityLabel = "Dataset \(seriesIndex + 1):" + String(format: " x: %.2f, y: %.2f", ax, ay)
+        element.accessibilityFrame = self.convert(rect, to: UIScreen.main.coordinateSpace)
+        
+        return element
+    }
+    
     // MARK: - Drawings
 
     fileprivate func drawLine(_ xValues: [Double], yValues: [Double], seriesIndex: Int, segmentIndex: Int) {
@@ -511,24 +534,17 @@ open class Chart: UIControl {
         path.move(to: CGPoint(x: CGFloat(xValues.first!), y: CGFloat(yValues.first!)))
         
         // Since drawing starts from the second point, create an accessibility element for the first data point.
-        let dimension: CGFloat = 9.0
         var dataSetIndexOffset: Int = 0
         let counts = self.accessibilityChartDataIndices.map { $0.count }
 
         // If we're drawing the first segment, then generate an element.
         // Otherwise, the first element is a separation point between positive/negative
         if self.accessibilityChartDataIndices[segmentIndex].contains(0) {
-            let rect = CGRect(x: CGFloat(xValues.first!) - dimension,
-                              y: CGFloat(yValues.first!) - dimension,
-                              width: 2 * dimension,
-                              height: 2 * dimension)
             
-            let ax = series[seriesIndex].data.first!.x
-            let ay = series[seriesIndex].data.first!.y
-            
-            let element = UIAccessibilityElement(accessibilityContainer: self)
-            element.accessibilityLabel = String(format: "%.2f, %.2f", ax, ay)
-            element.accessibilityFrame = self.convert(rect, to: UIScreen.main.coordinateSpace)
+            let element = self.createAccessibilityElement(forSeriesIndex: seriesIndex,
+                                                          withX: CGFloat(xValues.first!),
+                                                          y: CGFloat(yValues.first!),
+                                                          dataValueIndex: 0)
             
             self.accessibilityChartElements.append(element)
         }
@@ -543,20 +559,14 @@ open class Chart: UIControl {
             
             // If the current index is not a separation point on the zero line, then generate an accessibility point
             if self.accessibilityChartDataIndices[segmentIndex].contains(i) {
-                let rect = CGRect(x: x - dimension,
-                                  y: y - dimension,
-                                  width: 2 * dimension,
-                                  height: 2 * dimension)
-                
-                let ax = series[seriesIndex].data[i + dataSetIndexOffset].x
-                let ay = series[seriesIndex].data[i + dataSetIndexOffset].y
 
-                let element = UIAccessibilityElement(accessibilityContainer: self)
-                element.accessibilityLabel = "Dataset \(seriesIndex + 1):" + String(format: " x: %.2f, y: %.2f", ax, ay)
-                element.accessibilityFrame = self.convert(rect, to: UIScreen.main.coordinateSpace)
+                let element = self.createAccessibilityElement(forSeriesIndex: seriesIndex,
+                                                              withX: x,
+                                                              y: y,
+                                                              dataValueIndex: i,
+                                                              indexOffset: dataSetIndexOffset)
                 
                 self.accessibilityChartElements.append(element)
-                
             }
         }
 

@@ -61,11 +61,14 @@ class StockChartViewController: UIViewController, ChartDelegate {
         let series = ChartSeries(serieData)
         series.area = true
         
+        let accessibilityYLabels = serieData.map { "$\($0)" }
+        
         // Configure chart layout
         
         chart.lineWidth = 0.5
         chart.labelFont = UIFont.systemFont(ofSize: 12)
         chart.accessibilityXLabels = accessibilityXLabels
+        chart.accessibilityYLabels = accessibilityYLabels
         chart.xLabels = labels
         chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Double) -> String in
             return labelsAsString[labelIndex]

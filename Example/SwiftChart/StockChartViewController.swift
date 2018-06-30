@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftChart
 
 class StockChartViewController: UIViewController, ChartDelegate {
     
@@ -35,6 +34,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         var serieData: [Double] = []
         var labels: [Double] = []
         var labelsAsString: Array<String> = []
+        var accessibilityXLabels: [String] = []
         
         // Date formatter to retrieve the month names
         let dateFormatter = DateFormatter()
@@ -51,6 +51,11 @@ class StockChartViewController: UIViewController, ChartDelegate {
                 labels.append(Double(i))
                 labelsAsString.append(monthAsString)
             }
+            
+            let xFormatter = DateFormatter()
+            xFormatter.dateStyle = .medium
+            let xDescription = xFormatter.string(from: value["date"] as! Date)
+            accessibilityXLabels.append(xDescription)
         }
         
         let series = ChartSeries(serieData)
@@ -60,6 +65,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         
         chart.lineWidth = 0.5
         chart.labelFont = UIFont.systemFont(ofSize: 12)
+        chart.accessibilityXLabels = accessibilityXLabels
         chart.xLabels = labels
         chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Double) -> String in
             return labelsAsString[labelIndex]

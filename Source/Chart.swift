@@ -484,6 +484,20 @@ open class Chart: UIControl {
     
     fileprivate var accessibilityChartDataIndices: [Set<Int>] = []
     
+    /**
+     Labels that better describe the X component of all values.
+     
+     **NOTE**: Ensure that its count is the same as the number of data points / y values.
+    */
+    open var accessibilityXLabels: [String]?
+
+    /**
+     Labels to describe each Y value differently than the raw value.
+     
+     **NOTE**: Ensure that its count is the same as the number of data points / x values.
+     */
+    open var accessibilityYLabels: [String]?
+    
     open override var isAccessibilityElement: Bool {
         get { return false }
         set { }
@@ -507,7 +521,7 @@ open class Chart: UIControl {
                                                 y: CGFloat,
                                                dataValueIndex index: Int,
                                                indexOffset offset: Int = 0) -> UIAccessibilityElement {
-        // Note: This creates the accessibility element with each side 44.0 units since it is doubled
+        // Create the accessibility element with each side 44.0 units
         let dimension: CGFloat = 22.0
 
         let rect = CGRect(x: x - dimension,
@@ -518,8 +532,22 @@ open class Chart: UIControl {
         let ax = series[seriesIndex].data[index + offset].x
         let ay = series[seriesIndex].data[index + offset].y
         
+        // If x or y accessibilityLabels have been set, then use those otherwise default to raw values.
+        var labelDescription: String = ""
+        if let accessibilityXLabels = self.accessibilityXLabels {
+            labelDescription += "\(accessibilityXLabels[index + offset])"
+        } else {
+            labelDescription += String(format: " x: %.2f", ax)
+        }
+        
+        if let accessibilityYLabels = self.accessibilityYLabels {
+            labelDescription += ", \(accessibilityYLabels[index + offset])"
+        } else {
+            labelDescription += String(format: ", y: %.2f", ay)
+        }
+        
         let element = UIAccessibilityElement(accessibilityContainer: self)
-        element.accessibilityLabel = "Dataset \(seriesIndex + 1):" + String(format: " x: %.2f, y: %.2f", ax, ay)
+        element.accessibilityLabel = "Dataset \(seriesIndex + 1):" + labelDescription
         element.accessibilityFrame = self.convert(rect, to: UIScreen.main.coordinateSpace)
         
         return element

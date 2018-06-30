@@ -529,6 +529,7 @@ open class Chart: UIControl {
                           width: 2 * dimension,
                           height: 2 * dimension)
         
+        // Note that the offset is used to compute the correct index into the data based on the number of valid data points already generated in prior segments. (See drawLine())
         let ax = series[seriesIndex].data[index + offset].x
         let ay = series[seriesIndex].data[index + offset].y
         
@@ -872,6 +873,42 @@ open class Chart: UIControl {
             }
             indexes.append(index)
         }
+        
+        // Summarize the currently touched element for accessibility clients.
+        var labelDescription: String = ""
+        var lastSelectedIndex: Int = 0
+        
+        for (seriesIndex, dataIndex) in indexes.enumerated() {
+            if let value =  self.valueForSeries(seriesIndex, atIndex: dataIndex) {
+                defer { lastSelectedIndex = dataIndex ?? 0 }
+                
+                // If x or y accessibilityLabels have been set, then use those otherwise default to raw values.
+                if let accessibilityXLabels = self.accessibilityXLabels {
+                    labelDescription += "\(accessibilityXLabels[dataIndex ?? 0])"
+                } else {
+                    labelDescription += String(format: "Dataset \(seriesIndex + 1). x: %.2f", x)
+                }
+                
+                if let accessibilityYLabels = self.accessibilityYLabels {
+                    labelDescription += ", \(accessibilityYLabels[dataIndex ?? 0])"
+                } else {
+                    labelDescription += String(format: " y: %.2f.", value)
+                }
+
+            }
+        }
+        
+        // Post an announcement, so a user doesn't need to lift their finger to hear whats being touched
+        UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification,
+                                        labelDescription)
+        
+        // If the user does end the touch and raise their finger, select the last narrated element.
+        // Note that one is added here, since the first element of the accessibilityElement array is the chart's description.
+        if point.phase == .ended {
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification,
+                                            self.accessibilityElement(at: lastSelectedIndex + 1))
+        }
+        
         delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
     }
 

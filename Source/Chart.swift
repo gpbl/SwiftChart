@@ -562,7 +562,7 @@ open class Chart: UIControl {
         let path = CGMutablePath()
         path.move(to: CGPoint(x: CGFloat(xValues.first!), y: CGFloat(yValues.first!)))
         
-        // Since drawing starts from the second point, create an accessibility element for the first data point.
+        // Since drawing starts from the second point, create an accessibility element for the first data point here, before the loop.
         var dataSetIndexOffset: Int = 0
         let counts = self.accessibilityChartDataIndices.map { $0.count }
 
@@ -581,6 +581,7 @@ open class Chart: UIControl {
         // This offset is used to compute the correct index into the data based on the number of valid data points already generated in prior segments.
         dataSetIndexOffset += segmentIndex > 0  && counts.count > 1 ? counts[0..<segmentIndex].reduce(0, +) - 1 : 0
         
+        // Using the above, generate accessibilityElements for each data point
         for i in 1..<yValues.count {
             let x = CGFloat(xValues[i])
             let y = CGFloat(yValues[i])
@@ -1017,6 +1018,10 @@ open class Chart: UIControl {
         
         // The indices of data points are relative to the original data array.
         // This removes traversed element counts from earlier segment indices to make each index relative to the segment the data point occurs in.
+        // For example, instead of an an array like
+        // [Set(2, 0, 1), Set(3), Set(4)]
+        // We want an array that looks like
+        // [Set(2, 0, 1), Set(1), Set(1)]
         var previousElementsOffset: Int = accessibilityIndices.first?.count ?? 0
         for (i, indexSet) in accessibilityIndices.enumerated() {
             guard i > 0 else { continue }

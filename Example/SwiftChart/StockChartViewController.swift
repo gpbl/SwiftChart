@@ -35,6 +35,7 @@ class StockChartViewController: UIViewController, ChartDelegate {
         var serieData: [Double] = []
         var labels: [Double] = []
         var labelsAsString: Array<String> = []
+        var accessibilityXLabels: [String] = []
         
         // Date formatter to retrieve the month names
         let dateFormatter = DateFormatter()
@@ -51,15 +52,26 @@ class StockChartViewController: UIViewController, ChartDelegate {
                 labels.append(Double(i))
                 labelsAsString.append(monthAsString)
             }
+            
+            // Create a slightly more descriptive x-label for Accessibility/VoiceOver
+            let xFormatter = DateFormatter()
+            xFormatter.dateStyle = .medium
+            let xDescription = xFormatter.string(from: value["date"] as! Date)
+            accessibilityXLabels.append(xDescription)
         }
         
         let series = ChartSeries(serieData)
         series.area = true
         
+        // Since we know the values are in Dollars, we can improve the experience for VoiceOver users by simply setting y-labels
+        let accessibilityYLabels = serieData.map { "$\($0)" }
+        
         // Configure chart layout
         
         chart.lineWidth = 0.5
         chart.labelFont = UIFont.systemFont(ofSize: 12)
+        chart.accessibilityXLabels = accessibilityXLabels
+        chart.accessibilityYLabels = accessibilityYLabels
         chart.xLabels = labels
         chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Double) -> String in
             return labelsAsString[labelIndex]

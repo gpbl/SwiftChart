@@ -15,26 +15,25 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		B9ACB3E0934B63E8A6CB5C52 /* Pods_SwiftChart_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDADC885C2A763380FA6A181 /* Pods_SwiftChart_Example.framework */; };
+		E8B0D660A46EF06FABD767C8 /* Pods_SwiftChart_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC7CAF090F76E359EA48CF70 /* Pods_SwiftChart_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0838CDB4AE8E12713B758753 /* Pods-SwiftChart_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftChart_Example.debug.xcconfig"; path = "Target Support Files/Pods-SwiftChart_Example/Pods-SwiftChart_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		09C58F88F9C228CBF039C2CA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		2408E4771C1B8F6A00A7B359 /* BasicChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicChartViewController.swift; sourceTree = "<group>"; };
 		2408E4781C1B8F6A00A7B359 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		2408E47B1C1B935500A7B359 /* StockChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockChartViewController.swift; sourceTree = "<group>"; };
 		2408E47D1C1B93D300A7B359 /* AAPL.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AAPL.json; sourceTree = "<group>"; };
 		31A108168CDFC8774B3891F4 /* SwiftChart.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SwiftChart.podspec; path = ../SwiftChart.podspec; sourceTree = "<group>"; };
-		33F6A210FA56D809CA4AA675 /* Pods_SwiftChart_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftChart_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		409B2FB583F62E0E3208B68F /* Pods-SwiftChart_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftChart_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftChart_Example/Pods-SwiftChart_Example.release.xcconfig"; sourceTree = "<group>"; };
-		5406AF4556AABC934E698C8B /* Pods-SwiftChart_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftChart_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftChart_Example/Pods-SwiftChart_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* SwiftChart_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftChart_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		EDADC885C2A763380FA6A181 /* Pods_SwiftChart_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftChart_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC7CAF090F76E359EA48CF70 /* Pods_SwiftChart_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftChart_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9CECD7DA3EB977200516F46 /* Pods-SwiftChart_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftChart_Example.release.xcconfig"; path = "Target Support Files/Pods-SwiftChart_Example/Pods-SwiftChart_Example.release.xcconfig"; sourceTree = "<group>"; };
 		F91CA5016DC91AA3DDBAE123 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -43,20 +42,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9ACB3E0934B63E8A6CB5C52 /* Pods_SwiftChart_Example.framework in Frameworks */,
+				E8B0D660A46EF06FABD767C8 /* Pods_SwiftChart_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2E081EE2EB7703DD89A27377 /* Frameworks */ = {
+		019BA820AC6ECA01D102E7F4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EDADC885C2A763380FA6A181 /* Pods_SwiftChart_Example.framework */,
-				33F6A210FA56D809CA4AA675 /* Pods_SwiftChart_Tests.framework */,
+				AC7CAF090F76E359EA48CF70 /* Pods_SwiftChart_Example.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		15309D42D49266D6102533D0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0838CDB4AE8E12713B758753 /* Pods-SwiftChart_Example.debug.xcconfig */,
+				D9CECD7DA3EB977200516F46 /* Pods-SwiftChart_Example.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
@@ -65,8 +72,8 @@
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example */,
 				607FACD11AFB9204008FA782 /* Products */,
-				FD871B2EE14ABDC2E864B270 /* Pods */,
-				2E081EE2EB7703DD89A27377 /* Frameworks */,
+				15309D42D49266D6102533D0 /* Pods */,
+				019BA820AC6ECA01D102E7F4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,15 +120,6 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		FD871B2EE14ABDC2E864B270 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				5406AF4556AABC934E698C8B /* Pods-SwiftChart_Example.debug.xcconfig */,
-				409B2FB583F62E0E3208B68F /* Pods-SwiftChart_Example.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -129,12 +127,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "SwiftChart_Example" */;
 			buildPhases = (
-				7E8563198AC19B33FA7CF875 /* Check Pods Manifest.lock */,
+				AA3B1EA7E0C905A9B23C0C10 /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				5BB544A5BA126FEB600506AC /* Embed Pods Frameworks */,
-				2DB0CB1121F0E8F0F7638EF4 /* Copy Pods Resources */,
+				C2C2B16FE7DD18FFB987DA69 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -194,49 +191,48 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2DB0CB1121F0E8F0F7638EF4 /* Copy Pods Resources */ = {
+		AA3B1EA7E0C905A9B23C0C10 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
+			inputFileListPaths = (
 			);
-			name = "Copy Pods Resources";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftChart_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftChart_Example/Pods-SwiftChart_Example-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5BB544A5BA126FEB600506AC /* Embed Pods Frameworks */ = {
+		C2C2B16FE7DD18FFB987DA69 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
+			inputFileListPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftChart_Example/Pods-SwiftChart_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SwiftChart/SwiftChart.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftChart.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftChart_Example/Pods-SwiftChart_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7E8563198AC19B33FA7CF875 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftChart_Example/Pods-SwiftChart_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -382,9 +378,9 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5406AF4556AABC934E698C8B /* Pods-SwiftChart_Example.debug.xcconfig */;
+			baseConfigurationReference = 0838CDB4AE8E12713B758753 /* Pods-SwiftChart_Example.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SwiftChart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -392,15 +388,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.gpbl.SwiftChart-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 409B2FB583F62E0E3208B68F /* Pods-SwiftChart_Example.release.xcconfig */;
+			baseConfigurationReference = D9CECD7DA3EB977200516F46 /* Pods-SwiftChart_Example.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SwiftChart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -408,7 +404,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.gpbl.SwiftChart-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

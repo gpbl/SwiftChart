@@ -325,6 +325,7 @@ let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 | `showXLabelsAndGrid`          | Enable the lines for the labels on the x-axis (`Bool`, default `true`)                                                                                                                                      |
 | `showYLabelsAndGrid`          | Enable the lines for the labels on the y-axis (`Bool`, default `true`)                                                                                                                                      |
 | `topInset`                    | Height of the area at the top of the chart, acting a padding to make place for the top y-axis label (`CGFloat`, default `20`)                                                                               |
+| `leftInset`                   | Width of the area at the left of the chart, acting a padding to make place for the left x-axis label.                                                                                                       |
 | `xLabels`                     | The values to display as labels on the x-axis. You can format these values  with the `xLabelFormatter` attribute. As default, it will display the values of the series which has the most data. `[Double]?` |
 | `xLabelsFormatter`            | Function to format the labels on the x-axis (`(Int, Double) -> String`)                                                                                                                                     |
 | `xLabelsOrientation:`         | Set the x-axis labels orientation to `vertical` or `horizontal` (`ChartLabelOrientation`, default `.horizontal`)                                                                                            |
@@ -375,7 +376,6 @@ Use the `ChartDelegate` protocol to tell other objects about the chart’s touch
 
 Shorthands for various colors.
 
-**Example**
 
 ```swift
 let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])

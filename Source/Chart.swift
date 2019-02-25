@@ -148,7 +148,12 @@ open class Chart: UIControl {
     Enable the lines for the labels on the y-axis
     */
     open var showYLabelsAndGrid: Bool = true
-
+    
+    /**
+     Enable touch on chart
+     */
+    open var isTouchEnabled: Bool = true
+    
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
     */
@@ -707,39 +712,41 @@ open class Chart: UIControl {
     }
 
     func handleTouchEvents(_ touches: Set<UITouch>, event: UIEvent!) {
-        let point = touches.first!
-        let left = point.location(in: self).x
-        let x = valueFromPointAtX(left)
-
-        if left < 0 || left > (drawingWidth as CGFloat) {
-            // Remove highlight line at the end of the touch event
-            if let shapeLayer = highlightShapeLayer {
-                shapeLayer.path = nil
+        if isTouchEnabled {
+            let point = touches.first!
+            let left = point.location(in: self).x
+            let x = valueFromPointAtX(left)
+            
+            if left < 0 || left > (drawingWidth as CGFloat) {
+                // Remove highlight line at the end of the touch event
+                if let shapeLayer = highlightShapeLayer {
+                    shapeLayer.path = nil
+                }
+                delegate?.didFinishTouchingChart(self)
+                return
             }
-            delegate?.didFinishTouchingChart(self)
-            return
-        }
-
-        drawHighlightLineFromLeftPosition(left)
-
-        if delegate == nil {
-            return
-        }
-
-        var indexes: [Int?] = []
-
-        for series in self.series {
-            var index: Int? = nil
-            let xValues = series.data.map({ (point: ChartPoint) -> Double in
-                return point.x })
-            let closest = Chart.findClosestInValues(xValues, forValue: x)
-            if closest.lowestIndex != nil && closest.highestIndex != nil {
-                // Consider valid only values on the right
-                index = closest.lowestIndex
+            
+            drawHighlightLineFromLeftPosition(left)
+            
+            if delegate == nil {
+                return
             }
-            indexes.append(index)
+            
+            var indexes: [Int?] = []
+            
+            for series in self.series {
+                var index: Int? = nil
+                let xValues = series.data.map({ (point: ChartPoint) -> Double in
+                    return point.x })
+                let closest = Chart.findClosestInValues(xValues, forValue: x)
+                if closest.lowestIndex != nil && closest.highestIndex != nil {
+                    // Consider valid only values on the right
+                    index = closest.lowestIndex
+                }
+                indexes.append(index)
+            }
+            delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
         }
-        delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
     }
 
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

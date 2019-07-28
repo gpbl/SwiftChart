@@ -106,7 +106,7 @@ let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 If you prefer to use Autolayout, set the frame to `0` and add the constraints later:
 
 ```swift
-let chart = Chart(frame: CGRectZero)
+let chart = Chart(frame: CGRect.zero)
 // add constraints now
 ```
 

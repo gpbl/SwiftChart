@@ -81,6 +81,12 @@ The library includes:
 **Example**
 
 ```swift
+// At the top of the file
+import SwiftChart
+
+/// ...
+
+// Create a new Chart in your code
 let chart = Chart()
 let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
 series.color = ChartColors.greenColor()
@@ -106,7 +112,7 @@ let chart = Chart(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
 If you prefer to use Autolayout, set the frame to `0` and add the constraints later:
 
 ```swift
-let chart = Chart(frame: CGRectZero)
+let chart = Chart(frame: CGRect.zero)
 // add constraints now
 ```
 

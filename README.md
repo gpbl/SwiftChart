@@ -81,6 +81,12 @@ The library includes:
 **Example**
 
 ```swift
+// At the top of the file
+import SwiftChart
+
+/// ...
+
+// Create a new Chart in your code
 let chart = Chart()
 let series = ChartSeries([0, 6, 2, 8, 4, 7, 3, 10, 8])
 series.color = ChartColors.greenColor()

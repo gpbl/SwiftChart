@@ -2,9 +2,6 @@
 //  SwiftChart.h
 //  SwiftChart
 //
-//  Created by Thomas De Leon on 3/28/19.
-//  Copyright © 2019 LivePerson. All rights reserved.
-//
 
 #import <UIKit/UIKit.h>
 

@@ -342,7 +342,7 @@ open class Chart: UIControl {
                 let scaledYValues = scaleValuesOnYAxis( segment.map { $0.y } )
 
                 if series.line {
-                    drawLine(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                    drawLine(scaledXValues, yValues: scaledYValues, seriesIndex: index, width: series.width)
                 }
                 if series.area {
                     drawArea(scaledXValues, yValues: scaledYValues, seriesIndex: index)
@@ -461,7 +461,7 @@ open class Chart: UIControl {
 
     // MARK: - Drawings
 
-    fileprivate func drawLine(_ xValues: [Double], yValues: [Double], seriesIndex: Int) {
+    fileprivate func drawLine(_ xValues: [Double], yValues: [Double], seriesIndex: Int, width: CGFloat?) {
         // YValues are "reverted" from top to bottom, so 'above' means <= level
         let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
         let path = CGMutablePath()
@@ -481,7 +481,7 @@ open class Chart: UIControl {
             lineLayer.strokeColor = series[seriesIndex].colors.below.cgColor
         }
         lineLayer.fillColor = nil
-        lineLayer.lineWidth = lineWidth
+        lineLayer.lineWidth = width ?? lineWidth
         lineLayer.lineJoin = CAShapeLayerLineJoin.bevel
 
         self.layer.addSublayer(lineLayer)

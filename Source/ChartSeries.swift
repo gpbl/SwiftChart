@@ -22,6 +22,11 @@ open class ChartSeries {
     open var line: Bool = true
 
     /**
+    The width of the series line. Useful when different line widths are required
+     */
+    open var width: CGFloat?
+
+    /**
     Draws an area below the series line.
     */
     open var area: Bool = false

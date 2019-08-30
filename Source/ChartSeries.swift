@@ -22,6 +22,12 @@ open class ChartSeries {
     open var line: Bool = true
 
     /**
+     Draws the line in a dashed pattern.
+     */
+
+    open var dashed: Bool = false
+
+    /**
     The width of the series line. Useful when different line widths are required
      */
     open var width: CGFloat?

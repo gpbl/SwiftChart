@@ -474,6 +474,7 @@ open class Chart: UIControl {
         let lineLayer = CAShapeLayer()
         lineLayer.frame = self.bounds
         lineLayer.path = path
+        lineLayer.lineDashPattern = series[seriesIndex].dashed ? [7, 3] : nil
 
         if isAboveZeroLine {
             lineLayer.strokeColor = series[seriesIndex].colors.above.cgColor

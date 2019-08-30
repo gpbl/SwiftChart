@@ -144,10 +144,21 @@ open class Chart: UIControl {
     Enable the lines for the labels on the x-axis
     */
     open var showXLabelsAndGrid: Bool = true
+
+    /**
+     Show the lines for the labels on the x-axis with dashed pattern
+     */
+    open var showXGridDashed: Bool = true
+
     /**
     Enable the lines for the labels on the y-axis
     */
     open var showYLabelsAndGrid: Bool = true
+
+    /**
+     Show the lines for the labels on the y-axis with dashed pattern
+     */
+    open var showYGridDashed: Bool = true
 
     /**
     Height of the area at the bottom of the chart, containing the labels for the x-axis.
@@ -576,6 +587,12 @@ open class Chart: UIControl {
             if x != 0 && x != drawingWidth {
                 context.move(to: CGPoint(x: x, y: CGFloat(0)))
                 context.addLine(to: CGPoint(x: x, y: bounds.height))
+                if labels[i] != 0 && showXGridDashed {
+                    // Vertical grid for 0 is not dashed or when showXGrddDashed is false
+                    context.setLineDash(phase: CGFloat(0), lengths: [CGFloat(5)])
+                } else {
+                    context.setLineDash(phase: CGFloat(0), lengths: [])
+                }
                 context.strokePath()
             }
 
@@ -650,8 +667,8 @@ open class Chart: UIControl {
 
                 context.move(to: CGPoint(x: CGFloat(0), y: y))
                 context.addLine(to: CGPoint(x: self.bounds.width, y: y))
-                if labels[i] != 0 {
-                    // Horizontal grid for 0 is not dashed
+                if labels[i] != 0 && showYGridDashed {
+                    // Horizontal grid for 0 is not dashed or when showYGrodDashed is false
                     context.setLineDash(phase: CGFloat(0), lengths: [CGFloat(5)])
                 } else {
                     context.setLineDash(phase: CGFloat(0), lengths: [])

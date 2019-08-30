@@ -650,12 +650,12 @@ open class Chart: UIControl {
 
                 context.move(to: CGPoint(x: CGFloat(0), y: y))
                 context.addLine(to: CGPoint(x: self.bounds.width, y: y))
-//                if labels[i] != 0 {
-//                    // Horizontal grid for 0 is not dashed
-//                    context.setLineDash(phase: CGFloat(0), lengths: [CGFloat(5)])
-//                } else {
-//                    context.setLineDash(phase: CGFloat(0), lengths: [])
-//                }
+                if labels[i] != 0 {
+                    // Horizontal grid for 0 is not dashed
+                    context.setLineDash(phase: CGFloat(0), lengths: [CGFloat(5)])
+                } else {
+                    context.setLineDash(phase: CGFloat(0), lengths: [])
+                }
                 context.strokePath()
             }
 

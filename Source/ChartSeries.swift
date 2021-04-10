@@ -25,6 +25,9 @@ open class ChartSeries {
     Draws an area below the series line.
     */
     open var area: Bool = false
+    
+    /// Draws circles at each of the data points
+    open var circles: Bool = false
 
     /**
     The series color.

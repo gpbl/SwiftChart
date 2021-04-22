@@ -16,6 +16,9 @@ open class ChartSeries {
     */
     open var data: [(x: Double, y: Double)]
 
+    /// The name of the series. Required to remove a series by name.
+    open var name = ""
+    
     /**
     When set to `false`, will hide the series line. Useful for drawing only the area with `area=true`.
     */
@@ -37,6 +40,15 @@ open class ChartSeries {
             colors = (above: color, below: color, 0)
         }
     }
+    
+    /// The color for the inside of any circles
+    open var fillColor = UIColor.clear
+    
+    /// The width of the line for this series.
+    open var lineWidth: CGFloat?
+    
+    /// The radius of the circle for a series that is configured to display circles. Defaults to 1.5.
+    open var circleRadius = CGFloat(1.5)
 
     /**
     A tuple to specify the color above or below the zero

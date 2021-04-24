@@ -160,7 +160,7 @@ open class Chart: UIControl {
     open var topInset: CGFloat = 20
 
     /**
-    Width of the chart's lines.
+    Default width of the chart's lines, if not specified as part of the chart series. 
     */
     @IBInspectable
     open var lineWidth: CGFloat = 2
@@ -277,6 +277,14 @@ open class Chart: UIControl {
     open func removeSeriesAt(_ index: Int) {
         series.remove(at: index)
     }
+    
+    
+    /// Remove any series with the specified name
+    /// - Parameter name: The name of the series to remove.
+    open func removeSeriesNamed(_ name: String)
+    {
+        series.removeAll { $0.name == name }
+    }
 
     /**
     Remove all the series.
@@ -346,6 +354,9 @@ open class Chart: UIControl {
                 }
                 if series.area {
                     drawArea(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                }
+                if series.circles {
+                    drawCircles(scaledXValues, yValues: scaledYValues, seriesIndex: index)
                 }
             })
         }
@@ -481,7 +492,7 @@ open class Chart: UIControl {
             lineLayer.strokeColor = series[seriesIndex].colors.below.cgColor
         }
         lineLayer.fillColor = nil
-        lineLayer.lineWidth = lineWidth
+        lineLayer.lineWidth = series[seriesIndex].lineWidth != nil ? series[seriesIndex].lineWidth! : self.lineWidth
         lineLayer.lineJoin = CAShapeLayerLineJoin.bevel
 
         self.layer.addSublayer(lineLayer)
@@ -514,6 +525,26 @@ open class Chart: UIControl {
         self.layer.addSublayer(areaLayer)
 
         layerStore.append(areaLayer)
+    }
+    
+    fileprivate func drawCircles(_ xValues: [Double], yValues: [Double], seriesIndex: Int)
+    {
+        let twoPi = CGFloat.pi * 2.0
+        
+        for i in 0..<yValues.count {
+            let center = CGPoint(x: xValues[i], y: yValues[i])
+            let circleRadius = series[seriesIndex].circleRadius
+            let circlePath = UIBezierPath(arcCenter: center, radius: circleRadius, startAngle: 0, endAngle: twoPi, clockwise: true)
+            let circleLayer = CAShapeLayer()
+            circleLayer.path = circlePath.cgPath
+            circleLayer.frame = self.bounds
+            circleLayer.strokeColor = series[seriesIndex].color.cgColor
+            circleLayer.fillColor = series[seriesIndex].fillColor.cgColor
+            circleLayer.lineWidth = series[seriesIndex].lineWidth != nil ? series[seriesIndex].lineWidth! : self.lineWidth
+            
+            self.layer.addSublayer(circleLayer)
+            self.layerStore.append(circleLayer)
+        }
     }
 
     fileprivate func drawAxes() {
@@ -734,7 +765,15 @@ open class Chart: UIControl {
                 return point.x })
             let closest = Chart.findClosestInValues(xValues, forValue: x)
             if closest.lowestIndex != nil && closest.highestIndex != nil {
-                // Consider valid only values on the right
+                // figure out if we are closer to the higher or lower x value
+                let lowDelta  = abs(x - closest.lowestValue!)
+                let highDelta = abs(closest.highestValue! - x)
+                
+                index = lowDelta < highDelta ? closest.lowestIndex : closest.highestIndex
+            }
+            // When we are at the extreme far right (high-end) of the graph, we won't have a highest value, so always
+            // pick the lowest value (assuming we have that). 
+            else if closest.lowestValue != nil {
                 index = closest.lowestIndex
             }
             indexes.append(index)

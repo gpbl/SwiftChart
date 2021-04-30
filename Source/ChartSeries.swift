@@ -31,6 +31,9 @@ open class ChartSeries {
     
     /// Draws circles at each of the data points
     open var circles: Bool = false
+    
+    /// Draws the series as a bar graph
+    open var bar: Bool = false
 
     /**
     The series color.

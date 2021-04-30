@@ -358,6 +358,9 @@ open class Chart: UIControl {
                 if series.circles {
                     drawCircles(scaledXValues, yValues: scaledYValues, seriesIndex: index)
                 }
+                if series.bar {
+                    drawBars(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                }
             })
         }
 
@@ -544,6 +547,51 @@ open class Chart: UIControl {
             
             self.layer.addSublayer(circleLayer)
             self.layerStore.append(circleLayer)
+        }
+    }
+    
+    fileprivate func drawBars(_ xValues: [Double], yValues: [Double], seriesIndex: Int)
+    {
+        let barWidthPercent = 0.60
+        
+        guard xValues.count > 0, xValues.count == yValues.count else {
+            return
+        }
+        
+        // For starters, find the minimum distance between x values. We will base the bar width on this.
+        // We default to the same width as the labels, in case there is only a single x-value.
+        var minSeriesXDelta = Double(self.drawingWidth) / Double((xLabels?.count ?? 7) - 2)
+        for xValueIdx in 1 ..< xValues.count {
+            let deltaX = xValues[xValueIdx] - xValues[xValueIdx - 1]
+            minSeriesXDelta = deltaX < minSeriesXDelta ? deltaX : minSeriesXDelta
+        }
+        
+        let halfBarWidth = (minSeriesXDelta * barWidthPercent) / 2.0
+        let zero         = getZeroValueOnYAxis(zeroLevel: series[seriesIndex].colors.zeroLevel)
+        
+        for index in 0 ..< yValues.count {
+            let topLeftCorner     = CGPoint(x: xValues[index] - halfBarWidth, y: yValues[index])
+            let topRightCorner    = CGPoint(x: xValues[index] + halfBarWidth, y: yValues[index])
+            let bottomLeftCorner  = CGPoint(x: xValues[index] - halfBarWidth, y: zero)
+            let bottomRightCorner = CGPoint(x: xValues[index] + halfBarWidth, y: zero)
+            
+            let path = CGMutablePath()
+            path.move(to: bottomLeftCorner)
+            path.addLine(to: topLeftCorner)
+            path.addLine(to: topRightCorner)
+            path.addLine(to: bottomRightCorner)
+            
+            let lineLayer = CAShapeLayer()
+            lineLayer.frame = self.bounds
+            lineLayer.path = path
+
+            lineLayer.strokeColor = series[seriesIndex].colors.above.cgColor
+            lineLayer.fillColor   = series[seriesIndex].colors.above.withAlphaComponent(areaAlphaComponent).cgColor
+            lineLayer.lineWidth   = series[seriesIndex].lineWidth != nil ? series[seriesIndex].lineWidth! : self.lineWidth
+            lineLayer.lineJoin    = CAShapeLayerLineJoin.bevel
+            
+            self.layer.addSublayer(lineLayer)
+            layerStore.append(lineLayer)
         }
     }
 

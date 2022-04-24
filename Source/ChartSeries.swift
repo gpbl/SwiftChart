@@ -52,11 +52,33 @@ open class ChartSeries {
     
     /// The radius of the circle for a series that is configured to display circles. Defaults to 1.5.
     open var circleRadius = CGFloat(1.5)
-
-    /**
-    A tuple to specify the color above or below the zero
-    */
+    
+    /// A tuple to specify the colors of the line and fill area above and below the zero level.
+    /// Line and area fill colors can also be set independently through separate variables.
     open var colors: (
+        above: UIColor,
+        below: UIColor,
+        zeroLevel: Double
+    ) = (above: ChartColors.blueColor(), below: ChartColors.redColor(), 0) {
+        didSet {
+            lineColors.above = colors.above
+            lineColors.below = colors.below
+            lineColors.zeroLevel = colors.zeroLevel
+            areaColors.above = colors.above
+            areaColors.below = colors.below
+            areaColors.zeroLevel = colors.zeroLevel
+        }
+    }
+    
+    /// A tuple to specify the color of the line above and below the zero level.
+    open var lineColors: (
+        above: UIColor,
+        below: UIColor,
+        zeroLevel: Double
+    ) = (above: ChartColors.blueColor(), below: ChartColors.redColor(), 0)
+    
+    /// A tuple to specify the color of the area fill above and below zero.
+    open var areaColors: (
         above: UIColor,
         below: UIColor,
         zeroLevel: Double

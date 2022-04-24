@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol ChartDelegate: class {
+public protocol ChartDelegate: AnyObject {
 
     /**
     Tells the delegate that the specified chart has been touched.
@@ -158,6 +158,9 @@ open class Chart: UIControl {
     Height of the area at the top of the chart, acting a padding to make place for the top y-axis label.
     */
     open var topInset: CGFloat = 20
+    
+    /// Space between the top of the graph and the horizontal top axis. This is a subset of the top inset, so it must be less than that value.
+    open var topPadding = CGFloat(0)
 
     /**
     Default width of the chart's lines, if not specified as part of the chart series. 
@@ -204,6 +207,15 @@ open class Chart: UIControl {
     Hide the highlight line when touch event ends, e.g. when stop swiping over the chart
     */
     open var hideHighlightLineOnTouchEnd = false
+    
+    /// Forces to highlight line to snap to data values in the initial series
+    open var highlightLineSnapToValues = false
+    
+    /// Draws the highlight line only from the top of the graph to the current Y value
+    open var highlightLineEndsAtYValue = false
+    
+    /// The series for which the highlight line applies. Defaults to the first series, if not specified.
+    open var highlightLineForSeries = 0
 
     /**
     Alpha component for the area color.
@@ -343,7 +355,7 @@ open class Chart: UIControl {
         for (index, series) in self.series.enumerated() {
 
             // Separate each line in multiple segments over and below the x axis
-            let segments = Chart.segmentLine(series.data as ChartLineSegment, zeroLevel: series.colors.zeroLevel)
+            let segments = Chart.segmentLine(series.data as ChartLineSegment, zeroLevel: series.lineColors.zeroLevel)
 
             segments.forEach({ segment in
                 let scaledXValues = scaleValuesOnXAxis( segment.map { $0.x } )
@@ -357,6 +369,9 @@ open class Chart: UIControl {
                 }
                 if series.circles {
                     drawCircles(scaledXValues, yValues: scaledYValues, seriesIndex: index)
+                }
+                if series.bar {
+                    drawBars(scaledXValues, yValues: scaledYValues, seriesIndex: index)
                 }
             })
         }
@@ -434,6 +449,14 @@ open class Chart: UIControl {
         let scaled = values.map { factor * ($0 - self.min.x) }
         return scaled
     }
+    
+    fileprivate func scaleValueOnXAxis(_ value: Double) -> Double {
+        let width  = Double(drawingWidth)
+        let factor = (max.x - min.x != 0) ? width / (max.x - min.x) : 0.0
+        
+        let scaled = factor * (value - self.min.x)
+        return scaled
+    }
 
     fileprivate func scaleValuesOnYAxis(_ values: [Double]) -> [Double] {
         let height = Double(drawingHeight)
@@ -474,7 +497,7 @@ open class Chart: UIControl {
 
     fileprivate func drawLine(_ xValues: [Double], yValues: [Double], seriesIndex: Int) {
         // YValues are "reverted" from top to bottom, so 'above' means <= level
-        let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
+        let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].lineColors.zeroLevel)
         let path = CGMutablePath()
         path.move(to: CGPoint(x: CGFloat(xValues.first!), y: CGFloat(yValues.first!)))
         for i in 1..<yValues.count {
@@ -487,9 +510,9 @@ open class Chart: UIControl {
         lineLayer.path = path
 
         if isAboveZeroLine {
-            lineLayer.strokeColor = series[seriesIndex].colors.above.cgColor
+            lineLayer.strokeColor = series[seriesIndex].lineColors.above.cgColor
         } else {
-            lineLayer.strokeColor = series[seriesIndex].colors.below.cgColor
+            lineLayer.strokeColor = series[seriesIndex].lineColors.below.cgColor
         }
         lineLayer.fillColor = nil
         lineLayer.lineWidth = series[seriesIndex].lineWidth != nil ? series[seriesIndex].lineWidth! : self.lineWidth
@@ -502,9 +525,9 @@ open class Chart: UIControl {
 
     fileprivate func drawArea(_ xValues: [Double], yValues: [Double], seriesIndex: Int) {
         // YValues are "reverted" from top to bottom, so 'above' means <= level
-        let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].colors.zeroLevel)
+        let isAboveZeroLine = yValues.max()! <= self.scaleValueOnYAxis(series[seriesIndex].areaColors.zeroLevel)
         let area = CGMutablePath()
-        let zero = CGFloat(getZeroValueOnYAxis(zeroLevel: series[seriesIndex].colors.zeroLevel))
+        let zero = CGFloat(getZeroValueOnYAxis(zeroLevel: series[seriesIndex].areaColors.zeroLevel))
 
         area.move(to: CGPoint(x: CGFloat(xValues[0]), y: zero))
         for i in 0..<xValues.count {
@@ -516,9 +539,9 @@ open class Chart: UIControl {
         areaLayer.path = area
         areaLayer.strokeColor = nil
         if isAboveZeroLine {
-            areaLayer.fillColor = series[seriesIndex].colors.above.withAlphaComponent(areaAlphaComponent).cgColor
+            areaLayer.fillColor = series[seriesIndex].areaColors.above.withAlphaComponent(areaAlphaComponent).cgColor
         } else {
-            areaLayer.fillColor = series[seriesIndex].colors.below.withAlphaComponent(areaAlphaComponent).cgColor
+            areaLayer.fillColor = series[seriesIndex].areaColors.below.withAlphaComponent(areaAlphaComponent).cgColor
         }
         areaLayer.lineWidth = 0
 
@@ -546,6 +569,51 @@ open class Chart: UIControl {
             self.layerStore.append(circleLayer)
         }
     }
+    
+    fileprivate func drawBars(_ xValues: [Double], yValues: [Double], seriesIndex: Int)
+    {
+        let barWidthPercent = 0.60
+        
+        guard xValues.count > 0, xValues.count == yValues.count else {
+            return
+        }
+        
+        // For starters, find the minimum distance between x values. We will base the bar width on this.
+        // We default to the same width as the labels, in case there is only a single x-value.
+        var minSeriesXDelta = Double(self.drawingWidth) / Double((xLabels?.count ?? 7) - 2)
+        for xValueIdx in 1 ..< xValues.count {
+            let deltaX = xValues[xValueIdx] - xValues[xValueIdx - 1]
+            minSeriesXDelta = deltaX < minSeriesXDelta ? deltaX : minSeriesXDelta
+        }
+        
+        let halfBarWidth = (minSeriesXDelta * barWidthPercent) / 2.0
+        let zero         = getZeroValueOnYAxis(zeroLevel: series[seriesIndex].lineColors.zeroLevel)
+        
+        for index in 0 ..< yValues.count {
+            let topLeftCorner     = CGPoint(x: xValues[index] - halfBarWidth, y: yValues[index])
+            let topRightCorner    = CGPoint(x: xValues[index] + halfBarWidth, y: yValues[index])
+            let bottomLeftCorner  = CGPoint(x: xValues[index] - halfBarWidth, y: zero)
+            let bottomRightCorner = CGPoint(x: xValues[index] + halfBarWidth, y: zero)
+            
+            let path = CGMutablePath()
+            path.move(to: bottomLeftCorner)
+            path.addLine(to: topLeftCorner)
+            path.addLine(to: topRightCorner)
+            path.addLine(to: bottomRightCorner)
+            
+            let lineLayer = CAShapeLayer()
+            lineLayer.frame = self.bounds
+            lineLayer.path = path
+
+            lineLayer.strokeColor = series[seriesIndex].lineColors.above.cgColor
+            lineLayer.fillColor   = series[seriesIndex].areaColors.above.withAlphaComponent(areaAlphaComponent).cgColor
+            lineLayer.lineWidth   = series[seriesIndex].lineWidth != nil ? series[seriesIndex].lineWidth! : self.lineWidth
+            lineLayer.lineJoin    = CAShapeLayerLineJoin.bevel
+            
+            self.layer.addSublayer(lineLayer)
+            layerStore.append(lineLayer)
+        }
+    }
 
     fileprivate func drawAxes() {
         let context = UIGraphicsGetCurrentContext()!
@@ -558,8 +626,8 @@ open class Chart: UIControl {
         context.strokePath()
 
         // horizontal axis at the top
-        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
-        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
+        context.move(to: CGPoint(x: CGFloat(0), y: topPadding))
+        context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: topPadding))
         context.strokePath()
 
         // horizontal axis when y = 0
@@ -571,12 +639,12 @@ open class Chart: UIControl {
         }
 
         // vertical axis on the left
-        context.move(to: CGPoint(x: CGFloat(0), y: CGFloat(0)))
+        context.move(to: CGPoint(x: CGFloat(0), y: topPadding))
         context.addLine(to: CGPoint(x: CGFloat(0), y: drawingHeight + topInset))
         context.strokePath()
 
         // vertical axis on the right
-        context.move(to: CGPoint(x: CGFloat(drawingWidth), y: CGFloat(0)))
+        context.move(to: CGPoint(x: CGFloat(drawingWidth), y: topPadding))
         context.addLine(to: CGPoint(x: CGFloat(drawingWidth), y: drawingHeight + topInset))
         context.strokePath()
     }
@@ -604,7 +672,7 @@ open class Chart: UIControl {
             // Add vertical grid for each label, except axes on the left and right
 
             if x != 0 && x != drawingWidth {
-                context.move(to: CGPoint(x: x, y: CGFloat(0)))
+                context.move(to: CGPoint(x: x, y: topPadding))
                 context.addLine(to: CGPoint(x: x, y: bounds.height))
                 context.strokePath()
             }
@@ -676,7 +744,7 @@ open class Chart: UIControl {
             let y = CGFloat(value)
 
             // Add horizontal grid for each label, but not over axes
-            if y != drawingHeight + topInset && y != zero {
+            if y != (drawingHeight + topInset - topPadding) && y != zero {
 
                 context.move(to: CGPoint(x: CGFloat(0), y: y))
                 context.addLine(to: CGPoint(x: self.bounds.width, y: y))
@@ -710,20 +778,22 @@ open class Chart: UIControl {
 
     // MARK: - Touch events
 
-    fileprivate func drawHighlightLineFromLeftPosition(_ left: CGFloat) {
+    fileprivate func drawHighlightLineFromLeftPosition(_ left: CGFloat, lineBottom: CGFloat? = nil) {
+        let lineEnd = lineBottom != nil ? lineBottom! : CGFloat(drawingHeight + topInset)
+        
         if let shapeLayer = highlightShapeLayer {
             // Use line already created
             let path = CGMutablePath()
 
             path.move(to: CGPoint(x: left, y: 0))
-            path.addLine(to: CGPoint(x: left, y: drawingHeight + topInset))
+            path.addLine(to: CGPoint(x: left, y: lineEnd))
             shapeLayer.path = path
         } else {
             // Create the line
             let path = CGMutablePath()
 
             path.move(to: CGPoint(x: left, y: CGFloat(0)))
-            path.addLine(to: CGPoint(x: left, y: drawingHeight + topInset))
+            path.addLine(to: CGPoint(x: left, y: lineEnd))
             let shapeLayer = CAShapeLayer()
             shapeLayer.frame = self.bounds
             shapeLayer.path = path
@@ -739,7 +809,8 @@ open class Chart: UIControl {
 
     func handleTouchEvents(_ touches: Set<UITouch>, event: UIEvent!) {
         let point = touches.first!
-        let left = point.location(in: self).x
+        var left = point.location(in: self).x
+        var bottom: CGFloat?
         let x = valueFromPointAtX(left)
 
         if left < 0 || left > (drawingWidth as CGFloat) {
@@ -750,8 +821,22 @@ open class Chart: UIControl {
             delegate?.didFinishTouchingChart(self)
             return
         }
+        
+        if (highlightLineEndsAtYValue || highlightLineSnapToValues) && self.highlightLineForSeries < self.series.count {
+            let highlightedSeries = self.series[self.highlightLineForSeries]
+            if let index = self.findClosestIndexIn(series: highlightedSeries, to: x) {
+                if highlightLineSnapToValues {
+                    let seriesXValue = highlightedSeries.data[index].x
+                    left = CGFloat(scaleValueOnXAxis(seriesXValue))
+                }
+                if highlightLineEndsAtYValue {
+                    let seriesYValue = highlightedSeries.data[index].y
+                    bottom = CGFloat(scaleValueOnYAxis(seriesYValue)) - (self.lineWidth)
+                }
+            }
+        }
 
-        drawHighlightLineFromLeftPosition(left)
+        drawHighlightLineFromLeftPosition(left, lineBottom: bottom)
 
         if delegate == nil {
             return
@@ -760,22 +845,7 @@ open class Chart: UIControl {
         var indexes: [Int?] = []
 
         for series in self.series {
-            var index: Int? = nil
-            let xValues = series.data.map({ (point: ChartPoint) -> Double in
-                return point.x })
-            let closest = Chart.findClosestInValues(xValues, forValue: x)
-            if closest.lowestIndex != nil && closest.highestIndex != nil {
-                // figure out if we are closer to the higher or lower x value
-                let lowDelta  = abs(x - closest.lowestValue!)
-                let highDelta = abs(closest.highestValue! - x)
-                
-                index = lowDelta < highDelta ? closest.lowestIndex : closest.highestIndex
-            }
-            // When we are at the extreme far right (high-end) of the graph, we won't have a highest value, so always
-            // pick the lowest value (assuming we have that). 
-            else if closest.lowestValue != nil {
-                index = closest.lowestIndex
-            }
+            let index = self.findClosestIndexIn(series: series, to: x)
             indexes.append(index)
         }
         delegate!.didTouchChart(self, indexes: indexes, x: x, left: left)
@@ -800,7 +870,37 @@ open class Chart: UIControl {
     }
 
     // MARK: - Utilities
-
+    
+    /// Finds and returns the index of the closest value in the specified series to the provided x-value.
+    /// - Parameters:
+    ///   - series: The series to search.
+    ///   - x: The x-value in question
+    /// - Returns: The index of the value in the series that is closest to the specified x-value, or nil the series is empty.
+    fileprivate func findClosestIndexIn(series: ChartSeries, to x: Double) -> Int?
+    {
+        var index: Int? = nil
+        let xValues = series.data.map({ (point: ChartPoint) -> Double in
+            return point.x })
+        let closest = Chart.findClosestInValues(xValues, forValue: x)
+        if closest.lowestIndex != nil && closest.highestIndex != nil {
+            // figure out if we are closer to the higher or lower x value
+            let lowDelta  = abs(x - closest.lowestValue!)
+            let highDelta = abs(closest.highestValue! - x)
+            
+            index = lowDelta < highDelta ? closest.lowestIndex : closest.highestIndex
+        }
+        // When we are at the extreme far right (high-end) or the extreme far left (low-end) of the graph, we won't have
+        // a highest value or lowest value, so pick whichever value we do have.
+        else if closest.lowestIndex != nil {
+            index = closest.lowestIndex
+        }
+        else if closest.highestIndex != nil {
+            index = closest.highestIndex
+        }
+        
+        return index
+    }
+    
     fileprivate func valueFromPointAtX(_ x: CGFloat) -> Double {
         let value = ((max.x-min.x) / Double(drawingWidth)) * Double(x) + min.x
         return value
